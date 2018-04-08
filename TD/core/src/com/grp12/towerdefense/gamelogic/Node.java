@@ -15,7 +15,7 @@ public class Node {
         return y;
     }
 
-    enum NodeType {TOWERNODE, PATHNODE}
+    public enum NodeType {TOWERNODE, PATHNODE}
     private NodeType type;
 
     private int x;
@@ -23,11 +23,11 @@ public class Node {
 
     int pixelSize;
 
-    public Node(NodeType _type, boolean _waypoint, int _x, int _y){
+    public Node(NodeType _type/*, boolean _waypoint, int _x, int _y*/){
         type = _type;
-        waypoint = _waypoint;
+        /*waypoint = _waypoint;
         x = _x;
-        y = _y;
+        y = _y;*/
     }
 
 

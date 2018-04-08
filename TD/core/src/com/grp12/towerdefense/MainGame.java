@@ -5,14 +5,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.PlayState;
+import com.grp12.towerdefense.views.MapView;
 
 public class MainGame extends ApplicationAdapter {
 
 	public static final int HEIGHT = 480;
 	public static final int WIDTH = 720;
 	public static final String TITLE = "Tower Defense";
+
+	Map map;
+	MapView mapView;
 
 	SpriteBatch batch;
 	private GameStateManager gsm;
@@ -22,6 +27,9 @@ public class MainGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 		gsm.push(new PlayState(gsm));
+		map = new Map();
+		map.generateMap();
+		mapView = new MapView(map.getGrid());
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
@@ -30,7 +38,11 @@ public class MainGame extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gsm.update(Gdx.graphics.getDeltaTime());
-		gsm.render(batch);
+		//gsm.render(batch);
+		batch.begin();
+		mapView.draw(batch);
+		batch.end();
+
 	}
 	
 	@Override

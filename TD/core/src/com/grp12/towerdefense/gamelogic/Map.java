@@ -17,7 +17,17 @@ public class Map {
     }
 
     public void generateMap(){
-        
+        //temporary code for a hard coded map
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if ((i+j)%2 == 0) {
+                    grid[i][j] = new Node(Node.NodeType.TOWERNODE);
+                } else {
+                    grid[i][j] = new Node(Node.NodeType.PATHNODE);
+                }
+            }
+        }
+
     }
 
     public Node[][] getGrid() {

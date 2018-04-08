@@ -1,4 +1,4 @@
-package com.grp12.towerdefense;
+package com.grp12.towerdefense.gamelogic;
 
 public class Map {
 
@@ -9,6 +9,11 @@ public class Map {
 
 
     public Map(){
-        grid = new Node[width][height];
+        grid = new Node[height][width];
     }
+
+    public void generateMap(){
+
+    }
+
 }

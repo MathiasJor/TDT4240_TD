@@ -21,7 +21,7 @@ public class Node {
     private int x;
     private int y;
 
-
+    int pixelSize;
 
     public Node(NodeType _type, boolean _waypoint, int _x, int _y){
         type = _type;

@@ -7,7 +7,7 @@ public class Map {
     final int width = 16;
     final int height = 20;
 
-    Node[][] grid;
+    private Node[][] grid;
 
     ArrayList<Node> waypoints;
 
@@ -17,7 +17,10 @@ public class Map {
     }
 
     public void generateMap(){
-
+        
     }
 
+    public Node[][] getGrid() {
+        return grid;
+    }
 }

@@ -39,14 +39,14 @@ public class Map {
                 "ooooooooooooeooo");
     }
 
-    public void generateMap(String mapString){
+    public void generateMap(String mapString) {
         System.out.println(mapString);
         String[] rows = mapString.split("\n");
 
-        for(int y = 0; y < rows.length; y++){
+        for (int y = 0; y < rows.length; y++) {
             String row = rows[y];
-            for(int x = 0; x < row.length(); x++){
-                switch(row.charAt(x)){
+            for (int x = 0; x < row.length(); x++) {
+                switch (row.charAt(x)) {
                     case 'o':
                         grid[y][x] = new Node(Node.NodeType.TOWERNODE, false, x, y);
                         break;
@@ -60,9 +60,8 @@ public class Map {
                 }
             }
         }
-
-
     }
+
 
     public Node[][] getGrid() {
         return grid;

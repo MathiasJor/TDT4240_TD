@@ -15,7 +15,7 @@ public class Node {
         return y;
     }
 
-    enum NodeType {TOWERNODE, PATHNODE}
+    public enum NodeType {TOWERNODE, PATHNODE}
     private NodeType type;
 
     private int x;

@@ -1,11 +1,15 @@
 package com.grp12.towerdefense.gamelogic;
 
+import java.util.ArrayList;
+
 public class Map {
 
     final int width = 16;
     final int height = 20;
 
     Node[][] grid;
+
+    ArrayList<Node> waypoints;
 
 
     public Map(){

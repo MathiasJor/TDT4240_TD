@@ -10,11 +10,15 @@ import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.PlayState;
 import com.grp12.towerdefense.views.MapView;
 
+import de.golfgl.gdxgamesvcs.IGameServiceClient;
+
 public class MainGame extends ApplicationAdapter {
 
 	public static final int HEIGHT = 480;
 	public static final int WIDTH = 720;
 	public static final String TITLE = "Tower Defense";
+
+	IGameServiceClient gc;
 
 	Map map;
 	MapView mapView;
@@ -37,7 +41,7 @@ public class MainGame extends ApplicationAdapter {
 		gsm.update(Gdx.graphics.getDeltaTime());
 		//gsm.render(batch);
 		batch.begin();
-		mapView.draw(batch);
+//		mapView.draw(batch);
 		batch.end();
 
 	}

@@ -2,5 +2,5 @@
 <resources>
 
     <string name="app_name">Tower Defense</string>
-
+    <string name="app_id">yourAppIdHere</string>
 </resources>

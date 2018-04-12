@@ -1,5 +1,6 @@
 package com.grp12.towerdefense.gamelogic.enemies;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.grp12.towerdefense.gamelogic.statuseffects.AbstractStatusEffect;
 import com.grp12.towerdefense.gamelogic.Node;
@@ -7,31 +8,41 @@ import com.grp12.towerdefense.gamelogic.Node;
 import java.util.ArrayList;
 
 public abstract class AbstractEnemy extends Actor{
+
     private int health;
-    float x;
-    float y;
-    public int speed;
+    private float speed;
+    private Vector2 position = new Vector2();
+
+    private Node currentWaypoint = null;
+    private int waypointIndex;
+    private ArrayList<Node> waypoints;
 
     ArrayList<AbstractStatusEffect> statusEffects;
 
-    Node nextWaypoint;
+    public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health) {
+        this.waypoints = waypoints;
+        this.speed = speed;
+        this.health = health;
+        waypointIndex = 0;
+        findNextWaypoint();
+    }
 
     public void move(float dt){
-        if(x == nextWaypoint.getX() && y == nextWaypoint.getY()){
+        if (position.dst(currentWaypoint.getPosition()) <= 0.4f){
             //TODO: Implement a check to see if we have reached the end of the path
             findNextWaypoint();
         }
-
-        x = (nextWaypoint.getX() - x) * dt * speed;
-        y = (nextWaypoint.getY() - y) * dt * speed;
+        position.x = (currentWaypoint.getX() - position.x) * dt * speed;
+        position.y = (currentWaypoint.getY() - position.y) * dt * speed;
     }
 
     public void setNextWaypoint(Node waypoint){
-        nextWaypoint = waypoint;
+        currentWaypoint = waypoint;
     }
 
     public void findNextWaypoint(){
-
+        currentWaypoint = waypoints.get(waypointIndex);
+        waypointIndex++;
     }
 
     public int getHealth() {
@@ -40,5 +51,13 @@ public abstract class AbstractEnemy extends Actor{
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public float getX() {
+        return position.x;
+    }
+
+    public float getY() {
+        return position.y;
     }
 }

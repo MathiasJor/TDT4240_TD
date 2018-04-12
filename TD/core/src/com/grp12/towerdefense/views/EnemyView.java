@@ -7,7 +7,7 @@ import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 
 import java.util.ArrayList;
 
-public class EnemyView implements View {
+public class EnemyView extends View {
 
     private ArrayList<AbstractEnemy> enemies;
     private Texture enemyImg;
@@ -16,8 +16,8 @@ public class EnemyView implements View {
     public EnemyView() {
         enemies = new ArrayList<AbstractEnemy>();
     }
-
-    public void draw(SpriteBatch sb) {
+    @Override
+    public void draw(SpriteBatch spriteBatch) {
         for(AbstractEnemy e : enemies) {
             //TODO: tegn fiender der de er på kartet
         }

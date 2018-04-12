@@ -8,7 +8,7 @@ import com.grp12.towerdefense.gamelogic.Node;
 /*
 MapView is unique in that it contains stuff that doesn't change during the game, and for performance's sake.
 It returns a SpriteCache to not have to fill up a SpriteBatch with the same stuff each time it draws.
-It does not implement the View interface like other views should.
+It does not extend the View interface like other views should.
  */
 
 public class MapView {

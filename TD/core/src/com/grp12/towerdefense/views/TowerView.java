@@ -7,7 +7,7 @@ import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 
 import java.util.ArrayList;
 
-public class TowerView implements View {
+public class TowerView extends View {
 
     private ArrayList<AbstractTower> towers;
     private Texture towerImg;
@@ -15,13 +15,16 @@ public class TowerView implements View {
 
     public TowerView() {
         towers = new ArrayList<AbstractTower>();
+        towerImg = new Texture("towerDefense_tile250.png");
+        towerSpr = new Sprite(towerImg);
     }
 
-    public void draw(SpriteBatch sb) {
+    @Override
+    public void draw(SpriteBatch spriteBatch) {
         for(AbstractTower t : towers) {
             //TODO: tegn tårn der de er på kartet
+            //spriteBatch.draw(towerSpr, t.getX()*tilesize, t.getY()*tilesize);
         }
-
-        }
+    }
 
 }

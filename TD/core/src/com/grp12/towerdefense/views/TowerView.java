@@ -22,8 +22,8 @@ public class TowerView extends View {
     @Override
     public void draw(SpriteBatch spriteBatch) {
         for(AbstractTower t : towers) {
-            //TODO: tegn tårn der de er på kartet
-            //spriteBatch.draw(towerSpr, t.getX()*tilesize, t.getY()*tilesize);
+            //TODO: tegn tårn der de er på kartet, mangler coords på tårn
+            //spriteBatch.draw(towerSpr, t.getX()*getTileWidth(), t.getY()*getTileHeight());
         }
     }
 

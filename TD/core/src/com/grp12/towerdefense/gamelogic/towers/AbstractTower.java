@@ -5,11 +5,10 @@ import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public abstract class AbstractTower {
 
-    private int damage, cost, range;
+    private int damage, cost, range, targetEnemy=1000;
     private float reloadTime;
     private Vector2 position;
 
@@ -61,4 +60,17 @@ public abstract class AbstractTower {
         }
         return distance.indexOf(Collections.min(distance));
     }
+
+   //check if target is still in range
+    public int targetEnemy(ArrayList<AbstractEnemy> listOfEnemies){
+        if(targetEnemy==1000){
+            targetEnemy=findNextEnemy(listOfEnemies);
+        }
+        else if(position.dst(listOfEnemies.get(targetEnemy).getPosition)>range){
+            targetEnemy=findNextEnemy(listOfEnemies);
+        }
+        return targetEnemy;
+    }
+
+
 }

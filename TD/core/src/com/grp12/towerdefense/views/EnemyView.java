@@ -1,10 +1,25 @@
 package com.grp12.towerdefense.views;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 
-public class EnemyView {
+import java.util.ArrayList;
 
-    public void draw(SpriteBatch sb) {
-        // draws the enemies on the screen
+public class EnemyView extends View {
+
+    private ArrayList<AbstractEnemy> enemies;
+    private Texture enemyImg;
+    private Sprite enemySpr;
+
+    public EnemyView() {
+        enemies = new ArrayList<AbstractEnemy>();
+    }
+    @Override
+    public void draw(SpriteBatch spriteBatch) {
+        for(AbstractEnemy e : enemies) {
+            //TODO: tegn fiender der de er på kartet
+        }
     }
 }

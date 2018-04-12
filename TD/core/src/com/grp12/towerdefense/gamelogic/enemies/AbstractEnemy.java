@@ -41,4 +41,5 @@ public abstract class AbstractEnemy extends Actor{
     public void setHealth(int health) {
         this.health = health;
     }
+
 }

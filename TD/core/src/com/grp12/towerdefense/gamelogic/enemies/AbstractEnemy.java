@@ -41,8 +41,12 @@ public abstract class AbstractEnemy extends Actor{
     }
 
     public void findNextWaypoint(){
-        currentWaypoint = waypoints.get(waypointIndex);
-        waypointIndex++;
+        if (waypointIndex <= waypoints.size()) {
+            currentWaypoint = waypoints.get(waypointIndex);
+            waypointIndex++;
+        } else {
+            System.out.println("End reached by: " + this.toString());
+        }
     }
 
     public int getHealth() {

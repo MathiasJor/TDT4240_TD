@@ -36,4 +36,9 @@ public class TowerView extends View {
         towers.remove(abstractTower);
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
 }

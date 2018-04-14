@@ -25,10 +25,6 @@ public class MainGame extends ApplicationAdapter {
 	public static final int WIDTH = 720;
 	public static final String TITLE = "Tower Defense";
 
-	private Map map;
-	private MapView mapView;
-	private EnemyView enemyView;
-
 	SpriteBatch batch;
 	private GameStateManager gsm;
 
@@ -41,14 +37,8 @@ public class MainGame extends ApplicationAdapter {
 		gsm = new GameStateManager();
 		gsm.push(new PlayState(gsm));
 
-		map = new Map();
-		mapView = new MapView(map.getGrid());
-        View.setTileHeight(mapView.getTileHeight());
-        View.setTileWidth(mapView.getMapWidth());
-        enemyView = new EnemyView();
-
         camera = new OrthographicCamera();
-        viewport = new FillViewport(mapView.getMapWidth(), mapView.getMapHeight(), camera);
+        viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
         viewport.apply();
 
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
@@ -62,15 +52,10 @@ public class MainGame extends ApplicationAdapter {
 		gsm.update(Gdx.graphics.getDeltaTime());
 
         camera.update();
-        mapView.getSpriteCache().setProjectionMatrix(camera.combined);
-        mapView.getSpriteCache().begin();
-        mapView.getSpriteCache().draw(mapView.getCacheId());
-        mapView.getSpriteCache().end();
-
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        enemyView.draw(batch);
+        gsm.render(batch);
         batch.end();
-
 		//gsm.render(batch);
 	}
 	

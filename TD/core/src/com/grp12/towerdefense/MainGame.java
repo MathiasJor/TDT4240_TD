@@ -60,7 +60,6 @@ public class MainGame extends ApplicationAdapter {
         mapView.getSpriteCache().end();
 
 		//gsm.render(batch);
-
 	}
 	
 	@Override

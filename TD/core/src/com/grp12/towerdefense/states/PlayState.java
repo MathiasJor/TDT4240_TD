@@ -32,7 +32,7 @@ public class PlayState extends State {
         super(gsm);
 
         map = new Map();
-        e = new BasicEnemy(map.getWaypoints(), 10, 100);
+        e = new BasicEnemy(map.getWaypoints(), 1, 100);
 
         //Views
         mapView = new MapView(map.getGrid());

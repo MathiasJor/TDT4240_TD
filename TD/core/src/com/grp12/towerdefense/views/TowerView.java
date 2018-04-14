@@ -27,4 +27,13 @@ public class TowerView extends View {
         }
     }
 
+    public void addTower(AbstractTower abstractTower) {
+        if (towers.indexOf(abstractTower) == -1)
+            towers.add(abstractTower);
+    }
+
+    public void removeTower(AbstractTower abstractTower) {
+        towers.remove(abstractTower);
+    }
+
 }

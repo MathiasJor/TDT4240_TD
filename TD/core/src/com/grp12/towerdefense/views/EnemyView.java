@@ -15,11 +15,24 @@ public class EnemyView extends View {
 
     public EnemyView() {
         enemies = new ArrayList<AbstractEnemy>();
+        enemyImg = new Texture("towerDefense_tile245.png");
+        enemySpr = new Sprite(enemyImg);
+
     }
     @Override
     public void draw(SpriteBatch spriteBatch) {
         for(AbstractEnemy e : enemies) {
-            //TODO: tegn fiender der de er på kartet
+            //Må kanskje endres for å ta høyde for hvordan koordinater skal oversettes
+            spriteBatch.draw(enemySpr, e.getX(), e.getY());
         }
+    }
+
+    public void addEnemy(AbstractEnemy abstractEnemy) {
+        if (enemies.indexOf(abstractEnemy) == -1)
+            enemies.add(abstractEnemy);
+    }
+
+    public void removeEnemy(AbstractEnemy abstractEnemy) {
+        enemies.remove(abstractEnemy);
     }
 }

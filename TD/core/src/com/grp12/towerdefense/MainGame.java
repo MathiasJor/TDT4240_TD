@@ -9,10 +9,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.grp12.towerdefense.gamelogic.Map;
+import com.grp12.towerdefense.gamelogic.Node;
+import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.PlayState;
+import com.grp12.towerdefense.views.EnemyView;
 import com.grp12.towerdefense.views.MapView;
 import com.grp12.towerdefense.views.View;
+
+import java.util.ArrayList;
 
 public class MainGame extends ApplicationAdapter {
 
@@ -22,6 +27,7 @@ public class MainGame extends ApplicationAdapter {
 
 	private Map map;
 	private MapView mapView;
+	private EnemyView enemyView;
 
 	SpriteBatch batch;
 	private GameStateManager gsm;
@@ -34,10 +40,12 @@ public class MainGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 		gsm.push(new PlayState(gsm));
+
 		map = new Map();
 		mapView = new MapView(map.getGrid());
         View.setTileHeight(mapView.getTileHeight());
         View.setTileWidth(mapView.getMapWidth());
+        enemyView = new EnemyView();
 
         camera = new OrthographicCamera();
         viewport = new FillViewport(mapView.getMapWidth(), mapView.getMapHeight(), camera);
@@ -58,6 +66,10 @@ public class MainGame extends ApplicationAdapter {
         mapView.getSpriteCache().begin();
         mapView.getSpriteCache().draw(mapView.getCacheId());
         mapView.getSpriteCache().end();
+
+        batch.begin();
+        enemyView.draw(batch);
+        batch.end();
 
 		//gsm.render(batch);
 	}

@@ -13,6 +13,9 @@ public abstract class AbstractEnemy extends Actor{
     private float speed;
     private Vector2 position = new Vector2();
 
+    //Will be used to find direction we need to move to get to the next waypoint
+    Vector2 direction = new Vector2();
+
     private Node currentWaypoint = null;
     private int waypointIndex;
     private ArrayList<Node> waypoints;
@@ -25,15 +28,26 @@ public abstract class AbstractEnemy extends Actor{
         this.health = health;
         waypointIndex = 0;
         findNextWaypoint();
+
+        position.x = waypoints.get(0).getX();
+        position.y = waypoints.get(0).getY();
     }
 
     public void move(float dt){
-        if (position.dst(currentWaypoint.getPosition()) <= 0.4f){
-            //TODO: Implement a check to see if we have reached the end of the path
+        if (position.dst(currentWaypoint.getPosition()) <= 0.1f){
+            //TODO: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
             findNextWaypoint();
         }
-        position.x = (currentWaypoint.getX() - position.x) * dt * speed;
-        position.y = (currentWaypoint.getY() - position.y) * dt * speed;
+
+        //Calculate the direction and normalize vector
+        direction.setZero();
+        direction.x = currentWaypoint.getX() - position.x;
+        direction.y = currentWaypoint.getY() - position.y;
+        direction = direction.nor();
+
+        //Add direction * speed * dt to current position
+        position.x += (direction.x * speed * dt);
+        position.y += (direction.y * speed * dt);
     }
 
     public void setNextWaypoint(Node waypoint){
@@ -41,7 +55,7 @@ public abstract class AbstractEnemy extends Actor{
     }
 
     public void findNextWaypoint(){
-        if (waypointIndex <= waypoints.size()) {
+        if (waypointIndex < waypoints.size()) {
             currentWaypoint = waypoints.get(waypointIndex);
             waypointIndex++;
         } else {
@@ -63,5 +77,9 @@ public abstract class AbstractEnemy extends Actor{
 
     public float getY() {
         return position.y;
+    }
+
+    public Vector2 getPosition() {
+        return position;
     }
 }

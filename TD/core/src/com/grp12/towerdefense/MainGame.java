@@ -37,9 +37,8 @@ public class MainGame extends ApplicationAdapter {
 		gsm.update(Gdx.graphics.getDeltaTime());
 		//gsm.render(batch);
 		batch.begin();
-		mapView.draw(batch);
+		//mapView.draw(batch);
 		batch.end();
-
 	}
 	
 	@Override

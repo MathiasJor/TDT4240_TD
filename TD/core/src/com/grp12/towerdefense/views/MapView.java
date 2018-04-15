@@ -10,6 +10,7 @@ MapView is unique in that it contains stuff that doesn't change during the game,
 It returns a SpriteCache to not have to fill up a SpriteBatch with the same stuff each time it draws.
 It does not extend the View interface like other views should.
  */
+// Changed to View subclass for now, if stuff starts getting laggy, consider making it use spritecache again, and make it so that the main render loop fetches it.
 
 public class MapView extends View {
 

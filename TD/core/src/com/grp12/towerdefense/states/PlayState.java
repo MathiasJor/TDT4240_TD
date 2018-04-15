@@ -1,18 +1,12 @@
 package com.grp12.towerdefense.states;
 
-
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.views.EnemyView;
 import com.grp12.towerdefense.views.MapView;
 import com.grp12.towerdefense.views.TowerView;
 import com.grp12.towerdefense.views.View;
-
-import javax.swing.ViewportLayout;
 
 public class PlayState extends State {
 
@@ -24,9 +18,7 @@ public class PlayState extends State {
     private EnemyView enemyView;
     private TowerView towerView;
 
-    OrthographicCamera camera;
-    Viewport viewport;
-
+    private boolean paused;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -41,7 +33,6 @@ public class PlayState extends State {
         enemyView = new EnemyView();
         enemyView.addEnemy(e);
         towerView = new TowerView();
-
     }
 
     @Override
@@ -63,6 +54,9 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
+        mapView.dispose();
+        enemyView.dispose();
+        towerView.dispose();
 
     }
 

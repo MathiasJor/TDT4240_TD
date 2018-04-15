@@ -22,8 +22,7 @@ public class EnemyView extends View {
     @Override
     public void draw(SpriteBatch spriteBatch) {
         for(AbstractEnemy e : enemies) {
-            //Må kanskje endres for å ta høyde for hvordan koordinater skal oversettes
-            spriteBatch.draw(enemyImg, e.getY()*getTileWidth(), e.getX()*getTileHeight());
+            spriteBatch.draw(enemySpr, e.getY()*getTileWidth(), e.getX()*getTileHeight());
         }
     }
 
@@ -38,6 +37,6 @@ public class EnemyView extends View {
 
     @Override
     public void dispose() {
-
+        //TODO: Implement this
     }
 }

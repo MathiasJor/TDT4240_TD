@@ -56,7 +56,6 @@ public class MainGame extends ApplicationAdapter {
         batch.begin();
         gsm.render(batch);
         batch.end();
-		//gsm.render(batch);
 	}
 	
 	@Override

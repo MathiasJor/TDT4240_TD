@@ -49,8 +49,9 @@ public class PlayState extends State {
         currentWave = new Wave(e, 15);
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
-        AbstractTower tower = new BasicTower(new Vector2(14,15));
+        AbstractTower tower = new BasicTower(new Vector2(1,16));
         towers.add(tower);
+        AbstractTower.setEnemyList(enemies);
         towerView.addTower(tower);
     }
 
@@ -61,14 +62,30 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
+        //Start: Spawn enemies in the start of the lane
         AbstractEnemy e = currentWave.popAttempt(dt);
         if (e != null) {
             enemies.add(e);
             enemyView.addEnemy(e);
         }
-        for (AbstractEnemy enemy : enemies) {
-            enemy.move(dt);
+        //calculate enemy movement
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).getHealth() == 0) {
+                enemyView.removeEnemy(enemies.get(i));
+                enemies.remove(i);
+
+            } else {
+                enemies.get(i).move(dt);
+            }
         }
+        //calculate tower targeting and shooting
+        for (AbstractTower tower : towers) {
+            tower.fire(dt);
+        }
+
+        //TODO: Implement a check to test if the wave is over
+        //Send result and enemies wave to competitor
+        //Start waiting and a buy phase
 
     }
 

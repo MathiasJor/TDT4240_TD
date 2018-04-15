@@ -21,6 +21,7 @@ public class EnemyView extends View {
     }
     @Override
     public void draw(SpriteBatch spriteBatch) {
+        int counter = 0;
         for(AbstractEnemy e : enemies) {
             spriteBatch.draw(enemySpr, e.getY()*getTileWidth(), e.getX()*getTileHeight());
         }

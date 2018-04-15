@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class AbstractTower {
 
@@ -12,28 +11,44 @@ public abstract class AbstractTower {
     private float reloadTime;
     private Vector2 position;
     private AbstractEnemy target;
+    private static ArrayList<AbstractEnemy> enemies;
+    private float frameTime = 0;
+    private boolean canShoot = true;
 
     public AbstractTower(int damage, float reloadTime, int cost, int range, Vector2 position){
         this.damage = damage;
         this.reloadTime = reloadTime;
         this.range = range;
         this.position = position;
+        enemies = new ArrayList<AbstractEnemy>();
+        target = null;
     }
 
-    public void fire() {
-        if (target != null) {
+    public static void setEnemyList(ArrayList<AbstractEnemy> enemies) {
+        AbstractTower.enemies = enemies;
+    }
+
+    public void fire(float dt) {
+        frameTime += dt;
+        if (frameTime > reloadTime)
+            canShoot = true;
+
+        targetUpdate();
+        if (target != null && canShoot) {
             target.takeDamage(damage);
+            frameTime = 0;
+            canShoot = false;
         }
     }
 
-    public void targetUpdate() {
-        //TODO: This logic needs to be implemented
-        //Check if target is alive and in range
-        //  If not: Try to find new target
+    private void targetUpdate() {
+        if (target == null || target.getHealth() == 0 || !enemyOutOfRange(target)) {
+            target = findNextEnemy(enemies);
+        }
     }
 
-    private void targetDistance(AbstractEnemy abstractEnemy) {
-        //TODO: Checks the distance between this and the abstract enemy
+    private boolean enemyOutOfRange(AbstractEnemy abstractEnemy) {
+        return position.dst2(abstractEnemy.getPosition()) > range;
     }
 
     public AbstractEnemy getTarget() {
@@ -68,16 +83,17 @@ public abstract class AbstractTower {
         return position;
     }
 
-    public int findNextEnemy(ArrayList<AbstractEnemy> listOfEnemies){
-        ArrayList<Float> distance = new ArrayList<Float>();
-        float tempDistance=0;
-        for (int i=0; i<(listOfEnemies.size());i++){
-            tempDistance=position.dst2(listOfEnemies.get(i).getPosition());
-            if(tempDistance>range){
-                tempDistance=1000;
+    public AbstractEnemy findNextEnemy(ArrayList<AbstractEnemy> listOfEnemies){
+        float shortest = Float.MAX_VALUE;
+        float tempDistance;
+        AbstractEnemy returnEnemy = null;
+        for (AbstractEnemy enemy : listOfEnemies){
+            tempDistance = position.dst2(enemy.getPosition());
+            if(tempDistance < shortest){
+                shortest = tempDistance;
+                returnEnemy = enemy;
             }
-            distance.add(tempDistance);
         }
-        return distance.indexOf(Collections.min(distance));
+        return (shortest < range) ? returnEnemy : null;
     }
 }

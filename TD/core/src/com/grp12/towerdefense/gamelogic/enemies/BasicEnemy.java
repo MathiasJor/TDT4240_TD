@@ -43,4 +43,9 @@ public class BasicEnemy extends AbstractEnemy {
     public float getY() {
         return super.getY();
     }
+
+    @Override
+    public AbstractEnemy clone() {
+        return new BasicEnemy(getWaypoints(), getSpeed(), getHealth());
+    }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.grp12.towerdefense.gamelogic.statuseffects.AbstractStatusEffect;
 import com.grp12.towerdefense.gamelogic.Node;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public abstract class AbstractEnemy extends Actor {
@@ -63,6 +64,12 @@ public abstract class AbstractEnemy extends Actor {
         }
     }
 
+    public void takeDamage(int damage) {
+        health -= damage;
+        if (health < 0)
+            health = 0;
+    }
+
     public int getHealth() {
         return health;
     }
@@ -82,5 +89,16 @@ public abstract class AbstractEnemy extends Actor {
     public Vector2 getPosition() {
         return position;
     }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public ArrayList<Node> getWaypoints() {
+        return (ArrayList) waypoints.clone();
+    }
+
+    //Should return a deep copy of this object
+    public abstract AbstractEnemy clone();
 
 }

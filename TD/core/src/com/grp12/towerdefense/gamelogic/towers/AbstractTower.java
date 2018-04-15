@@ -26,8 +26,14 @@ public abstract class AbstractTower {
         }
     }
 
-    public void setTarget(AbstractEnemy abstractEnemy) {
-        target = abstractEnemy;
+    public void targetUpdate() {
+        //TODO: This logic needs to be implemented
+        //Check if target is alive and in range
+        //  If not: Try to find new target
+    }
+
+    private void targetDistance(AbstractEnemy abstractEnemy) {
+        //TODO: Checks the distance between this and the abstract enemy
     }
 
     public AbstractEnemy getTarget() {
@@ -61,7 +67,6 @@ public abstract class AbstractTower {
     public Vector2 getPosition(){
         return position;
     }
-
 
     public int findNextEnemy(ArrayList<AbstractEnemy> listOfEnemies){
         ArrayList<Float> distance = new ArrayList<Float>();

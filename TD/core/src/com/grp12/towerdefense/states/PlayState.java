@@ -1,10 +1,13 @@
 package com.grp12.towerdefense.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.Wave;
+import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
+import com.grp12.towerdefense.gamelogic.towers.BasicTower;
 import com.grp12.towerdefense.views.EnemyView;
 import com.grp12.towerdefense.views.GameMenuView;
 import com.grp12.towerdefense.views.MapView;
@@ -25,14 +28,13 @@ public class PlayState extends State {
     private GameMenuView gameMenuView;
     private Wave currentWave;
     private ArrayList<AbstractEnemy> enemies;
+    private ArrayList<AbstractTower> towers;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
 
         map = new Map();
-        e = new BasicEnemy(map.getWaypoints(), 1, 100);
-        currentWave = new Wave(e, 15);
-        enemies = new ArrayList<AbstractEnemy>();
+
 
         //Views
         mapView = new MapView(map.getGrid());
@@ -40,7 +42,16 @@ public class PlayState extends State {
         View.setTileWidth(mapView.getTileWidth());
         enemyView = new EnemyView();
         towerView = new TowerView();
+        //TODO: Implement GameMenuView
         gameMenuView = new GameMenuView();
+
+        e = new BasicEnemy(map.getWaypoints(), 1, 100);
+        currentWave = new Wave(e, 15);
+        enemies = new ArrayList<AbstractEnemy>();
+        towers = new ArrayList<AbstractTower>();
+        AbstractTower tower = new BasicTower(new Vector2(14,15));
+        towers.add(tower);
+        towerView.addTower(tower);
     }
 
     @Override

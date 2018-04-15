@@ -42,7 +42,7 @@ public abstract class AbstractTower {
     }
 
     private void targetUpdate() {
-        if (target == null || target.getHealth() == 0 || !enemyOutOfRange(target)) {
+        if (target == null || target.getHealth() == 0 || enemyOutOfRange(target)) {
             target = findNextEnemy(enemies);
         }
     }

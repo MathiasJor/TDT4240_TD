@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.views.EnemyView;
+import com.grp12.towerdefense.views.GameMenuView;
 import com.grp12.towerdefense.views.MapView;
 import com.grp12.towerdefense.views.TowerView;
 import com.grp12.towerdefense.views.View;
@@ -17,6 +18,7 @@ public class PlayState extends State {
     private MapView mapView;
     private EnemyView enemyView;
     private TowerView towerView;
+    private GameMenuView gameMenuView;
 
     private boolean paused;
 
@@ -33,6 +35,7 @@ public class PlayState extends State {
         enemyView = new EnemyView();
         enemyView.addEnemy(e);
         towerView = new TowerView();
+        gameMenuView = new GameMenuView();
     }
 
     @Override
@@ -48,7 +51,8 @@ public class PlayState extends State {
     @Override
     public void render(SpriteBatch sb) {
         mapView.draw(sb);
-        enemyView.draw(sb);
+        if (!paused)
+            enemyView.draw(sb);
         towerView.draw(sb);
     }
 

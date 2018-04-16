@@ -9,8 +9,12 @@ data = '{"type":"connect", "userId": "null"}'
 =======
 
 HOST, PORT = "localhost", 9999
+<<<<<<< HEAD
 data = '{"type":"newGame", "userId": 0}'
 >>>>>>> started implementing a simple server in python, with a simple python client to test the responses
+=======
+data = '{"type":"connect", "userId": "null"}'
+>>>>>>> Crawling ahead with updates to server. BUilding response structure
 
 # Create a socket (SOCK_STREAM means a TCP socket)
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

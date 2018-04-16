@@ -1,6 +1,7 @@
 import json
 import socketserver
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 class ConnectedUser:
@@ -79,26 +80,46 @@ class TCPHandler(socketserver.BaseRequestHandler):
 
 =======
 import azure as az
+=======
+>>>>>>> Crawling ahead with updates to server. BUilding response structure
 
-class TCPHandler(socketserver.BaseRequestHandler):
+class ConnectedUser:
+	def __init__(self, id, ip):
+		self.id = id
+		self.ip = ip
+
+class ServerData:
 	connectedUsers = []
 	userStorageDir = ''
-	usersLookingForGame = [0, 1]
+	nextUserId = 0
+	usersLookingForGame = []
 	games = []
 
+<<<<<<< HEAD
 >>>>>>> started implementing a simple server in python, with a simple python client to test the responses
+=======
+serverData = ServerData
+
+class TCPHandler(socketserver.BaseRequestHandler):
+
+>>>>>>> Crawling ahead with updates to server. BUilding response structure
 	def handle(self):
 		self.handleResponse(self.request.recv(1024).strip())
 
 	def handleResponse(self, res):
 <<<<<<< HEAD
+<<<<<<< HEAD
 		global serverData
 =======
 >>>>>>> started implementing a simple server in python, with a simple python client to test the responses
+=======
+		global serverData
+>>>>>>> Crawling ahead with updates to server. BUilding response structure
 		response = json.loads(res)
 		print(response)
 
 		if(response['type'] == 'connect'):
+<<<<<<< HEAD
 <<<<<<< HEAD
 			if(response['userId'] == 'null'):
 				serverData.connectedUsers.append(ConnectedUser(serverData.nextUserId, self.client_address[0]))
@@ -170,11 +191,23 @@ class TCPHandler(socketserver.BaseRequestHandler):
 =======
 			self.connectedUsers.append(response['userId'])
 			self.request.sendall(bytes("You have successfully connected the client!", 'utf-8'))
+=======
+			if(response['userId'] == 'null'):
+				serverData.connectedUsers.append(ConnectedUser(serverData.nextUserId, self.client_address[0]))
+				serverData.nextUserId += 1
+				print(serverData.nextUserId)
+				self.request.sendall(bytes("You have successfully connected the client! Your userId is " + str(serverData.nextUserId - 1), 'utf-8'))
+			else:
+				serverData.connectedUsers.append(response['userId'])
+				self.request.sendall(bytes("You have successfully connected the client!", 'utf-8'))				
+>>>>>>> Crawling ahead with updates to server. BUilding response structure
 		elif(response['type'] == 'newGame'):
-			if(self.usersLookingForGame.__contains__(response['userId'])):
+			if response["userId"] == "null":
+				return
+			if(serverData.usersLookingForGame.__contains__(response['userId'])):
 				self.request.sendall(bytes(self.createNewGame(), 'utf-8'))
 			else:			
-				self.usersLookingForGame.append(response['userId'])
+				serverData.usersLookingForGame.append(response['userId'])
 				self.request.sendall(bytes(self.createNewGame(), 'utf-8'))
 		elif(response['type'] == 'endTurn'):
 			#TODO: Implement response when a user has ended their turn
@@ -190,17 +223,23 @@ class TCPHandler(socketserver.BaseRequestHandler):
 		return "{}"
 	
 	def createNewGame(self):
-		if len(self.usersLookingForGame) > 1:
+		global serverData
+		if len(serverData.usersLookingForGame) > 1:
 			#OK, so we are enough players to create a new game!
 			
 			#First we remove the first user from the looking for game pool
-			user1 = self.usersLookingForGame.pop(0)
+			user1 = serverData.usersLookingForGame.pop(0)
 			# Then we do the same for the second user. No proper matchmaking here!
-			user2 = self.usersLookingForGame.pop(0)
+			user2 = serverData.usersLookingForGame.pop(0)
 
+<<<<<<< HEAD
 			self.games.append("{users:[{id: "+ str(user1) + ", health: 30, isTurn: true}, {id: " + str(user2) + ", health: 30, isTurn: false}], id:" + str(len(self.games)) + "}")
 			return self.games[len(self.games) - 1]
 >>>>>>> started implementing a simple server in python, with a simple python client to test the responses
+=======
+			serverData.games.append("{users:[{id: "+ str(user1) + ", health: 30, isTurn: true}, {id: " + str(user2) + ", health: 30, isTurn: false}], id:" + str(len(serverData.games)) + "}")
+			return serverData.games[len(serverData.games) - 1]
+>>>>>>> Crawling ahead with updates to server. BUilding response structure
 		print("Not enough players looking for game yet...")
 		return "Not enough players in pool, please wait..."
 		

@@ -1,10 +1,16 @@
 import socket
+<<<<<<< HEAD
 import json
 
 userid = 'null'
 
 HOST, PORT = "localhost", 9999
 data = '{"type":"connect", "userId": "null"}'
+=======
+
+HOST, PORT = "localhost", 9999
+data = '{"type":"newGame", "userId": 0}'
+>>>>>>> started implementing a simple server in python, with a simple python client to test the responses
 
 # Create a socket (SOCK_STREAM means a TCP socket)
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -12,7 +18,11 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
     # Connect to server and send data
     sock.connect((HOST, PORT))
+<<<<<<< HEAD
     sock.sendall(bytes(data,'utf-8'))
+=======
+    sock.sendall(data + "\n")
+>>>>>>> started implementing a simple server in python, with a simple python client to test the responses
 
     # Receive data from the server and shut down
     received = sock.recv(1024)
@@ -21,6 +31,7 @@ finally:
 
 print ("Sent:     {}".format(data))
 print ("Received: {}".format(received))
+<<<<<<< HEAD
 res = json.loads(received)
 userid = res['userId']
 string = ''
@@ -78,3 +89,6 @@ while not string == 'end':
         finally:
             sock.close()
         print(received)
+=======
+input()
+>>>>>>> started implementing a simple server in python, with a simple python client to test the responses

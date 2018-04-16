@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class EnemyView extends View {
 
+    //TODO: #3: Add more textures and test for enemies type to draw different enemies
     private ArrayList<AbstractEnemy> enemies;
     private Texture enemyImg;
     private Sprite enemySpr;
@@ -38,6 +39,6 @@ public class EnemyView extends View {
 
     @Override
     public void dispose() {
-        //TODO: Implement this
+        //TODO: #4: Implement this
     }
 }

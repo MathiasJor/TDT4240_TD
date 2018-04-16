@@ -42,7 +42,7 @@ public class PlayState extends State {
         View.setTileWidth(mapView.getTileWidth());
         enemyView = new EnemyView();
         towerView = new TowerView();
-        //TODO: Implement GameMenuView
+        //TODO: #5: Implement GameMenuView
         gameMenuView = new GameMenuView();
 
         e = new BasicEnemy(map.getWaypoints(), 1, 100);
@@ -57,7 +57,7 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput() {
-
+        //TODO: #10: Implement input handling
     }
 
     @Override
@@ -83,9 +83,15 @@ public class PlayState extends State {
             tower.fire(dt);
         }
 
-        //TODO: Implement a check to test if the wave is over
+        //TODO: #6: Implement a check to test if the wave is over
+        //TODO: #7: Implement code to send information about the ended wave
+
         //Send result and enemies wave to competitor
+        //TODO: #8: Implement waiting and buy phase
         //Start waiting and a buy phase
+        //TODO: #9: In waiting and buy phase, check if competitors turn is over and allow a new round to start
+        //TODO: #16: Fetch the results from competitors wave and enemies sent to device
+
 
     }
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class TowerView extends View {
 
+    //TODO: #12: Add more textures in TowerView and a test for which texture to draw
     private ArrayList<AbstractTower> towers;
     private Texture towerImg;
     private Sprite towerSpr;
@@ -37,7 +38,7 @@ public class TowerView extends View {
 
     @Override
     public void dispose() {
-        //TODO: Implement this
+        //TODO: #4: Implement this
     }
 
 }

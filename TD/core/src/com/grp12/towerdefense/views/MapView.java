@@ -54,7 +54,7 @@ public class MapView extends View {
 
 
     public void dispose() {
-        //TODO: Implement this
+        //TODO: #4: Implement this
     }
 
 

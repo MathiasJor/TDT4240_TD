@@ -36,7 +36,7 @@ public abstract class AbstractEnemy extends Actor {
 
     public void move(float dt) {
         if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
-            //TODO: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
+            //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
             findNextWaypoint();
         }
 

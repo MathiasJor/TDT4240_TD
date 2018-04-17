@@ -51,6 +51,7 @@ public abstract class AbstractTower {
         return container.getPosition().dst2(abstractEnemy.getPosition()) > range;
     }
 
+    //TODO: Setting this sets the node.setTower, if it fails, fail here as well
     public void setNode (Node node) {
         container = node;
     }

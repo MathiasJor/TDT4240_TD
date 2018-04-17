@@ -41,6 +41,7 @@ public class Node {
         this.position = position;
     }
 
+    //TODO: Successfully setting this sets the tower.setNode as well
     public void setTower(AbstractTower abstractTower) {
         if (type == NodeType.TOWERNODE) {
             this.tower = abstractTower;

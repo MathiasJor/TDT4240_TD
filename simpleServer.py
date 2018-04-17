@@ -20,10 +20,16 @@ class Game:
 		self.user1 = user1
 		self.user2 = user2
 		self.id = id
+<<<<<<< HEAD
 		self.turnData = '""'
 
 	def toString(self):
 		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health)+', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"turnData\":" + str(self.turnData) + " \"id\":" + str(self.id) + "}"
+=======
+
+	def toString(self):
+		"{users:[{id: "+ str(self.user1.id) + ", health:"+str(self.user1.health)+", isTurn:" + str(self.user1.isTurn) + "}, {id: " + str(self.user2.id) + ", health: " + str(self.user2.health) + ", isTurn: " + str(self.user2.isTurn) + "}], id:" + str(len(serverData.games)) + "}"
+>>>>>>> Filling out some data classes
 
 class ServerData:
 	connectedUsers = []
@@ -195,7 +201,6 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			if(response['userId'] == 'null'):
 				serverData.connectedUsers.append(ConnectedUser(serverData.nextUserId, self.client_address[0]))
 				serverData.nextUserId += 1
-				print(serverData.nextUserId)
 				self.request.sendall(bytes("You have successfully connected the client! Your userId is " + str(serverData.nextUserId - 1), 'utf-8'))
 			else:
 				serverData.connectedUsers.append(response['userId'])
@@ -233,11 +238,15 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			user2 = serverData.usersLookingForGame.pop(0)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 			self.games.append("{users:[{id: "+ str(user1) + ", health: 30, isTurn: true}, {id: " + str(user2) + ", health: 30, isTurn: false}], id:" + str(len(self.games)) + "}")
 			return self.games[len(self.games) - 1]
 >>>>>>> started implementing a simple server in python, with a simple python client to test the responses
 =======
 			serverData.games.append("{users:[{id: "+ str(user1) + ", health: 30, isTurn: true}, {id: " + str(user2) + ", health: 30, isTurn: false}], id:" + str(len(serverData.games)) + "}")
+=======
+			serverData.games.append(Game(user1, user2, len(serverData.games)))
+>>>>>>> Filling out some data classes
 			return serverData.games[len(serverData.games) - 1]
 >>>>>>> Crawling ahead with updates to server. BUilding response structure
 		print("Not enough players looking for game yet...")

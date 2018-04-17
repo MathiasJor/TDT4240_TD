@@ -26,7 +26,7 @@ public abstract class AbstractStatusEffect {
         enemy.setSpeed((float) (speed*1-reduceBasedOnTowerLevel[towerLevel]));
     }
 
-    //posion, returns the arrau [how much health reduced per seconds, duration in sections]
+    //posion, returns the array [how much health reduced per seconds, duration in sections]
     public int[] poison(AbstractEnemy enemy,int towerLevel){
        return new int[]{(int) (enemy.getHealth() * reduceBasedOnTowerLevel[towerLevel]),10};
     }

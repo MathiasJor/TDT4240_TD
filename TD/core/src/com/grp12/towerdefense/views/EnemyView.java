@@ -9,17 +9,36 @@ import java.util.ArrayList;
 
 public class EnemyView extends View {
 
+    //TODO: #3: Add more textures and test for enemies type to draw different enemies
     private ArrayList<AbstractEnemy> enemies;
     private Texture enemyImg;
     private Sprite enemySpr;
 
     public EnemyView() {
         enemies = new ArrayList<AbstractEnemy>();
+        enemyImg = new Texture("towerDefense_tile245.png");
+        enemySpr = new Sprite(enemyImg);
+
     }
     @Override
     public void draw(SpriteBatch spriteBatch) {
+        int counter = 0;
         for(AbstractEnemy e : enemies) {
-            //TODO: tegn fiender der de er på kartet
+            spriteBatch.draw(enemySpr, e.getY()*getTileWidth(), e.getX()*getTileHeight());
         }
+    }
+
+    public void addEnemy(AbstractEnemy abstractEnemy) {
+        if (enemies.indexOf(abstractEnemy) == -1)
+            enemies.add(abstractEnemy);
+    }
+
+    public void removeEnemy(AbstractEnemy abstractEnemy) {
+        enemies.remove(abstractEnemy);
+    }
+
+    @Override
+    public void dispose() {
+        //TODO: #4: Implement this
     }
 }

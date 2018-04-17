@@ -6,6 +6,21 @@ class ConnectedUser:
 		self.id = id
 		self.ip = ip
 
+class GameUser:
+	def __init__(self, id, health, isTurn):
+		self.id = id
+		self.health = health
+		self.isTurn = isTurn
+
+class Game:
+	def __init__(self, user1, user2, id):
+		self.user1 = user1
+		self.user2 = user2
+		self.id = id
+
+	def toString(self):
+		"{users:[{id: "+ str(self.user1.id) + ", health:"+str(self.user1.health)+", isTurn:" + str(self.user1.isTurn) + "}, {id: " + str(self.user2.id) + ", health: " + str(self.user2.health) + ", isTurn: " + str(self.user2.isTurn) + "}], id:" + str(len(serverData.games)) + "}"
+
 class ServerData:
 	connectedUsers = []
 	userStorageDir = ''
@@ -29,7 +44,6 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			if(response['userId'] == 'null'):
 				serverData.connectedUsers.append(ConnectedUser(serverData.nextUserId, self.client_address[0]))
 				serverData.nextUserId += 1
-				print(serverData.nextUserId)
 				self.request.sendall(bytes("You have successfully connected the client! Your userId is " + str(serverData.nextUserId - 1), 'utf-8'))
 			else:
 				serverData.connectedUsers.append(response['userId'])
@@ -65,7 +79,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			# Then we do the same for the second user. No proper matchmaking here!
 			user2 = serverData.usersLookingForGame.pop(0)
 
-			serverData.games.append("{users:[{id: "+ str(user1) + ", health: 30, isTurn: true}, {id: " + str(user2) + ", health: 30, isTurn: false}], id:" + str(len(serverData.games)) + "}")
+			serverData.games.append(Game(user1, user2, len(serverData.games)))
 			return serverData.games[len(serverData.games) - 1]
 		print("Not enough players looking for game yet...")
 		return "Not enough players in pool, please wait..."

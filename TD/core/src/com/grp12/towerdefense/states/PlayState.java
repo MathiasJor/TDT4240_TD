@@ -39,6 +39,11 @@ public class PlayState extends State {
 
 
         //Views
+        AbstractTower tower = new BasicTower();
+        //TODO: functions that makes it so that setting on, sets the other
+        tower.setNode(map.getGrid()[16][1]);
+        map.getGrid()[16][1].setTower(tower);
+
         mapView = new MapView(map.getGrid());
         View.setTileHeight(mapView.getTileHeight());
         View.setTileWidth(mapView.getTileWidth());
@@ -51,7 +56,7 @@ public class PlayState extends State {
         currentWave = new Wave(e, 15);
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
-        AbstractTower tower = new BasicTower(new Vector2(1,16));
+
         towers.add(tower);
         AbstractTower.setEnemyList(enemies);
         towerView.addTower(tower);
@@ -115,7 +120,7 @@ public class PlayState extends State {
         } else {
             gameMenuView.draw(sb);
         }
-        towerView.draw(sb);
+        //towerView.draw(sb);
 
     }
 

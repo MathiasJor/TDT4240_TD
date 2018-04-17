@@ -1,9 +1,11 @@
 package com.grp12.towerdefense.views;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.grp12.towerdefense.gamelogic.Node;
+import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 
 /*
 MapView is unique in that it contains stuff that doesn't change during the game, and for performance's sake.
@@ -36,6 +38,10 @@ public class MapView extends View {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j].getType() == Node.NodeType.TOWERNODE) {
                     sb.draw(land, i*land.getHeight(), j*land.getWidth());
+                    AbstractTower t = grid[i][j].getTower();
+                    if (t != null) {
+                        sb.draw(new Sprite(new Texture("towerDefense_tile250.png")), i * land.getHeight(), j * land.getWidth());
+                    }
                 }
                 if (grid[i][j].getType() == Node.NodeType.PATHNODE) {
                     sb.draw(path, i*land.getHeight(), j*land.getWidth());

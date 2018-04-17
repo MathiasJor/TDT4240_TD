@@ -18,6 +18,7 @@ public class Node {
         this.type = type;
         this.position.x = x;
         this.position.y = y;
+        tower = null;
     }
 
     public NodeType getType() {
@@ -42,7 +43,7 @@ public class Node {
 
     public void setTower(AbstractTower abstractTower) {
         if (type == NodeType.TOWERNODE) {
-            this.tower = tower;
+            this.tower = abstractTower;
         } else {
             //Maybe TODO: Throw some exception?
         }

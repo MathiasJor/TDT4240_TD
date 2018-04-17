@@ -30,6 +30,8 @@ public class PlayState extends State {
     private ArrayList<AbstractEnemy> enemies;
     private ArrayList<AbstractTower> towers;
 
+    private boolean buyPhase;
+
     public PlayState(GameStateManager gsm) {
         super(gsm);
 
@@ -43,7 +45,7 @@ public class PlayState extends State {
         enemyView = new EnemyView();
         towerView = new TowerView();
         //TODO: #5: Implement GameMenuView
-        gameMenuView = new GameMenuView();
+        gameMenuView = new GameMenuView(new Vector2(0,0));
 
         e = new BasicEnemy(map.getWaypoints(), 1, 100);
         currentWave = new Wave(e, 15);
@@ -53,6 +55,8 @@ public class PlayState extends State {
         towers.add(tower);
         AbstractTower.setEnemyList(enemies);
         towerView.addTower(tower);
+        buyPhase = false;
+
     }
 
     @Override
@@ -62,35 +66,43 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
-        //Start: Spawn enemies in the start of the lane
-        AbstractEnemy e = currentWave.popAttempt(dt);
-        if (e != null) {
-            enemies.add(e);
-            enemyView.addEnemy(e);
-        }
-        //calculate enemy movement
-        for (int i = 0; i < enemies.size(); i++) {
-            if (enemies.get(i).getHealth() == 0) {
-                enemyView.removeEnemy(enemies.get(i));
-                enemies.remove(i);
+        if (!buyPhase) {
+            //Start: Spawn enemies in the start of the lane
+            AbstractEnemy e = currentWave.popAttempt(dt);
+            if (e != null) {
+                enemies.add(e);
+                enemyView.addEnemy(e);
+            }
+            //calculate enemy movement
+            for (int i = 0; i < enemies.size(); i++) {
+                if (enemies.get(i).getHealth() == 0) {
+                    enemyView.removeEnemy(enemies.get(i));
+                    enemies.remove(i);
+                    //TODO: add code the gives money for a dead enemy
 
-            } else {
-                enemies.get(i).move(dt);
+                } else {
+                    enemies.get(i).move(dt);
+                }
+            }
+            //calculate tower targeting and shooting
+            for (AbstractTower tower : towers) {
+                tower.fire(dt);
+            }
+
+            //TODO: #6: Implement a check to test if the wave is over
+            //TODO: #7: Implement code to send information about the ended wave
+
+            //Send result and enemies wave to competitor
+            //TODO: #8: Implement waiting and buy phase
+            //Start waiting and a buy phase
+            //TODO: #9: In waiting and buy phase, check if competitors turn is over and allow a new round to start
+            //TODO: #16: Fetch the results from competitors wave and enemies sent to device
+            //Temporary lazy check if the round is over
+            if (enemies.size() == 0 && currentWave.empty()) {
+                //send info about round to server
+                buyPhase = true;
             }
         }
-        //calculate tower targeting and shooting
-        for (AbstractTower tower : towers) {
-            tower.fire(dt);
-        }
-
-        //TODO: #6: Implement a check to test if the wave is over
-        //TODO: #7: Implement code to send information about the ended wave
-
-        //Send result and enemies wave to competitor
-        //TODO: #8: Implement waiting and buy phase
-        //Start waiting and a buy phase
-        //TODO: #9: In waiting and buy phase, check if competitors turn is over and allow a new round to start
-        //TODO: #16: Fetch the results from competitors wave and enemies sent to device
 
 
     }
@@ -98,8 +110,13 @@ public class PlayState extends State {
     @Override
     public void render(SpriteBatch sb) {
         mapView.draw(sb);
-        enemyView.draw(sb);
+        if (!buyPhase) {
+            enemyView.draw(sb);
+        } else {
+            gameMenuView.draw(sb);
+        }
         towerView.draw(sb);
+
     }
 
     @Override
@@ -107,7 +124,7 @@ public class PlayState extends State {
         mapView.dispose();
         enemyView.dispose();
         towerView.dispose();
-
+        gameMenuView.dispose();
     }
 
     @Override

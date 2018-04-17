@@ -54,4 +54,8 @@ public class Wave {
         }
         return null;
     }
+
+    public boolean empty() {
+        return enemies.size() == 0;
+    }
 }

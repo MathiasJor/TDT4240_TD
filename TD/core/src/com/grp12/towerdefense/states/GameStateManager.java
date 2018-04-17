@@ -32,4 +32,12 @@ public class GameStateManager {
     public void render(SpriteBatch sb) {
         states.peek().render(sb);
     }
+
+    public int getViewportWidth() {
+        return states.peek().getViewportWidth();
+    }
+
+    public int getViewportHeight() {
+        return states.peek().getViewportHeight();
+    }
 }

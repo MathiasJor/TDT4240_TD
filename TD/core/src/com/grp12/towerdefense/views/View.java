@@ -25,4 +25,6 @@ public abstract class View {
 
     public abstract void draw(SpriteBatch spriteBatch);
 
+    public abstract void dispose();
+
 }

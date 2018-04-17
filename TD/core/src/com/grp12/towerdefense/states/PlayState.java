@@ -136,7 +136,7 @@ public class PlayState extends State {
                 //send info about round to server
                 buyPhase = true;
             }
-        }
+        
 
 
     }

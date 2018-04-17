@@ -30,7 +30,7 @@ public class MainGame extends ApplicationAdapter {
 	private GameStateManager gsm;
 
     private OrthographicCamera camera;
-    private Viewport viewport;
+    public Viewport viewport;
     ServerConnection sc = new ServerConnection();
 	
 	@Override
@@ -54,11 +54,11 @@ public class MainGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gsm.update(Gdx.graphics.getDeltaTime());
 
-        /*camera.update();
+        camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         gsm.render(batch);
-        batch.end();*/
+        batch.end();
 
 	}
 	
@@ -66,4 +66,6 @@ public class MainGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
+
+	public Viewport getViewport(){return viewport;}
 }

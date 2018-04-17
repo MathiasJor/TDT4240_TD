@@ -1,8 +1,15 @@
 package com.grp12.towerdefense.states;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.grp12.towerdefense.MainGame;
 import com.grp12.towerdefense.gamelogic.Map;
+import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.Wave;
@@ -30,6 +37,8 @@ public class PlayState extends State {
     private ArrayList<AbstractEnemy> enemies;
     private ArrayList<AbstractTower> towers;
 
+
+
     public PlayState(GameStateManager gsm) {
         super(gsm);
 
@@ -45,6 +54,7 @@ public class PlayState extends State {
         //TODO: #5: Implement GameMenuView
         gameMenuView = new GameMenuView();
 
+
         e = new BasicEnemy(map.getWaypoints(), 1, 100);
         currentWave = new Wave(e, 15);
         enemies = new ArrayList<AbstractEnemy>();
@@ -58,6 +68,25 @@ public class PlayState extends State {
     @Override
     protected void handleInput() {
         //TODO: #10: Implement input handling
+        if(Gdx.input.isTouched()){
+            //get x and y from where finger touch
+            int x = Gdx.input.getX();
+            int y = Gdx.input.getY();
+            //convert so axes are 0,0 down to left and not up to the left
+            y= Gdx.graphics.getHeight()-y;
+            Vector2 nodeIsClicked = new Vector2(x,y);
+            //get node informastion
+            Node node =mapView.getNode(nodeIsClicked, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+            //if not nodepath build a tower there
+            if(node.getType()== Node.NodeType.TOWERNODE){
+                Vector2 setNode =new Vector2(node.getX(),node.getY());
+                AbstractTower tower = new BasicTower(setNode);
+                towers.add(tower);
+                AbstractTower.setEnemyList(enemies);
+                towerView.addTower(tower);
+            }
+
+        }
     }
 
     @Override
@@ -82,7 +111,7 @@ public class PlayState extends State {
         for (AbstractTower tower : towers) {
             tower.fire(dt);
         }
-
+        handleInput();
         //TODO: #6: Implement a check to test if the wave is over
         //TODO: #7: Implement code to send information about the ended wave
 

@@ -59,8 +59,16 @@ public class MapView {
         return land.getWidth()*grid.length;
     }
 
+    public int getTileWidth() {
+        return land.getWidth();
+    }
+
     public int getMapHeight() {
         return land.getHeight()*grid[0].length;
+    }
+
+    public int getTileHeight() {
+        return land.getHeight();
     }
 
 

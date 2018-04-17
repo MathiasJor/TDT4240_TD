@@ -12,6 +12,7 @@ import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.PlayState;
 import com.grp12.towerdefense.views.MapView;
+import com.grp12.towerdefense.views.View;
 
 public class MainGame extends ApplicationAdapter {
 
@@ -35,6 +36,8 @@ public class MainGame extends ApplicationAdapter {
 		gsm.push(new PlayState(gsm));
 		map = new Map();
 		mapView = new MapView(map.getGrid());
+        View.setTileHeight(mapView.getTileHeight());
+        View.setTileWidth(mapView.getMapWidth());
 
         camera = new OrthographicCamera();
         viewport = new FillViewport(mapView.getMapWidth(), mapView.getMapHeight(), camera);

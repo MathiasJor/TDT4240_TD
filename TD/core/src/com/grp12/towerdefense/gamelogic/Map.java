@@ -78,40 +78,40 @@ public class Map {
                 Node tempNode;
                 switch (mapArray[y][x]) {
                     case '0':
-                        tempNode = new Node(Node.NodeType.TOWERNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.TOWERNODE, x, realY);
                         grid[realY][x] = tempNode;
                         break;
                     case '1':
-                        tempNode = new Node(Node.NodeType.PATHNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.PATHNODE, x, realY);
                         grid[realY][x] = tempNode;
                         break;
                     case 'S':
-                        tempNode = new Node(Node.NodeType.PATHNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.PATHNODE, x, realY);
                         grid[realY][x] = tempNode;
                         //waypoints.add(tempNode);
                         break;
                     case 'E':
-                        tempNode = new Node(Node.NodeType.PATHNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.PATHNODE, x, realY);
                         grid[realY][x] = tempNode;
                         //waypoints.add(tempNode);
                         break;
                     case 'R':
-                        tempNode = new Node(Node.NodeType.PATHNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.PATHNODE, x, realY);
                         grid[realY][x] = tempNode;
                         //waypoints.add(tempNode);
                         break;
                     case 'L':
-                        tempNode = new Node(Node.NodeType.PATHNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.PATHNODE, x, realY);
                         grid[realY][x] = tempNode;
                         //waypoints.add(tempNode);
                         break;
                     case 'U':
-                        tempNode = new Node(Node.NodeType.PATHNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.PATHNODE, x, realY);
                         grid[realY][x] = tempNode;
                         //waypoints.add(tempNode);
                         break;
                     case 'D':
-                        tempNode = new Node(Node.NodeType.PATHNODE, true, x, realY);
+                        tempNode = new Node(Node.NodeType.PATHNODE, x, realY);
                         grid[realY][x] = tempNode;
                         //waypoints.add(tempNode);
                         break;

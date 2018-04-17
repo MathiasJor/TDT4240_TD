@@ -111,4 +111,3 @@ public abstract class AbstractEnemy extends Actor {
 
     }
 
-}

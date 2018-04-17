@@ -30,8 +30,10 @@ public class MainGame extends ApplicationAdapter {
 	private GameStateManager gsm;
 
     private OrthographicCamera camera;
-    public Viewport viewport;
+
     ServerConnection sc = new ServerConnection();
+    private Viewport viewport;
+
 	
 	@Override
 	public void create () {
@@ -46,7 +48,6 @@ public class MainGame extends ApplicationAdapter {
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-		sc.ping();
 	}
 
 	@Override

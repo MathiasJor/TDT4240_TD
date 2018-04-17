@@ -1,6 +1,7 @@
 package com.grp12.towerdefense.gamelogic.towers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 
 import java.util.ArrayList;
@@ -9,17 +10,16 @@ public abstract class AbstractTower {
 
     private int damage, cost, range;
     private float reloadTime;
-    private Vector2 position;
     private AbstractEnemy target;
     private static ArrayList<AbstractEnemy> enemies;
     private float frameTime = 0;
     private boolean canShoot = true;
+    private Node container;
 
-    public AbstractTower(int damage, float reloadTime, int cost, int range, Vector2 position){
+    public AbstractTower(int damage, float reloadTime, int cost, int range){
         this.damage = damage;
         this.reloadTime = reloadTime;
         this.range = range;
-        this.position = position;
         enemies = new ArrayList<AbstractEnemy>();
         target = null;
     }
@@ -48,7 +48,15 @@ public abstract class AbstractTower {
     }
 
     private boolean enemyOutOfRange(AbstractEnemy abstractEnemy) {
-        return position.dst2(abstractEnemy.getPosition()) > range;
+        return container.getPosition().dst2(abstractEnemy.getPosition()) > range;
+    }
+
+    public void setNode (Node node) {
+        container = node;
+    }
+
+    public Node getNode () {
+        return container;
     }
 
     public AbstractEnemy getTarget() {
@@ -80,7 +88,7 @@ public abstract class AbstractTower {
     }
 
     public Vector2 getPosition(){
-        return position;
+        return container.getPosition();
     }
 
     public AbstractEnemy findNextEnemy(ArrayList<AbstractEnemy> listOfEnemies){
@@ -88,7 +96,7 @@ public abstract class AbstractTower {
         float tempDistance;
         AbstractEnemy returnEnemy = null;
         for (AbstractEnemy enemy : listOfEnemies){
-            tempDistance = position.dst2(enemy.getPosition());
+            tempDistance = container.getPosition().dst2(enemy.getPosition());
             if(tempDistance < shortest){
                 shortest = tempDistance;
                 returnEnemy = enemy;

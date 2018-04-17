@@ -7,7 +7,7 @@ import com.grp12.towerdefense.gamelogic.Node;
 
 import java.util.ArrayList;
 
-public abstract class AbstractEnemy extends Actor{
+public abstract class AbstractEnemy extends Actor {
 
     private int health;
     private float speed;
@@ -27,8 +27,8 @@ public abstract class AbstractEnemy extends Actor{
         findNextWaypoint();
     }
 
-    public void move(float dt){
-        if (position.dst(currentWaypoint.getPosition()) <= 0.4f){
+    public void move(float dt) {
+        if (position.dst(currentWaypoint.getPosition()) <= 0.4f) {
             //TODO: Implement a check to see if we have reached the end of the path
             findNextWaypoint();
         }
@@ -36,11 +36,11 @@ public abstract class AbstractEnemy extends Actor{
         position.y = (currentWaypoint.getY() - position.y) * dt * speed;
     }
 
-    public void setNextWaypoint(Node waypoint){
+    public void setNextWaypoint(Node waypoint) {
         currentWaypoint = waypoint;
     }
 
-    public void findNextWaypoint(){
+    public void findNextWaypoint() {
         currentWaypoint = waypoints.get(waypointIndex);
         waypointIndex++;
     }
@@ -53,14 +53,11 @@ public abstract class AbstractEnemy extends Actor{
         this.health = health;
     }
 
-<<<<<<< HEAD
-=======
-    public float getX() {
-        return position.x;
+    public Vector2 getPosition(){
+        return position;
     }
 
-    public float getY() {
-        return position.y;
-    }
->>>>>>> refs/remotes/origin/master
+    public void setSpeed(float speed){this.speed=speed;}
+    public float getSpeed(){return speed;}
+
 }

@@ -56,8 +56,8 @@ public class PlayState extends State {
         gameMenuView = new GameMenuView(new Vector2(0,0));
 
 
-        e = new BasicEnemy(map.getWaypoints(), 1, 100);
-        currentWave = new Wave(e, 15);
+        e = new BasicEnemy(map.getWaypoints(), 1, 1000);
+        currentWave = new Wave(e, 10);
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower tower = new BasicTower(new Vector2(1,16));
@@ -82,11 +82,21 @@ public class PlayState extends State {
             Node node =mapView.getNode(nodeIsClicked, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             //if not nodepath build a tower there
             if(node.getType()== Node.NodeType.TOWERNODE){
-                Vector2 setNode =new Vector2(node.getX(),node.getY());
-                AbstractTower tower = new BasicTower(setNode);
-                towers.add(tower);
-                AbstractTower.setEnemyList(enemies);
-                towerView.addTower(tower);
+                if(!node.getOccupied()){
+                    node.setOccupied(true);
+                    Vector2 setNode =new Vector2(node.getX(),node.getY());
+                    AbstractTower tower = new BasicTower(setNode);
+                    towers.add(tower);
+                    AbstractTower.setEnemyList(enemies);
+                    towerView.addTower(tower);
+                }
+                else{
+                    for (AbstractTower t: towers){
+                        if(t.getPosition()==node.getPosition()){
+                            t.upgradeTower(1000,1,250);
+                        }
+                    }
+                }
             }
 
         }

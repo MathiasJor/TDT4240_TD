@@ -6,7 +6,7 @@ public class Node {
 
     public enum NodeType {TOWERNODE, PATHNODE}
     private NodeType type;
-
+    private boolean occupied = false;
     private Vector2 position = new Vector2();
 
     int pixelSize;
@@ -36,4 +36,8 @@ public class Node {
     public void setPosition(Vector2 position){
         this.position = position;
     }
+
+    public boolean getOccupied(){return occupied;}
+
+    public void setOccupied(boolean occupied){this.occupied=occupied;}
 }

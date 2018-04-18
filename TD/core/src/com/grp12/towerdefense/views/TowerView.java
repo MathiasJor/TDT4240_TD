@@ -12,18 +12,18 @@ public class TowerView extends View {
     //TODO: #12: Add more textures in TowerView and a test for which texture to draw
     private ArrayList<AbstractTower> towers;
     private Texture towerImg;
-    private Sprite towerSpr;
+    private Sprite towerSprB;
 
     public TowerView() {
         towers = new ArrayList<AbstractTower>();
         towerImg = new Texture("towerDefense_tile250.png");
-        towerSpr = new Sprite(towerImg);
+        towerSprB = new Sprite(towerImg);
     }
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
         for(AbstractTower t : towers) {
-            spriteBatch.draw(towerSpr, t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
+            spriteBatch.draw(towerSprB, t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
 
         }
     }

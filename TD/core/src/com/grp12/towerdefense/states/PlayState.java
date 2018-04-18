@@ -31,7 +31,7 @@ public class PlayState extends State {
     //Views
     private MapView mapView;
     private EnemyView enemyView;
-    private TowerView towerView;
+    //private TowerView towerView;
     private GameMenuView gameMenuView;
     private Wave currentWave;
     private ArrayList<AbstractEnemy> enemies;
@@ -47,11 +47,16 @@ public class PlayState extends State {
 
 
         //Views
+        AbstractTower tower = new BasicTower();
+        //TODO: functions that makes it so that setting on, sets the other
+        tower.setNode(map.getGrid()[16][1]);
+        map.getGrid()[16][1].setTower(tower);
+
         mapView = new MapView(map.getGrid());
         View.setTileHeight(mapView.getTileHeight());
         View.setTileWidth(mapView.getTileWidth());
         enemyView = new EnemyView();
-        towerView = new TowerView();
+        //towerView = new TowerView();
         //TODO: #5: Implement GameMenuView
         gameMenuView = new GameMenuView(new Vector2(0,0));
 
@@ -60,10 +65,10 @@ public class PlayState extends State {
         currentWave = new Wave(e, 15);
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
-        AbstractTower tower = new BasicTower(new Vector2(1,16));
+
         towers.add(tower);
         AbstractTower.setEnemyList(enemies);
-        towerView.addTower(tower);
+        //towerView.addTower(tower);
         buyPhase = false;
 
     }
@@ -149,7 +154,7 @@ public class PlayState extends State {
         } else {
             gameMenuView.draw(sb);
         }
-        towerView.draw(sb);
+        //towerView.draw(sb);
 
     }
 
@@ -157,7 +162,7 @@ public class PlayState extends State {
     public void dispose() {
         mapView.dispose();
         enemyView.dispose();
-        towerView.dispose();
+        //towerView.dispose();
         gameMenuView.dispose();
     }
 

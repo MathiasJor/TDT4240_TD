@@ -1,6 +1,7 @@
 package com.grp12.towerdefense.gamelogic;
 
 import com.badlogic.gdx.math.Vector2;
+import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 
 public class Node {
 
@@ -9,12 +10,15 @@ public class Node {
 
     private Vector2 position = new Vector2();
 
+    private AbstractTower tower;
+
     int pixelSize;
 
     public Node(NodeType type, int x, int y){
         this.type = type;
         this.position.x = x;
         this.position.y = y;
+        tower = null;
     }
 
     public NodeType getType() {
@@ -35,5 +39,22 @@ public class Node {
 
     public void setPosition(Vector2 position){
         this.position = position;
+    }
+
+    //TODO: Successfully setting this sets the tower.setNode as well
+    public void setTower(AbstractTower abstractTower) {
+        if (type == NodeType.TOWERNODE) {
+            this.tower = abstractTower;
+        } else {
+            //Maybe TODO: Throw some exception?
+        }
+    }
+
+    public void removeTower() {
+        this.tower = null;
+    }
+
+    public AbstractTower getTower() {
+        return this.tower;
     }
 }

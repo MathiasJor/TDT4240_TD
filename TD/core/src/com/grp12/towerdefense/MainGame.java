@@ -30,7 +30,10 @@ public class MainGame extends ApplicationAdapter {
 	private GameStateManager gsm;
 
     private OrthographicCamera camera;
+
+    ServerConnection sc = new ServerConnection();
     private Viewport viewport;
+
 	
 	@Override
 	public void create () {
@@ -64,4 +67,6 @@ public class MainGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
+
+	public Viewport getViewport(){return viewport;}
 }

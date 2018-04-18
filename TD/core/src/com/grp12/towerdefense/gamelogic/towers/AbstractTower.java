@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public abstract class AbstractTower {
 
-    private int damage, cost, range;
+    private int damage, cost, range, targetEnemy=1000, upgradeCost, towerLevel=0;
     private float reloadTime;
     private Vector2 position;
     private AbstractEnemy target;
@@ -20,6 +20,7 @@ public abstract class AbstractTower {
         this.reloadTime = reloadTime;
         this.range = range;
         this.position = position;
+        this.upgradeCost= (int) (cost*.6); //upgrade cost is 60% of build price
         enemies = new ArrayList<AbstractEnemy>();
         target = null;
     }
@@ -83,6 +84,27 @@ public abstract class AbstractTower {
         return position;
     }
 
+    public void setCost(int cost) {this.cost = cost;}
+
+    public int getCost(){return cost;}
+
+    public void setUpgradeCost(){this.upgradeCost= (int) (upgradeCost*1.2);} //upgrade cost increase by 20% for each upgrade
+
+    public int getUpgradeCost(){return upgradeCost;}
+
+    public int getTowerLevel(){return towerLevel;}
+
+    //set new values for upgrade tower
+    public void upgradeTower(int dmg, float reloadTime, int range){
+        setDamage(dmg);
+        setRange(range);
+        setReloadTime(reloadTime);
+        setUpgradeCost();
+        towerLevel++;
+    }
+
+
+
     public AbstractEnemy findNextEnemy(ArrayList<AbstractEnemy> listOfEnemies){
         float shortest = Float.MAX_VALUE;
         float tempDistance;
@@ -96,4 +118,6 @@ public abstract class AbstractTower {
         }
         return (shortest < range) ? returnEnemy : null;
     }
+    
+
 }

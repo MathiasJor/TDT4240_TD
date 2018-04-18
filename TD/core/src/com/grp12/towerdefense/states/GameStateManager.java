@@ -40,4 +40,6 @@ public class GameStateManager {
     public int getViewportHeight() {
         return states.peek().getViewportHeight();
     }
+
+    public Stack<State> getStates(){return states;}
 }

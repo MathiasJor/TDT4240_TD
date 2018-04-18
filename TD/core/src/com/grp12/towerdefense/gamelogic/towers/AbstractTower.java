@@ -20,7 +20,6 @@ public abstract class AbstractTower {
         this.damage = damage;
         this.reloadTime = reloadTime;
         this.range = range;
-        this.position = position;
         this.upgradeCost= (int) (cost*.6); //upgrade cost is 60% of build price
         enemies = new ArrayList<AbstractEnemy>();
         target = null;

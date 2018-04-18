@@ -87,11 +87,14 @@ public class PlayState extends State {
             Node node =mapView.getNode(nodeIsClicked, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             //if not nodepath build a tower there
             if(node.getType()== Node.NodeType.TOWERNODE){
-                Vector2 setNode =new Vector2(node.getX(),node.getY());
-                AbstractTower tower = new BasicTower(setNode);
-                towers.add(tower);
-                AbstractTower.setEnemyList(enemies);
-                towerView.addTower(tower);
+                AbstractTower tower = new BasicTower();
+                if (node.setTower(tower)) {
+                    tower.setNode(node);
+                    towers.add(tower);
+                    AbstractTower.setEnemyList(enemies);
+                }
+                System.out.println(towers.size());
+
             }
 
         }

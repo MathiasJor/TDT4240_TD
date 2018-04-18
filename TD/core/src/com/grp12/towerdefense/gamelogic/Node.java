@@ -42,11 +42,12 @@ public class Node {
     }
 
     //TODO: Successfully setting this sets the tower.setNode as well
-    public void setTower(AbstractTower abstractTower) {
-        if (type == NodeType.TOWERNODE) {
+    public boolean setTower(AbstractTower abstractTower) {
+        if (type == NodeType.TOWERNODE && tower == null) {
             this.tower = abstractTower;
+            return true;
         } else {
-            //Maybe TODO: Throw some exception?
+            return false;
         }
     }
 

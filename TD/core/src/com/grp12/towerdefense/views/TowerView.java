@@ -24,6 +24,7 @@ public class TowerView extends View {
     public void draw(SpriteBatch spriteBatch) {
         for(AbstractTower t : towers) {
             spriteBatch.draw(towerSpr, t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
+
         }
     }
 

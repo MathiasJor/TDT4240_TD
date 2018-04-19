@@ -23,8 +23,12 @@ public class TowerView extends View {
     @Override
     public void draw(SpriteBatch spriteBatch) {
         for(AbstractTower t : towers) {
-            spriteBatch.draw(towerSprB, t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
-
+            //towerSprB.rotate(t.getRotation());
+            towerSprB.setRotation(t.getRotation());
+            System.out.print(towerSprB.getRotation()+"\n");
+            //spriteBatch.draw(towerSprB, t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
+            towerSprB.setPosition(t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
+            towerSprB.draw(spriteBatch);
         }
     }
 

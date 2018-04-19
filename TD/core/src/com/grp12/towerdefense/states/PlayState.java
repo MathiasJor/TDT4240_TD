@@ -56,8 +56,10 @@ public class PlayState extends State {
         gameMenuView = new GameMenuView(new Vector2(0,0));
 
 
+        //e = new BasicEnemy(map.getWaypoints(), 1, 1000);
         e = new BasicEnemy(map.getWaypoints(), 1, 1000);
         currentWave = new Wave(e, 10);
+
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower tower = new BasicTower(new Vector2(1,16));

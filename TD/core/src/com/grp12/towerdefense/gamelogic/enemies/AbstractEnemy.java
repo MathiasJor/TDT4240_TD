@@ -59,7 +59,7 @@ public abstract class AbstractEnemy extends Actor {
 
         public void findNextWaypoint () {
             currentWaypoint = waypoints.get(waypointIndex);
-            waypointIndex++;
+            //waypointIndex++;
             if (waypointIndex < waypoints.size()) {
                 currentWaypoint = waypoints.get(waypointIndex);
                 waypointIndex++;

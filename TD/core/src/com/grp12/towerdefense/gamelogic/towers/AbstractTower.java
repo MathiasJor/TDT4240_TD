@@ -14,6 +14,7 @@ public abstract class AbstractTower {
     private static ArrayList<AbstractEnemy> enemies;
     private float frameTime = 0;
     private boolean canShoot = true;
+    private float rotation=0;
 
     public AbstractTower(int damage, float reloadTime, int cost, int range, Vector2 position){
         this.damage = damage;
@@ -33,9 +34,10 @@ public abstract class AbstractTower {
         frameTime += dt;
         if (frameTime > reloadTime)
             canShoot = true;
-
         targetUpdate();
         if (target != null && canShoot) {
+            //rotation = position.angle(target.getPosition());
+            rotation = getRotation(target);
             target.takeDamage(damage);
             frameTime = 0;
             canShoot = false;
@@ -45,6 +47,14 @@ public abstract class AbstractTower {
     private void targetUpdate() {
         if (target == null || target.getHealth() == 0 || enemyOutOfRange(target)) {
             target = findNextEnemy(enemies);
+
+            if(target!=null){
+                //rotation = target.getPosition().angle(position);
+                rotation = getRotation(target);
+                System.out.print("tower=" +position.x +", "+position.y +" enemy= "+ target.getPosition().x +","+target.getPosition().y);
+            }
+
+
         }
     }
 
@@ -94,6 +104,8 @@ public abstract class AbstractTower {
 
     public int getTowerLevel(){return towerLevel;}
 
+    public float getRotation(){return rotation;}
+
     //set new values for upgrade tower
     public void upgradeTower(int dmg, float reloadTime, int range){
         setDamage(dmg);
@@ -117,6 +129,50 @@ public abstract class AbstractTower {
             }
         }
         return (shortest < range) ? returnEnemy : null;
+    }
+
+    public float getRotation(AbstractEnemy target){
+        Vector2 targetCoords = target.getPosition();
+        float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
+        degree= (float) Math.toDegrees(degree);
+
+        if(position.x==targetCoords.x){
+            if(targetCoords.y<position.y){
+                degree = 90;
+            }
+            else{
+               degree=270;
+            }
+        }
+        else if(position.y==targetCoords.y){
+            if(targetCoords.x> position.x){
+                degree = 0;
+            }
+            else{
+                degree=180;
+            }
+        }
+        else{
+            if(targetCoords.x>position.x){
+                if(targetCoords.y<position.y){
+                    degree=360-degree;
+                }
+                else{
+                    degree = +degree-90;
+                }
+            }
+            else{
+                if(targetCoords.y>position.y){
+                    degree=360-(90-degree);
+                }
+                else{
+                    degree=360-90+degree;
+                }
+            }
+        }
+
+
+        return degree;
     }
     
 

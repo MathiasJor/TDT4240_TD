@@ -18,16 +18,20 @@ class Game:
 		self.user1 = user1
 		self.user2 = user2
 		self.id = id
+		self.turnData = '""'
 
 	def toString(self):
-		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health)+', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}], \"id\":" + str(self.id) + "}"
+		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health)+', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"turnData\":" + str(self.turnData) + " \"id\":" + str(self.id) + "}"
 
 class ServerData:
 	connectedUsers = []
-	userStorageDir = 'D:/AndroidDevelopmentProjects/TDT4240_TD'
+	userStorageDir = ''
 	nextUserId = 0
 	usersLookingForGame = []
 	games = []
+
+	def __init__(self, serverDir):
+		self.userStorageDir = serverDir
 
 	def findUserGames(self, userid):
 		rs = '{ "type":"userGames", "games":['
@@ -68,7 +72,7 @@ class ServerData:
 
 		
 
-serverData = ServerData()
+serverData = ServerData('D:/AndroidDevelopmentProjects/TDT4240_TD')
 
 class TCPHandler(socketserver.BaseRequestHandler):
 
@@ -98,7 +102,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 				self.request.sendall(bytes(self.createNewGame(), 'utf-8'))
 		elif(response['type'] == 'endTurn'):
 			#TODO: Implement response when a user has ended their turn
-			self.startTurn(response['userId'], response['gameId'], response["sentCreatures"])
+			self.request.sendall(bytes(self.startTurn(response['userId'], response['gameId'], response["sentCreatures"]), 'utf-8'))
 		elif(response['type'] == 'getGames'):
 			self.request.sendall(bytes(self.getUserGames(response['userId']), 'utf-8'))
 		elif(response['type'] == 'serverSave'):
@@ -109,7 +113,24 @@ class TCPHandler(socketserver.BaseRequestHandler):
 	def startTurn(self, userid, gameid, sentCreatures):
 		#TODO: Implement code to send response to desired user
 		global serverData
-		
+		game = serverData.games[gameid]
+		foundPlayer = False
+		for i in range(len(game.users)):
+			if game.users[i].id == userid:
+				foundPlayer = True
+				if not game.users[i].isTurn:
+					return '{"type":"endTurnError", "message":"Wrong player ended turn!"}'
+		if not foundPlayer:
+			return '{"type":"endTurnError", "message":"Player not in given game"'
+		for i in range(len(game.users)):
+			if game.users[i].id == userid:
+				game.users[i].isTurn = False
+			else:
+				game.users[i].isTurn = True
+		game.turnData = sentCreatures
+		serverData.games[gameid] = game
+		# Wish I could send info to the other user that it is his turn, but he just has to refresh his games...
+		return '{"type":"endTurnResponse"}'
 	
 	def getUserGames(self, userId):
 		global serverData

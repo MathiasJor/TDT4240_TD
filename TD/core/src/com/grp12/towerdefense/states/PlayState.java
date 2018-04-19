@@ -53,10 +53,9 @@ public class PlayState extends State {
         playerStats.addMoney(500);
 
 
-        AbstractTower tower = new BasicTower();
+
         //TODO: functions that makes it so that setting on, sets the other
-        tower.setNode(map.getGrid()[16][1]);
-        map.getGrid()[16][1].setTower(tower);
+
 
         //views
         mapView = new MapView(map.getGrid());
@@ -74,7 +73,7 @@ public class PlayState extends State {
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
 
-        towers.add(tower);
+        
         AbstractTower.setEnemyList(enemies);
         //towerView.addTower(tower);
         buyPhase = false;

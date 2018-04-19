@@ -122,6 +122,7 @@ public class PlayState extends State {
 
                 } else {
                     enemies.get(i).move(dt);
+
                 }
             }
             //calculate tower targeting and shooting

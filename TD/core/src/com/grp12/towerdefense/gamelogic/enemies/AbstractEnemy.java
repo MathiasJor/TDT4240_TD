@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public abstract class AbstractEnemy extends Actor {
 
-    private int health;
-    private float speed;
+    private int health, slowDown=2;
+    private float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
 
     //Will be used to find direction we need to move to get to the next waypoint
@@ -20,7 +20,7 @@ public abstract class AbstractEnemy extends Actor {
     private Node currentWaypoint = null;
     private int waypointIndex;
     private ArrayList<Node> waypoints;
-
+    private float eRotation=0;
     ArrayList<AbstractStatusEffect> statusEffects;
 
     public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health) {
@@ -35,30 +35,58 @@ public abstract class AbstractEnemy extends Actor {
     }
 
     public void move(float dt) {
-        if (position.dst(currentWaypoint.getPosition()) <= 0.4f) {
+
+        if (position.dst(currentWaypoint.getPosition()) >= 0.2f) {
             //TODO: Implement a check to see if we have reached the end of the path
 
-            if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
+            //if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
+            if (position == waypoints.get(waypoints.size() - 1).getPosition()) {
                 //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
+            }
+            else {
+
+                if (Math.abs(position.x - currentWaypoint.getPosition().x) >= 0.01f) {
+                    if (position.x < currentWaypoint.getPosition().x) {
+                        position.x = position.x + (distanceX) / speed / slowDown * dt;
+                    } else if (position.x > currentWaypoint.getPosition().x) {
+                        position.x = position.x - (distanceX / speed / slowDown * dt);
+                    }
+
+                }
+                if (Math.abs(position.y - currentWaypoint.getPosition().y) >= 0.01f) {
+                    if (position.y < currentWaypoint.getPosition().y) {
+                        position.y = position.y + distanceY / speed / slowDown * dt;
+                    } else if (position.y > currentWaypoint.getPosition().y) {
+                        position.y = position.y - distanceY / speed / slowDown * dt;
+                    }
+                }
+
             }
 
             //Calculate the direction and normalize vector
-            direction.setZero();
-            direction.x = currentWaypoint.getX() - position.x;
-            direction.y = currentWaypoint.getY() - position.y;
-            direction = direction.nor();
+            /**direction.setZero();
+             direction.x = currentWaypoint.getX() - position.x;
+             direction.y = currentWaypoint.getY() - position.y;
+             direction = direction.nor();
 
-            //Add direction * speed * dt to current position
-            position.x += (direction.x * speed * dt);
-            position.y += (direction.y * speed * dt);
+             //Add direction * speed * dt to current position
+             position.x += (direction.x * speed * dt);
+             position.y += (direction.y * speed * dt);
+             **/
+        } else {
+            findNextWaypoint();
+            eRotation=findEDegree();
+            distanceX = Math.abs(position.x - currentWaypoint.getPosition().x);
+            distanceY = Math.abs(position.y - currentWaypoint.getPosition().y);
         }
+
     }
         public void setNextWaypoint (Node waypoint){
             currentWaypoint = waypoint;
         }
 
         public void findNextWaypoint () {
-            currentWaypoint = waypoints.get(waypointIndex);
+            //currentWaypoint = waypoints.get(waypointIndex);
             //waypointIndex++;
             if (waypointIndex < waypoints.size()) {
                 currentWaypoint = waypoints.get(waypointIndex);
@@ -66,6 +94,7 @@ public abstract class AbstractEnemy extends Actor {
             } else {
                 System.out.println("End reached by: " + this.toString());
             }
+
         }
 
         public void takeDamage ( int damage){
@@ -105,6 +134,59 @@ public abstract class AbstractEnemy extends Actor {
         public ArrayList<Node> getWaypoints () {
             return (ArrayList) waypoints.clone();
         }
+
+        public float getEnemyRotation(){return eRotation;}
+
+    public float findEDegree(){
+        Vector2 targetCoords = currentWaypoint.getPosition();
+        float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
+        degree= (float) Math.toDegrees(degree);
+        //System.out.print("enemy= "+ position.x +", "+ position.y +" waypoint= "+ targetCoords.x+ ", "+targetCoords.y+ "deg= "+degree+"+\n");
+        if(position.x==targetCoords.x){
+            if(targetCoords.y<position.y){
+                degree = 0;
+                System.out.print("5");
+            }
+            else{
+                degree=180;
+                System.out.print("6");
+            }
+        }
+        else if(position.y==targetCoords.y){
+            if(targetCoords.x> position.x){
+                degree = -90;
+                System.out.print("7");
+            }
+            else{
+                degree=90;
+                System.out.print("8");
+            }
+        }
+        else{
+            if(targetCoords.x>position.x){
+                if(targetCoords.y<position.y){
+                    degree=degree;
+                    System.out.print("1");
+                }
+                else{
+                    degree = 270;
+                    System.out.print("2");
+                }
+            }
+            else{
+                if(targetCoords.y>position.y){
+                    degree=degree;
+                    System.out.print("3");
+                }
+                else{
+                    degree=degree;
+                    System.out.print("4");
+
+                }
+            }
+        }
+        return degree;
+    }
 
         //Should return a deep copy of this object
         public abstract AbstractEnemy clone();

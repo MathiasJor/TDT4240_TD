@@ -37,7 +37,7 @@ public abstract class AbstractTower {
         targetUpdate();
         if (target != null && canShoot) {
             //rotation = position.angle(target.getPosition());
-            rotation = getRotation(target);
+            rotation = findDegree(target);
             target.takeDamage(damage);
             frameTime = 0;
             canShoot = false;
@@ -50,8 +50,7 @@ public abstract class AbstractTower {
 
             if(target!=null){
                 //rotation = target.getPosition().angle(position);
-                rotation = getRotation(target);
-                System.out.print("tower=" +position.x +", "+position.y +" enemy= "+ target.getPosition().x +","+target.getPosition().y);
+                rotation = findDegree(target);
             }
 
 
@@ -131,7 +130,7 @@ public abstract class AbstractTower {
         return (shortest < range) ? returnEnemy : null;
     }
 
-    public float getRotation(AbstractEnemy target){
+    public float findDegree(AbstractEnemy target){
         Vector2 targetCoords = target.getPosition();
         float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
         degree= (float) Math.toDegrees(degree);
@@ -141,7 +140,7 @@ public abstract class AbstractTower {
                 degree = 90;
             }
             else{
-               degree=270;
+                degree=270;
             }
         }
         else if(position.y==targetCoords.y){
@@ -155,18 +154,18 @@ public abstract class AbstractTower {
         else{
             if(targetCoords.x>position.x){
                 if(targetCoords.y<position.y){
-                    degree=360-degree;
+                    degree=90+degree;
                 }
                 else{
-                    degree = +degree-90;
+                    degree = +degree-90; //done
                 }
             }
             else{
                 if(targetCoords.y>position.y){
-                    degree=360-(90-degree);
+                    degree=270+degree; //done
                 }
                 else{
-                    degree=360-90+degree;
+                    degree=degree+90;
                 }
             }
         }

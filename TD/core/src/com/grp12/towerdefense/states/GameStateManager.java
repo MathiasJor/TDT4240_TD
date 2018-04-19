@@ -1,6 +1,7 @@
 package com.grp12.towerdefense.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.Stack;
 
@@ -42,4 +43,8 @@ public class GameStateManager {
     }
 
     public Stack<State> getStates(){return states;}
+
+    public void handleInput(Vector3 pointer) {
+        states.peek().handleInput(pointer);
+    }
 }

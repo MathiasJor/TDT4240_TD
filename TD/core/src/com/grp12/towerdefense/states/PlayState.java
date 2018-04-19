@@ -40,6 +40,7 @@ public class PlayState extends State {
     private ArrayList<AbstractTower> towers;
 
     private boolean buyPhase;
+    private boolean nextRoundReady;
     private PlayerStats playerStats;
 
     private BitmapFont bmf;
@@ -52,17 +53,11 @@ public class PlayState extends State {
         playerStats = new PlayerStats();
         playerStats.addMoney(500);
 
-
-
-        //TODO: functions that makes it so that setting on, sets the other
-
-
         //views
         mapView = new MapView(map.getGrid());
         View.setTileHeight(mapView.getTileHeight());
         View.setTileWidth(mapView.getTileWidth());
         enemyView = new EnemyView();
-        //towerView = new TowerView();
         //TODO: #5: Implement GameMenuView
         gameMenuView = new GameMenuView(new Vector2(0,0));
         bmf = new BitmapFont();
@@ -76,6 +71,7 @@ public class PlayState extends State {
 
         AbstractTower.setEnemyList(enemies);
         //towerView.addTower(tower);
+        nextRoundReady = true;
         buyPhase = false;
 
     }
@@ -120,9 +116,9 @@ public class PlayState extends State {
             for (int i = 0; i < enemies.size(); i++) {
                 if (enemies.get(i).getHealth() == 0) {
                     enemyView.removeEnemy(enemies.get(i));
+                    playerStats.addMoney(enemies.get(i).getCost()/2);
                     enemies.remove(i);
-                    playerStats.addMoney(20);
-                    //TODO: add code the gives money for a dead enemy
+
                 } else {
                     enemies.get(i).move(dt);
                 }
@@ -159,7 +155,6 @@ public class PlayState extends State {
         } else {
             gameMenuView.draw(sb);
         }
-        //towerView.draw(sb);
         bmf.getData().setScale(6);
         bmf.draw(sb, Integer.toString(playerStats.getBalance()), 20, mapView.getMapHeight()-20 );
 
@@ -169,7 +164,6 @@ public class PlayState extends State {
     public void dispose() {
         mapView.dispose();
         enemyView.dispose();
-        //towerView.dispose();
         gameMenuView.dispose();
     }
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public abstract class AbstractEnemy extends Actor {
 
-    private int health, slowDown=2;
+    private int health, slowDown=10;
     private float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
 
@@ -35,58 +35,35 @@ public abstract class AbstractEnemy extends Actor {
     }
 
     public void move(float dt) {
+        if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
+            //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
+            findNextWaypoint();
+        }
 
-        if (position.dst(currentWaypoint.getPosition()) >= 0.2f) {
-            //TODO: Implement a check to see if we have reached the end of the path
+        //Calculate the direction and normalize vector
+        direction.setZero();
+        direction.x = currentWaypoint.getX() - position.x;
+        direction.y = currentWaypoint.getY() - position.y;
+        direction = direction.nor();
 
-            //if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
-            if (position == waypoints.get(waypoints.size() - 1).getPosition()) {
-                //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
-            }
-            else {
-
-                if (Math.abs(position.x - currentWaypoint.getPosition().x) >= 0.01f) {
-                    if (position.x < currentWaypoint.getPosition().x) {
-                        position.x = position.x + (distanceX) / speed / slowDown * dt;
-                    } else if (position.x > currentWaypoint.getPosition().x) {
-                        position.x = position.x - (distanceX / speed / slowDown * dt);
-                    }
-
-                }
-                if (Math.abs(position.y - currentWaypoint.getPosition().y) >= 0.01f) {
-                    if (position.y < currentWaypoint.getPosition().y) {
-                        position.y = position.y + distanceY / speed / slowDown * dt;
-                    } else if (position.y > currentWaypoint.getPosition().y) {
-                        position.y = position.y - distanceY / speed / slowDown * dt;
-                    }
-                }
-
-            }
-
-            //Calculate the direction and normalize vector
-            /**direction.setZero();
-             direction.x = currentWaypoint.getX() - position.x;
-             direction.y = currentWaypoint.getY() - position.y;
-             direction = direction.nor();
-
-             //Add direction * speed * dt to current position
-             position.x += (direction.x * speed * dt);
-             position.y += (direction.y * speed * dt);
-             **/
-        } else {
+        //Add direction * speed * dt to current position
+        position.x += (direction.x * speed * dt);
+        position.y += (direction.y * speed * dt);
+    }
+        /**else {
             findNextWaypoint();
             eRotation=findEDegree();
             distanceX = Math.abs(position.x - currentWaypoint.getPosition().x);
             distanceY = Math.abs(position.y - currentWaypoint.getPosition().y);
-        }
+        }**/
 
-    }
+
         public void setNextWaypoint (Node waypoint){
             currentWaypoint = waypoint;
         }
 
         public void findNextWaypoint () {
-            //currentWaypoint = waypoints.get(waypointIndex);
+            currentWaypoint = waypoints.get(waypointIndex);
             //waypointIndex++;
             if (waypointIndex < waypoints.size()) {
                 currentWaypoint = waypoints.get(waypointIndex);
@@ -94,7 +71,7 @@ public abstract class AbstractEnemy extends Actor {
             } else {
                 System.out.println("End reached by: " + this.toString());
             }
-
+            eRotation = findEDegree();
         }
 
         public void takeDamage ( int damage){

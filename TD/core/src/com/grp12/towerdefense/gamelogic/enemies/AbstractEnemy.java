@@ -33,81 +33,76 @@ public abstract class AbstractEnemy extends Actor {
         position.x = waypoints.get(0).getX();
         position.y = waypoints.get(0).getY();
     }
-
     public void move(float dt) {
-        if (position.dst(currentWaypoint.getPosition()) <= 0.4f) {
-            //TODO: Implement a check to see if we have reached the end of the path
-
-            if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
-                //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
-            }
-
-            //Calculate the direction and normalize vector
-            direction.setZero();
-            direction.x = currentWaypoint.getX() - position.x;
-            direction.y = currentWaypoint.getY() - position.y;
-            direction = direction.nor();
-
-            //Add direction * speed * dt to current position
-            position.x += (direction.x * speed * dt);
-            position.y += (direction.y * speed * dt);
+        if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
+            //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
+            findNextWaypoint();
         }
+
+        //Calculate the direction and normalize vector
+        direction.setZero();
+        direction.x = currentWaypoint.getX() - position.x;
+        direction.y = currentWaypoint.getY() - position.y;
+        direction = direction.nor();
+
+        //Add direction * speed * dt to current position
+        position.x += (direction.x * speed * dt);
+        position.y += (direction.y * speed * dt);
     }
-        public void setNextWaypoint (Node waypoint){
-            currentWaypoint = waypoint;
-        }
 
-        public void findNextWaypoint () {
+    public void setNextWaypoint(Node waypoint) {
+        currentWaypoint = waypoint;
+    }
+
+    public void findNextWaypoint() {
+        if (waypointIndex < waypoints.size()) {
             currentWaypoint = waypoints.get(waypointIndex);
             waypointIndex++;
-            if (waypointIndex < waypoints.size()) {
-                currentWaypoint = waypoints.get(waypointIndex);
-                waypointIndex++;
-            } else {
-                System.out.println("End reached by: " + this.toString());
-            }
+        } else {
+            System.out.println("End reached by: " + this.toString());
         }
-
-        public void takeDamage ( int damage){
-            health -= damage;
-            if (health < 0)
-                health = 0;
-        }
-
-        public int getHealth () {
-            return health;
-        }
-
-        public void setHealth ( int health){
-            this.health = health;
-        }
-
-        public Vector2 getPosition () {
-            return position;
-        }
-
-        public void setSpeed ( float speed){
-            this.speed = speed;
-        }
-        public float getSpeed () {
-            return speed;
-        }
-
-        public float getX () {
-            return position.x;
-        }
-
-        public float getY () {
-            return position.y;
-        }
-
-
-        public ArrayList<Node> getWaypoints () {
-            return (ArrayList) waypoints.clone();
-        }
-
-        //Should return a deep copy of this object
-        public abstract AbstractEnemy clone();
-
     }
+
+    public void takeDamage ( int damage){
+        health -= damage;
+        if (health < 0)
+            health = 0;
+    }
+
+    public int getHealth () {
+        return health;
+    }
+
+    public void setHealth ( int health){
+        this.health = health;
+    }
+
+    public Vector2 getPosition () {
+        return position;
+    }
+
+    public void setSpeed ( float speed){
+        this.speed = speed;
+    }
+    public float getSpeed () {
+        return speed;
+    }
+
+    public float getX () {
+        return position.x;
+    }
+
+    public float getY () {
+        return position.y;
+    }
+
+
+    public ArrayList<Node> getWaypoints () {
+        return (ArrayList) waypoints.clone();
+    }
+
+    //Should return a deep copy of this object
+    public abstract AbstractEnemy clone();
+
+}
 

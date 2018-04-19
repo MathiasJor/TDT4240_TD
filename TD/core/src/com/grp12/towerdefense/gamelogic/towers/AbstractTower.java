@@ -19,9 +19,9 @@ public abstract class AbstractTower {
     public AbstractTower(int damage, float reloadTime, int cost, int range){
         this.damage = damage;
         this.reloadTime = reloadTime;
+        this.cost = cost;
         this.range = range;
         this.upgradeCost= (int) (cost*.6); //upgrade cost is 60% of build price
-        enemies = new ArrayList<AbstractEnemy>();
         target = null;
     }
 
@@ -33,7 +33,7 @@ public abstract class AbstractTower {
         frameTime += dt;
         if (frameTime > reloadTime)
             canShoot = true;
-
+        
         targetUpdate();
         if (target != null && canShoot) {
             target.takeDamage(damage);
@@ -119,7 +119,11 @@ public abstract class AbstractTower {
         float tempDistance;
         AbstractEnemy returnEnemy = null;
         for (AbstractEnemy enemy : listOfEnemies){
-            tempDistance = container.getPosition().dst2(enemy.getPosition());
+            if (enemy.getHealth() > 0) {
+                tempDistance = container.getPosition().dst2(enemy.getPosition());
+            } else {
+                tempDistance = shortest + 1;
+            }
             if(tempDistance < shortest){
                 shortest = tempDistance;
                 returnEnemy = enemy;

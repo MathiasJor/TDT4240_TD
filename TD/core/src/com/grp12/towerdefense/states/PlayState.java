@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.grp12.towerdefense.MainGame;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
+import com.grp12.towerdefense.gamelogic.PlayerStats;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.Wave;
@@ -38,12 +39,15 @@ public class PlayState extends State {
     private ArrayList<AbstractTower> towers;
 
     private boolean buyPhase;
+    private PlayerStats playerStats;
 
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
 
         map = new Map();
+        playerStats = new PlayerStats();
+        playerStats.addMoney(500);
 
 
         //Views
@@ -88,12 +92,13 @@ public class PlayState extends State {
             //if not nodepath build a tower there
             if(node.getType()== Node.NodeType.TOWERNODE){
                 AbstractTower tower = new BasicTower();
-                if (node.setTower(tower)) {
+                if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
                     tower.setNode(node);
                     towers.add(tower);
                     AbstractTower.setEnemyList(enemies);
+                    playerStats.withdrawMoney(tower.getCost());
+                    playerStats.getBalance();
                 }
-                System.out.println(towers.size());
 
             }
 
@@ -115,7 +120,6 @@ public class PlayState extends State {
                     enemyView.removeEnemy(enemies.get(i));
                     enemies.remove(i);
                     //TODO: add code the gives money for a dead enemy
-
                 } else {
                     enemies.get(i).move(dt);
                 }
@@ -125,25 +129,20 @@ public class PlayState extends State {
                 tower.fire(dt);
             }
         }
-        //calculate tower targeting and shooting
-        for (AbstractTower tower : towers) {
-            tower.fire(dt);
-        }
         handleInput();
         //TODO: #6: Implement a check to test if the wave is over
         //TODO: #7: Implement code to send information about the ended wave
 
-
-            //Send result and enemies wave to competitor
-            //TODO: #8: Implement waiting and buy phase
-            //Start waiting and a buy phase
-            //TODO: #9: In waiting and buy phase, check if competitors turn is over and allow a new round to start
-            //TODO: #16: Fetch the results from competitors wave and enemies sent to device
-            //Temporary lazy check if the round is over
-            if (enemies.size() == 0 && currentWave.empty()) {
-                //send info about round to server
-                buyPhase = true;
-            }
+        //Send result and enemies wave to competitor
+        //TODO: #8: Implement waiting and buy phase
+        //Start waiting and a buy phase
+        //TODO: #9: In waiting and buy phase, check if competitors turn is over and allow a new round to start
+        //TODO: #16: Fetch the results from competitors wave and enemies sent to device
+        //Temporary lazy check if the round is over
+        if (enemies.size() == 0 && currentWave.empty()) {
+            //send info about round to server
+            buyPhase = true;
+        }
         
 
 

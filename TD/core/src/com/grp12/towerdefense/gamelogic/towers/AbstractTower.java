@@ -33,7 +33,7 @@ public abstract class AbstractTower {
         frameTime += dt;
         if (frameTime > reloadTime)
             canShoot = true;
-        
+
         targetUpdate();
         if (target != null && canShoot) {
             target.takeDamage(damage);

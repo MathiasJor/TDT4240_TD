@@ -3,6 +3,7 @@ package com.grp12.towerdefense.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -41,6 +42,8 @@ public class PlayState extends State {
     private boolean buyPhase;
     private PlayerStats playerStats;
 
+    private BitmapFont bmf;
+
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -50,12 +53,12 @@ public class PlayState extends State {
         playerStats.addMoney(500);
 
 
-        //Views
         AbstractTower tower = new BasicTower();
         //TODO: functions that makes it so that setting on, sets the other
         tower.setNode(map.getGrid()[16][1]);
         map.getGrid()[16][1].setTower(tower);
 
+        //views
         mapView = new MapView(map.getGrid());
         View.setTileHeight(mapView.getTileHeight());
         View.setTileWidth(mapView.getTileWidth());
@@ -63,6 +66,7 @@ public class PlayState extends State {
         //towerView = new TowerView();
         //TODO: #5: Implement GameMenuView
         gameMenuView = new GameMenuView(new Vector2(0,0));
+        bmf = new BitmapFont();
 
 
         e = new BasicEnemy(map.getWaypoints(), 1, 100);
@@ -119,6 +123,7 @@ public class PlayState extends State {
                 if (enemies.get(i).getHealth() == 0) {
                     enemyView.removeEnemy(enemies.get(i));
                     enemies.remove(i);
+                    playerStats.addMoney(20);
                     //TODO: add code the gives money for a dead enemy
                 } else {
                     enemies.get(i).move(dt);
@@ -157,6 +162,8 @@ public class PlayState extends State {
             gameMenuView.draw(sb);
         }
         //towerView.draw(sb);
+        bmf.getData().setScale(6);
+        bmf.draw(sb, Integer.toString(playerStats.getBalance()), 20, mapView.getMapHeight()-20 );
 
     }
 

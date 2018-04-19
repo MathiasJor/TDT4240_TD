@@ -73,7 +73,7 @@ public class PlayState extends State {
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
 
-        
+
         AbstractTower.setEnemyList(enemies);
         //towerView.addTower(tower);
         buyPhase = false;
@@ -98,7 +98,6 @@ public class PlayState extends State {
                 if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
                     tower.setNode(node);
                     towers.add(tower);
-                    AbstractTower.setEnemyList(enemies);
                     playerStats.withdrawMoney(tower.getCost());
                     playerStats.getBalance();
                 }

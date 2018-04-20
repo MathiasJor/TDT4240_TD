@@ -55,7 +55,7 @@ public class PlayState extends State {
         super(gsm);
         //models
         map = new Map();
-        playerStats = new PlayerStats();
+        playerStats = new PlayerStats(100, 100);
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower.setEnemyList(enemies);

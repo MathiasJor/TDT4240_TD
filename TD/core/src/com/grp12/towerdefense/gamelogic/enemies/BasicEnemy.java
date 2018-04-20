@@ -5,8 +5,9 @@ import com.grp12.towerdefense.gamelogic.Node;
 import java.util.ArrayList;
 
 public class BasicEnemy extends AbstractEnemy {
+    //TODO Make bounty and cost parameters?
     public BasicEnemy(ArrayList<Node> waypoints, float speed, int health) {
-        super(waypoints, speed, health, 50);
+        super(waypoints, speed, health, 50, 10);
     }
 
     @Override

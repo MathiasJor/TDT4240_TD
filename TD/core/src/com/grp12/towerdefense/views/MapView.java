@@ -35,6 +35,9 @@ public class MapView extends View {
         this.grid = grid;
         land = new Texture("towerDefense_tile024.png");
         path = new Texture("towerDefense_tile050.png");
+        tower= new Texture("towerDefense_tile250.png");
+        tSprite = new Sprite(tower);
+      
         View.setTileHeight(path.getHeight());
         View.setTileWidth(path.getWidth());
         View.setMapHeight(land.getHeight()*grid[0].length);
@@ -42,6 +45,7 @@ public class MapView extends View {
         tower= new Texture("towerDefense_tile250.png");
 
         makeSpriteArray();
+
 
     }
 

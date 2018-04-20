@@ -63,7 +63,7 @@ public class PlayState extends State {
         towers = new ArrayList<AbstractTower>();
         AbstractTower.setEnemyList(enemies);
         listOfEnemyTypes = new ArrayList<AbstractEnemy>();
-        listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 200));
+        listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 100));
         listOfEnemyTypes.add(new FastEnemy(map.getWaypoints(), 1, 100));
         waveGenerator = new WaveGenerator(listOfEnemyTypes);
 

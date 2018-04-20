@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.actions.CountdownEventAction;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.grp12.towerdefense.MainGame;
@@ -19,6 +21,8 @@ import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.Wave;
 import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 import com.grp12.towerdefense.gamelogic.towers.BasicTower;
+import com.grp12.towerdefense.gamelogic.towers.RocketTower;
+import com.grp12.towerdefense.gamelogic.towers.StunTower;
 import com.grp12.towerdefense.views.EnemyView;
 import com.grp12.towerdefense.views.GameMenuView;
 import com.grp12.towerdefense.views.MapView;
@@ -27,6 +31,10 @@ import com.grp12.towerdefense.views.TowerView;
 import com.grp12.towerdefense.views.View;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import sun.java2d.SurfaceDataProxy;
 
 public class PlayState extends State {
 
@@ -47,6 +55,10 @@ public class PlayState extends State {
     //state
     private boolean playing;
     private boolean nextRoundReady;
+
+    //variables
+    int buildThisTower =0;
+    final boolean[] ready = {false};
 
     ServerConnection serverConnection;
 
@@ -69,7 +81,7 @@ public class PlayState extends State {
 
         //Represents the three states of the game loop: Playing, waiting for next round, and next is ready
         nextRoundReady = true;
-        playing = true;
+        playing = false;
 
 
 
@@ -136,21 +148,41 @@ public class PlayState extends State {
         if (nextRoundReady && !playing) {
             if (srb.clicked(pointer)) {
                 //currentWave = serverConnection.result()
-                currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 15);
+                currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 1);
                 playing = true;
             }
-        }
-        //get node informastion
-        Node node = mapView.getNode(pointer);
-        //if not nodepath build a tower there
-        if(node.getType()== Node.NodeType.TOWERNODE){
-            AbstractTower tower = new BasicTower();
-            if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
-                tower.setNode(node);
-                towers.add(tower);
-                playerStats.withdrawMoney(tower.getCost());
-                playerStats.getBalance();
+            else{
+                //open tower selection
+                gameMenuView.isClickedSelectTower(pointer);
+                if(gameMenuView.getShowElements()){
+                    buildThisTower =gameMenuView.towerSelected(pointer, mapView.getMapHeight(), mapView.getMapWidth());
+                    delayThis();
+                    ready[0]=false;
+                }
+
+                if(gameMenuView.getShowOneTower()){
+                    delayThis();
+                    if(gameMenuView.finishedWithSelectedTower(pointer)){
+                        ready[0]=false;
+                    }
+                    //get node informastion
+                    if(ready[0]){
+                        Node node = mapView.getNode(pointer);
+                        //if not nodepath build a tower there
+                        if(node.getType()== Node.NodeType.TOWERNODE){
+                            AbstractTower tower = newTower(buildThisTower);
+                            if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
+                                tower.setNode(node);
+                                towers.add(tower);
+                                playerStats.withdrawMoney(tower.getCost());
+                                playerStats.getBalance();
+                            }
+                        }
+                    }
+                }
             }
+
+
 
         }
 
@@ -159,7 +191,7 @@ public class PlayState extends State {
     //Set up the game
     private void init() {
         playerStats.addMoney(500);
-        currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 15);
+        currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 1);
     }
 
     @Override
@@ -178,4 +210,33 @@ public class PlayState extends State {
     public int getViewportHeight() {
         return mapView.getMapHeight();
     }
+
+    public AbstractTower newTower(int i){
+        AbstractTower tower = null;
+        switch (i){
+            case 0: tower= new StunTower();
+                    break;
+            case 1: tower = new RocketTower();
+                    break;
+            case 2: tower = new BasicTower();
+                    break;
+        }
+        return tower;
+    }
+
+    public void delayThis(){
+        long delay = 1000;
+        long period = 2000;
+        Timer task = new Timer();
+        task.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ready[0] =true;
+            }
+        }, delay);
+
+
+    }
+
+
 }

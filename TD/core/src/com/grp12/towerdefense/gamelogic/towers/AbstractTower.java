@@ -8,24 +8,29 @@ import java.util.ArrayList;
 
 public abstract class AbstractTower {
 
-    private int damage, cost, range, targetEnemy=1000, upgradeCost, towerLevel=0;
+    private int damage, cost, range, upgradeCost, towerLevel=0;
     private float reloadTime;
     private AbstractEnemy target;
     private static ArrayList<AbstractEnemy> enemies;
     private float frameTime = 0;
     private boolean canShoot = true;
+    private String towerName;
+    public enum towerType {Basic,Rocket, Stunner};
+    private towerType typeTower;
+
 
     private float rotation=0;
 
     private Node container;
 
 
-    public AbstractTower(int damage, float reloadTime, int cost, int range){
+    public AbstractTower(towerType typeTower, int damage, float reloadTime, int cost, int range){
         this.damage = damage;
         this.reloadTime = reloadTime;
         this.cost = cost;
         this.range = range;
         this.upgradeCost= (int) (cost*.6); //upgrade cost is 60% of build price
+        this.typeTower = typeTower;
         target = null;
     }
 
@@ -111,6 +116,8 @@ public abstract class AbstractTower {
     public int getTowerLevel(){return towerLevel;}
 
     public float getRotation(){return rotation;}
+
+    public towerType getType(){return typeTower;}
 
     //set new values for upgrade tower
     public void upgradeTower(int dmg, float reloadTime, int range){

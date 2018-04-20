@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 
+import java.util.ArrayList;
+
 import javax.swing.text.Position;
 
 /*
@@ -25,7 +27,9 @@ public class MapView extends View {
     private Texture path;
     private Texture land;
     private Texture tower;
+    private Texture bTower, rTower, sTower;
     private Sprite tSprite;
+    private Sprite[] towers = new Sprite[3];
 
     public MapView(Node[][] grid) {
         this.grid = grid;
@@ -38,6 +42,11 @@ public class MapView extends View {
         View.setTileWidth(path.getWidth());
         View.setMapHeight(land.getHeight()*grid[0].length);
         View.setMapWidth(land.getWidth()*grid.length);
+        tower= new Texture("towerDefense_tile250.png");
+
+        makeSpriteArray();
+
+
     }
 
     public void setGrid(Node[][] grid) {
@@ -52,6 +61,8 @@ public class MapView extends View {
                     sb.draw(land, i*land.getHeight(), j*land.getWidth());
                     AbstractTower t = grid[i][j].getTower();
                     if (t != null) {
+                        tSprite = gettSprite(t.getType());
+                        //sb.draw(new Sprite(new Texture("towerDefense_tile250.png")), i * land.getHeight(), j * land.getWidth());
                         tSprite.setRotation(t.getRotation());
                         tSprite.setPosition(i * land.getHeight(), j * land.getWidth());
                         tSprite.draw(sb);
@@ -78,5 +89,26 @@ public class MapView extends View {
         //TODO: #4: Implement this
     }
 
+    public void makeSpriteArray(){
+        sTower= new Texture("towerDefense_tile226.png");
+        rTower= new Texture("towerDefense_tile205.png");
+        bTower= new Texture("towerDefense_tile250.png");
+        towers[0] = new Sprite(sTower);
+        towers[1] = new Sprite(rTower);
+        towers[2] = new Sprite(bTower);
+    }
+
+    public Sprite gettSprite(AbstractTower.towerType tower){
+        Sprite spriteTower = null;
+       switch (tower){
+           case Stunner: spriteTower = towers[0];
+           break;
+           case Rocket: spriteTower = towers[1];
+           break;
+           case Basic: spriteTower = towers[2];
+           break;
+       }
+       return spriteTower;
+    }
 
 }

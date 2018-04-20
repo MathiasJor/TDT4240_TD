@@ -8,24 +8,29 @@ import java.util.ArrayList;
 
 public abstract class AbstractTower {
 
-    private int damage, cost, range, targetEnemy=1000, upgradeCost, towerLevel=0;
+    private int damage, cost, range, upgradeCost, towerLevel=0;
     private float reloadTime;
     private AbstractEnemy target;
     private static ArrayList<AbstractEnemy> enemies;
     private float frameTime = 0;
     private boolean canShoot = true;
+    private String towerName;
+    public enum towerType {Basic,Rocket, Stunner};
+    private towerType typeTower;
+
 
     private float rotation=0;
 
     private Node container;
 
 
-    public AbstractTower(int damage, float reloadTime, int cost, int range){
+    public AbstractTower(towerType typeTower, int damage, float reloadTime, int cost, int range){
         this.damage = damage;
         this.reloadTime = reloadTime;
         this.cost = cost;
         this.range = range;
         this.upgradeCost= (int) (cost*.6); //upgrade cost is 60% of build price
+        this.typeTower = typeTower;
         target = null;
     }
 
@@ -39,7 +44,6 @@ public abstract class AbstractTower {
             canShoot = true;
         targetUpdate();
         if (target != null && canShoot) {
-            //rotation = position.angle(target.getPosition());
             rotation = findDegree(target);
             target.takeDamage(damage);
             frameTime = 0;
@@ -50,13 +54,9 @@ public abstract class AbstractTower {
     private void targetUpdate() {
         if (target == null || target.getHealth() == 0 || enemyOutOfRange(target)) {
             target = findNextEnemy(enemies);
-
             if(target!=null){
-                //rotation = target.getPosition().angle(position);
                 rotation = findDegree(target);
             }
-
-
         }
     }
 
@@ -117,6 +117,8 @@ public abstract class AbstractTower {
 
     public float getRotation(){return rotation;}
 
+    public towerType getType(){return typeTower;}
+
     //set new values for upgrade tower
     public void upgradeTower(int dmg, float reloadTime, int range){
         setDamage(dmg);
@@ -150,7 +152,7 @@ public abstract class AbstractTower {
         Vector2 targetCoords = target.getPosition();
         float degree = (float) Math.atan((targetCoords.x-container.getPosition().x)/(targetCoords.y-container.getPosition().y));
         degree= (float) Math.toDegrees(degree);
-        //System.out.print(degree+"\n");
+
         if(container.getPosition().x==targetCoords.x){
             if(targetCoords.y<container.getPosition().y){
                 degree = 90;
@@ -185,8 +187,6 @@ public abstract class AbstractTower {
                 }
             }
         }
-
-
         return degree;
     }
     

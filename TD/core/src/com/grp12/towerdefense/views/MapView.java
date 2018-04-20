@@ -1,10 +1,12 @@
 package com.grp12.towerdefense.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 
@@ -29,11 +31,13 @@ public class MapView extends View {
         this.grid = grid;
         land = new Texture("towerDefense_tile024.png");
         path = new Texture("towerDefense_tile050.png");
-        View.setTileHeight(path.getHeight());
-        View.setTileWidth(path.getWidth());
         tower= new Texture("towerDefense_tile250.png");
         tSprite = new Sprite(tower);
-
+      
+        View.setTileHeight(path.getHeight());
+        View.setTileWidth(path.getWidth());
+        View.setMapHeight(land.getHeight()*grid[0].length);
+        View.setMapWidth(land.getWidth()*grid.length);
     }
 
     public void setGrid(Node[][] grid) {
@@ -48,7 +52,6 @@ public class MapView extends View {
                     sb.draw(land, i*land.getHeight(), j*land.getWidth());
                     AbstractTower t = grid[i][j].getTower();
                     if (t != null) {
-                        //sb.draw(new Sprite(new Texture("towerDefense_tile250.png")), i * land.getHeight(), j * land.getWidth());
                         tSprite.setRotation(t.getRotation());
                         tSprite.setPosition(i * land.getHeight(), j * land.getWidth());
                         tSprite.draw(sb);
@@ -62,19 +65,11 @@ public class MapView extends View {
         }
     }
 
-    public int getMapWidth() {
-        return land.getWidth()*grid.length;
-    }
-
-    public int getMapHeight() {
-        return land.getHeight()*grid[0].length;
-    }
-
     //returns the node from where finger is clicked
-    public Node getNode(Vector2 clickedNode, int gdxWidht, int gdxHeight){
+    public Node getNode(Vector3 pointer){
         //convert from screen coordinates to map coordinates
-        int i = (int) (Math.ceil(clickedNode.x*getMapWidth()/gdxWidht/land.getWidth()))-1;
-        int j = (int) (Math.ceil(clickedNode.y*getMapHeight()/gdxHeight/land.getWidth()))-1;
+        int i = (int) (Math.ceil(pointer.x/getTileWidth()))-1;
+        int j = (int) (Math.ceil(pointer.y/getTileHeight()))-1;
         return grid[i][j];
     }
 

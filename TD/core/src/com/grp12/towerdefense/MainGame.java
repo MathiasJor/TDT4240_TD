@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.grp12.towerdefense.Network.ServerConnection;
@@ -30,8 +31,6 @@ public class MainGame extends ApplicationAdapter {
 	private GameStateManager gsm;
 
     private OrthographicCamera camera;
-
-    ServerConnection sc = new ServerConnection();
     private Viewport viewport;
 
 	
@@ -44,9 +43,7 @@ public class MainGame extends ApplicationAdapter {
         camera = new OrthographicCamera();
         viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
         viewport.apply();
-
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
-
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	}
 
@@ -54,13 +51,20 @@ public class MainGame extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gsm.update(Gdx.graphics.getDeltaTime());
-
+		if(Gdx.input.isTouched()) {
+			handleInput();
+		}
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         gsm.render(batch);
         batch.end();
+	}
 
+	public void handleInput() {
+		Vector3 v3 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+		Vector3 pointer = camera.unproject(v3);
+		gsm.handleInput(pointer);
 	}
 	
 	@Override
@@ -68,5 +72,4 @@ public class MainGame extends ApplicationAdapter {
 		batch.dispose();
 	}
 
-	public Viewport getViewport(){return viewport;}
 }

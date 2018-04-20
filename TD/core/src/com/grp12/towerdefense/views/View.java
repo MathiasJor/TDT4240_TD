@@ -6,6 +6,8 @@ public abstract class View {
 
     private static int tileWidth;
     private static int tileHeight;
+    private static int mapWidth;
+    private static int mapHeight;
 
     public static void setTileHeight(int tileHeight) {
         View.tileHeight = tileHeight;
@@ -21,6 +23,22 @@ public abstract class View {
 
     public static int getTileWidth() {
         return tileWidth;
+    }
+
+    public static int getMapWidth() {
+        return mapWidth;
+    }
+
+    public static void setMapWidth(int mapWidth) {
+        View.mapWidth = mapWidth;
+    }
+
+    public static int getMapHeight() {
+        return mapHeight;
+    }
+
+    public static void setMapHeight(int mapHeight) {
+        View.mapHeight = mapHeight;
     }
 
     public abstract void draw(SpriteBatch spriteBatch);

@@ -6,7 +6,10 @@ import java.net.URL;
 
 public class ServerConnection {
 
-    private Socket socket;
+
+    public void sendResult() {
+
+    }
 
     public void ping() {
         new Thread(new ClientThread()).start();

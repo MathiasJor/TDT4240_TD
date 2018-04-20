@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class BasicEnemy extends AbstractEnemy {
     public BasicEnemy(ArrayList<Node> waypoints, float speed, int health) {
-        super(waypoints, speed, health);
+        super(waypoints, speed, health, 50);
     }
 
     @Override

@@ -13,6 +13,7 @@ public abstract class AbstractEnemy extends Actor {
     private int health, slowDown=10;
     private float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
+    private int cost;
 
     //Will be used to find direction we need to move to get to the next waypoint
     Vector2 direction = new Vector2();
@@ -23,10 +24,11 @@ public abstract class AbstractEnemy extends Actor {
     private float eRotation=0;
     ArrayList<AbstractStatusEffect> statusEffects;
 
-    public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health) {
+    public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health, int cost) {
         this.waypoints = waypoints;
         this.speed = speed;
         this.health = health;
+        this.cost = cost;
         waypointIndex = 0;
         findNextWaypoint();
 
@@ -102,6 +104,13 @@ public abstract class AbstractEnemy extends Actor {
         return position.y;
     }
 
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public int getCost() {
+        return cost;
+    }
 
     public ArrayList<Node> getWaypoints () {
         return (ArrayList) waypoints.clone();

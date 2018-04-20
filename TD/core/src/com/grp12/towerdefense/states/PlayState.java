@@ -88,7 +88,7 @@ public class PlayState extends State {
 
         //Represents the three states of the game loop: Playing, waiting for next round, and next is ready
         nextRoundReady = true;
-        playing = true;
+        playing = false;
 
 
         serverConnection = new ServerConnection();

@@ -10,10 +10,13 @@ import java.util.ArrayList;
 public abstract class AbstractEnemy extends Actor {
 
     private int health, slowDown=10;
-    private float speed, distanceX, distanceY;
+    protected float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
     private int cost;
     private int bounty;
+
+    public enum EnemyType {BASIC, FAST}
+    protected EnemyType type;
 
     //Will be used to find direction we need to move to get to the next waypoint
     Vector2 direction = new Vector2();
@@ -124,6 +127,10 @@ public abstract class AbstractEnemy extends Actor {
 
     public boolean isFinished() {
         return isFinished;
+    }
+
+    public EnemyType getType() {
+        return type;
     }
 
     public ArrayList<Node> getWaypoints () {

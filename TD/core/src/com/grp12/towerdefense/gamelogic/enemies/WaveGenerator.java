@@ -16,6 +16,7 @@ public class WaveGenerator {
     private ArrayList<AbstractEnemy> enemyTypes;
     private float currentEnemyHealthBoost;
     private int numberOfEnemies;
+    private int enemiesReceived;
 
     private int numberOfEnemyTypes;
     private int currentEnemyIndex;
@@ -28,6 +29,7 @@ public class WaveGenerator {
         currentWaveNumber = 0;
         currentEnemyHealthBoost = 1;
         numberOfEnemies = 10;
+        enemiesReceived = 0;
         currentEnemyIndex = 0;
         this.enemyTypes = enemyTypes;
         numberOfEnemyTypes = enemyTypes.size();
@@ -54,7 +56,18 @@ public class WaveGenerator {
         //Increase enemy health by "currentEnemyHealthBoost"
         AbstractEnemy enemy = enemyTypes.get(currentEnemyIndex);
         enemy.setHealth(Math.round(enemy.getHealth() * currentEnemyHealthBoost));
-        currentWave = new Wave(enemy, numberOfEnemies);
+
+        //Check if we received additional enemies from opponent
+        if (enemiesReceived > 0) {
+            currentWave = new Wave(enemy, numberOfEnemies + enemiesReceived);
+            enemiesReceived = 0;
+        } else {
+            currentWave = new Wave(enemy, numberOfEnemies);
+        }
+    }
+
+    public void setReceivedEnemies(int enemiesReceived) {
+        this.enemiesReceived = enemiesReceived;
     }
 
     public int getCurrentWaveNumber() {

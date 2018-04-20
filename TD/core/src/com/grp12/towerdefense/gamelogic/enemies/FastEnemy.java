@@ -4,11 +4,15 @@ import com.grp12.towerdefense.gamelogic.Node;
 
 import java.util.ArrayList;
 
-public class BasicEnemy extends AbstractEnemy {
+public class FastEnemy extends AbstractEnemy {
+
+    private final float speedMultiplier = 1.3f;
+
     //TODO Make bounty and cost parameters?
-    public BasicEnemy(ArrayList<Node> waypoints, float speed, int health) {
+    public FastEnemy(ArrayList<Node> waypoints, float speed, int health) {
         super(waypoints, speed, health, 50, 10);
-        this.type = EnemyType.BASIC;
+        this.speed = speed * speedMultiplier;
+        this.type = EnemyType.FAST;
     }
 
     @Override
@@ -48,6 +52,6 @@ public class BasicEnemy extends AbstractEnemy {
 
     @Override
     public AbstractEnemy clone() {
-        return new BasicEnemy(getWaypoints(), getSpeed(), getHealth());
+        return new FastEnemy(getWaypoints(), getSpeed(), getHealth());
     }
 }

@@ -10,10 +10,12 @@ import java.util.ArrayList;
 public abstract class AbstractEnemy extends Actor {
 
     private int health, slowDown=10;
+    private int maxHealth;
     protected float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
     private int cost;
     private int bounty;
+    private HealthBar healthBar;
 
     public enum EnemyType {BASIC, FAST}
     protected EnemyType type;
@@ -33,6 +35,7 @@ public abstract class AbstractEnemy extends Actor {
         this.waypoints = waypoints;
         this.speed = speed;
         this.health = health;
+        this.maxHealth = health;
         this.cost = cost;
         this.bounty = bounty;
 
@@ -42,7 +45,10 @@ public abstract class AbstractEnemy extends Actor {
 
         position.x = waypoints.get(0).getX();
         position.y = waypoints.get(0).getY();
+
+        healthBar = new HealthBar(70, 10);
     }
+
     public void move(float dt) {
         if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
             //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
@@ -131,6 +137,14 @@ public abstract class AbstractEnemy extends Actor {
 
     public EnemyType getType() {
         return type;
+    }
+
+    public HealthBar getHealthBar() {
+        return healthBar;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public ArrayList<Node> getWaypoints () {

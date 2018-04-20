@@ -46,12 +46,9 @@ public class EnemyView extends View {
                     fastEnemySpr.draw(spriteBatch);
                     break;
             }
-
-            
-            //spriteBatch.draw(enemySpr, e.getY()*getTileWidth(), e.getX()*getTileHeight());
-
-            //System.out.print(e.getEnemyRotation()+"\n");
-
+            e.getHealthBar().setPosition(e.getY()*getTileWidth() + 26, e.getX()*getTileHeight() + 110);
+            e.getHealthBar().setValue((Float.valueOf(e.getHealth()) / Float.valueOf(e.getMaxHealth())) * e.getHealthBar().getMaxValue());
+            e.getHealthBar().draw(spriteBatch, 1);
         }
     }
 

@@ -50,8 +50,7 @@ public class PlayState extends State {
         super(gsm);
 
         map = new Map();
-        playerStats = new PlayerStats();
-        playerStats.addMoney(500);
+        playerStats = new PlayerStats(500 ,20);
 
         //views
         mapView = new MapView(map.getGrid());
@@ -64,7 +63,7 @@ public class PlayState extends State {
 
 
         //e = new BasicEnemy(map.getWaypoints(), 1, 1000);
-        e = new BasicEnemy(map.getWaypoints(), 1, 1000);
+        e = new BasicEnemy(map.getWaypoints(), 10, 1000);
         currentWave = new Wave(e, 10);
 
         enemies = new ArrayList<AbstractEnemy>();
@@ -119,12 +118,17 @@ public class PlayState extends State {
             for (int i = 0; i < enemies.size(); i++) {
                 if (enemies.get(i).getHealth() == 0) {
                     enemyView.removeEnemy(enemies.get(i));
-                    playerStats.addMoney(enemies.get(i).getCost()/2);
+                    playerStats.addMoney(enemies.get(i).getBounty());
                     enemies.remove(i);
 
                 } else {
                     enemies.get(i).move(dt);
-
+                    //Remove enemies that have completed the path
+                    if (enemies.get(i).isFinished()) {
+                        playerStats.removeHealth(1);
+                        enemyView.removeEnemy(enemies.get(i));
+                        enemies.remove(i);
+                    }
                 }
             }
             //calculate tower targeting and shooting

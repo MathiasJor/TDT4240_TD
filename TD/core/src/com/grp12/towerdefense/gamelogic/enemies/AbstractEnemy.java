@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.grp12.towerdefense.gamelogic.statuseffects.AbstractStatusEffect;
 import com.grp12.towerdefense.gamelogic.Node;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public abstract class AbstractEnemy extends Actor {
@@ -14,9 +13,12 @@ public abstract class AbstractEnemy extends Actor {
     private float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
     private int cost;
+    private int bounty;
 
     //Will be used to find direction we need to move to get to the next waypoint
     Vector2 direction = new Vector2();
+
+    private boolean isFinished;
 
     private Node currentWaypoint = null;
     private int waypointIndex;
@@ -24,12 +26,15 @@ public abstract class AbstractEnemy extends Actor {
     private float eRotation=0;
     ArrayList<AbstractStatusEffect> statusEffects;
 
-    public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health, int cost) {
+    public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health, int cost, int bounty) {
         this.waypoints = waypoints;
         this.speed = speed;
         this.health = health;
         this.cost = cost;
+        this.bounty = bounty;
+
         waypointIndex = 0;
+        isFinished = false;
         findNextWaypoint();
 
         position.x = waypoints.get(0).getX();
@@ -63,11 +68,12 @@ public abstract class AbstractEnemy extends Actor {
             if (waypointIndex < waypoints.size()) {
                 currentWaypoint = waypoints.get(waypointIndex);
                 waypointIndex++;
-            } else {
-                System.out.println("End reached by: " + this.toString());
             }
             eRotation = findEDegree();
 
+        } else {
+            isFinished = true;
+            System.out.println("End reached by: " + this.toString());
         }
     }
 
@@ -110,6 +116,14 @@ public abstract class AbstractEnemy extends Actor {
 
     public int getCost() {
         return cost;
+    }
+
+    public int getBounty(){
+        return bounty;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
     }
 
     public ArrayList<Node> getWaypoints () {

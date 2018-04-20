@@ -1,6 +1,7 @@
 package com.grp12.towerdefense.gamelogic.towers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 
 import java.util.ArrayList;
@@ -9,20 +10,22 @@ public abstract class AbstractTower {
 
     private int damage, cost, range, targetEnemy=1000, upgradeCost, towerLevel=0;
     private float reloadTime;
-    private Vector2 position;
     private AbstractEnemy target;
     private static ArrayList<AbstractEnemy> enemies;
     private float frameTime = 0;
     private boolean canShoot = true;
+
     private float rotation=0;
 
-    public AbstractTower(int damage, float reloadTime, int cost, int range, Vector2 position){
+    private Node container;
+
+
+    public AbstractTower(int damage, float reloadTime, int cost, int range){
         this.damage = damage;
         this.reloadTime = reloadTime;
+        this.cost = cost;
         this.range = range;
-        this.position = position;
         this.upgradeCost= (int) (cost*.6); //upgrade cost is 60% of build price
-        enemies = new ArrayList<AbstractEnemy>();
         target = null;
     }
 
@@ -58,7 +61,16 @@ public abstract class AbstractTower {
     }
 
     private boolean enemyOutOfRange(AbstractEnemy abstractEnemy) {
-        return position.dst2(abstractEnemy.getPosition()) > range;
+        return container.getPosition().dst2(abstractEnemy.getPosition()) > range;
+    }
+
+    //TODO: Setting this sets the node.setTower, if it fails, fail here as well
+    public void setNode (Node node) {
+        container = node;
+    }
+
+    public Node getNode () {
+        return container;
     }
 
     public AbstractEnemy getTarget() {
@@ -90,7 +102,7 @@ public abstract class AbstractTower {
     }
 
     public Vector2 getPosition(){
-        return position;
+        return container.getPosition();
     }
 
     public void setCost(int cost) {this.cost = cost;}
@@ -121,7 +133,11 @@ public abstract class AbstractTower {
         float tempDistance;
         AbstractEnemy returnEnemy = null;
         for (AbstractEnemy enemy : listOfEnemies){
-            tempDistance = position.dst2(enemy.getPosition());
+            if (enemy.getHealth() > 0) {
+                tempDistance = container.getPosition().dst2(enemy.getPosition());
+            } else {
+                tempDistance = shortest + 1;
+            }
             if(tempDistance < shortest){
                 shortest = tempDistance;
                 returnEnemy = enemy;
@@ -132,19 +148,19 @@ public abstract class AbstractTower {
 
     public float findDegree(AbstractEnemy target){
         Vector2 targetCoords = target.getPosition();
-        float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
+        float degree = (float) Math.atan((targetCoords.x-container.getPosition().x)/(targetCoords.y-container.getPosition().y));
         degree= (float) Math.toDegrees(degree);
 
-        if(position.x==targetCoords.x){
-            if(targetCoords.y<position.y){
+        if(container.getPosition().x==targetCoords.x){
+            if(targetCoords.y<container.getPosition().y){
                 degree = 90;
             }
             else{
                 degree=270;
             }
         }
-        else if(position.y==targetCoords.y){
-            if(targetCoords.x> position.x){
+        else if(container.getPosition().y==targetCoords.y){
+            if(targetCoords.x> container.getPosition().x){
                 degree = 0;
             }
             else{
@@ -152,8 +168,8 @@ public abstract class AbstractTower {
             }
         }
         else{
-            if(targetCoords.x>position.x){
-                if(targetCoords.y<position.y){
+            if(targetCoords.x>container.getPosition().x){
+                if(targetCoords.y<container.getPosition().y){
                     degree=90+degree;
                 }
                 else{
@@ -161,7 +177,7 @@ public abstract class AbstractTower {
                 }
             }
             else{
-                if(targetCoords.y>position.y){
+                if(targetCoords.y>container.getPosition().y){
                     degree=270+degree; //done
                 }
                 else{

@@ -3,6 +3,7 @@ package com.grp12.towerdefense.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.grp12.towerdefense.MainGame;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
+import com.grp12.towerdefense.gamelogic.PlayerStats;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.Wave;
@@ -31,29 +33,39 @@ public class PlayState extends State {
     //Views
     private MapView mapView;
     private EnemyView enemyView;
-    private TowerView towerView;
+    //private TowerView towerView;
     private GameMenuView gameMenuView;
     private Wave currentWave;
     private ArrayList<AbstractEnemy> enemies;
     private ArrayList<AbstractTower> towers;
 
     private boolean buyPhase;
+    private PlayerStats playerStats;
+
+    private BitmapFont bmf;
 
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
 
         map = new Map();
+        playerStats = new PlayerStats();
+        playerStats.addMoney(500);
 
 
-        //Views
+
+        //TODO: functions that makes it so that setting on, sets the other
+
+
+        //views
         mapView = new MapView(map.getGrid());
         View.setTileHeight(mapView.getTileHeight());
         View.setTileWidth(mapView.getTileWidth());
         enemyView = new EnemyView();
-        towerView = new TowerView();
+        //towerView = new TowerView();
         //TODO: #5: Implement GameMenuView
         gameMenuView = new GameMenuView(new Vector2(0,0));
+        bmf = new BitmapFont();
 
 
         //e = new BasicEnemy(map.getWaypoints(), 1, 1000);
@@ -62,10 +74,10 @@ public class PlayState extends State {
 
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
-        AbstractTower tower = new BasicTower(new Vector2(1,16));
-        towers.add(tower);
+
+
         AbstractTower.setEnemyList(enemies);
-        towerView.addTower(tower);
+        //towerView.addTower(tower);
         buyPhase = false;
 
     }
@@ -84,21 +96,15 @@ public class PlayState extends State {
             Node node =mapView.getNode(nodeIsClicked, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             //if not nodepath build a tower there
             if(node.getType()== Node.NodeType.TOWERNODE){
-                if(!node.getOccupied()){
-                    node.setOccupied(true);
-                    Vector2 setNode =new Vector2(node.getX(),node.getY());
-                    AbstractTower tower = new BasicTower(setNode);
+
+                AbstractTower tower = new BasicTower();
+                if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
+                    tower.setNode(node);
                     towers.add(tower);
-                    AbstractTower.setEnemyList(enemies);
-                    towerView.addTower(tower);
+                    playerStats.withdrawMoney(tower.getCost());
+                    playerStats.getBalance();
                 }
-                else{
-                    for (AbstractTower t: towers){
-                        if(t.getPosition()==node.getPosition()){
-                            t.upgradeTower(1000,1,250);
-                        }
-                    }
-                }
+
             }
 
         }
@@ -118,8 +124,8 @@ public class PlayState extends State {
                 if (enemies.get(i).getHealth() == 0) {
                     enemyView.removeEnemy(enemies.get(i));
                     enemies.remove(i);
+                    playerStats.addMoney(20);
                     //TODO: add code the gives money for a dead enemy
-
                 } else {
                     enemies.get(i).move(dt);
 
@@ -130,25 +136,20 @@ public class PlayState extends State {
                 tower.fire(dt);
             }
         }
-        //calculate tower targeting and shooting
-        for (AbstractTower tower : towers) {
-            tower.fire(dt);
-        }
         handleInput();
         //TODO: #6: Implement a check to test if the wave is over
         //TODO: #7: Implement code to send information about the ended wave
 
-
-            //Send result and enemies wave to competitor
-            //TODO: #8: Implement waiting and buy phase
-            //Start waiting and a buy phase
-            //TODO: #9: In waiting and buy phase, check if competitors turn is over and allow a new round to start
-            //TODO: #16: Fetch the results from competitors wave and enemies sent to device
-            //Temporary lazy check if the round is over
-            if (enemies.size() == 0 && currentWave.empty()) {
-                //send info about round to server
-                buyPhase = true;
-            }
+        //Send result and enemies wave to competitor
+        //TODO: #8: Implement waiting and buy phase
+        //Start waiting and a buy phase
+        //TODO: #9: In waiting and buy phase, check if competitors turn is over and allow a new round to start
+        //TODO: #16: Fetch the results from competitors wave and enemies sent to device
+        //Temporary lazy check if the round is over
+        if (enemies.size() == 0 && currentWave.empty()) {
+            //send info about round to server
+            buyPhase = true;
+        }
         
 
 
@@ -162,7 +163,9 @@ public class PlayState extends State {
         } else {
             gameMenuView.draw(sb);
         }
-        towerView.draw(sb);
+        //towerView.draw(sb);
+        bmf.getData().setScale(6);
+        bmf.draw(sb, Integer.toString(playerStats.getBalance()), 20, mapView.getMapHeight()-20 );
 
     }
 
@@ -170,7 +173,7 @@ public class PlayState extends State {
     public void dispose() {
         mapView.dispose();
         enemyView.dispose();
-        towerView.dispose();
+        //towerView.dispose();
         gameMenuView.dispose();
     }
 

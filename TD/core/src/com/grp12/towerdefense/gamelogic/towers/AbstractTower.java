@@ -39,7 +39,6 @@ public abstract class AbstractTower {
             canShoot = true;
         targetUpdate();
         if (target != null && canShoot) {
-            //rotation = position.angle(target.getPosition());
             rotation = findDegree(target);
             target.takeDamage(damage);
             frameTime = 0;
@@ -50,13 +49,9 @@ public abstract class AbstractTower {
     private void targetUpdate() {
         if (target == null || target.getHealth() == 0 || enemyOutOfRange(target)) {
             target = findNextEnemy(enemies);
-
             if(target!=null){
-                //rotation = target.getPosition().angle(position);
                 rotation = findDegree(target);
             }
-
-
         }
     }
 
@@ -150,7 +145,6 @@ public abstract class AbstractTower {
         Vector2 targetCoords = target.getPosition();
         float degree = (float) Math.atan((targetCoords.x-container.getPosition().x)/(targetCoords.y-container.getPosition().y));
         degree= (float) Math.toDegrees(degree);
-        System.out.print(degree+"\n");
         if(container.getPosition().x==targetCoords.x){
             if(targetCoords.y<container.getPosition().y){
                 degree = 90;
@@ -185,8 +179,6 @@ public abstract class AbstractTower {
                 }
             }
         }
-
-
         return degree;
     }
     

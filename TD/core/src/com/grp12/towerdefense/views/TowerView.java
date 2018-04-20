@@ -25,7 +25,6 @@ public class TowerView extends View {
         for(AbstractTower t : towers) {
             //towerSprB.rotate(t.getRotation());
             towerSprB.setRotation(t.getRotation());
-            System.out.print("from aTowe= "+t.getRotation());
             //spriteBatch.draw(towerSprB, t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
             towerSprB.setPosition(t.getPosition().y*getTileWidth(), t.getPosition().x*getTileHeight());
             towerSprB.draw(spriteBatch);

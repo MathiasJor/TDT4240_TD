@@ -72,7 +72,7 @@ public class PlayState extends State {
         playing = true;
 
 
-    
+
 
 
         serverConnection = new ServerConnection();
@@ -132,16 +132,6 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput(Vector3 pointer) {
-
-
-
-
-
-
-
-
-
-
 
         if (nextRoundReady && !playing) {
             if (srb.clicked(pointer)) {

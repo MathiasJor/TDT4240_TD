@@ -21,6 +21,8 @@ public class WaveGenerator {
     private int currentEnemyIndex;
 
     private final double healthIncrease = 0.1;
+    private final int intervalToIncreaseEnemies = 5;
+    private final int increaseEnemiesBy = 1;
 
     public WaveGenerator(ArrayList<AbstractEnemy> enemyTypes) {
         currentWaveNumber = 0;
@@ -34,8 +36,14 @@ public class WaveGenerator {
 
     public void setNextWave(){
         currentEnemyHealthBoost += healthIncrease;
-        numberOfEnemies += 10;
         currentWaveNumber++;
+
+        //Increase enemies by "increaseEnemiesBy" every "intervalToIncreaseEnemies"th round
+        if (currentWaveNumber % intervalToIncreaseEnemies == 0) {
+            numberOfEnemies += increaseEnemiesBy;
+        }
+
+        //Used to cycle through different enemy types, depending on how many are available.
         if (currentEnemyIndex < numberOfEnemyTypes) {
             currentEnemyIndex++;
             if (currentEnemyIndex == numberOfEnemyTypes) {
@@ -43,9 +51,9 @@ public class WaveGenerator {
             }
         }
 
+        //Increase enemy health by "currentEnemyHealthBoost"
         AbstractEnemy enemy = enemyTypes.get(currentEnemyIndex);
-        enemy.setHealth(Math.round(enemy.getHealth()*currentEnemyHealthBoost));
-        System.out.println(Math.round(enemy.getHealth()*currentEnemyHealthBoost));
+        enemy.setHealth(Math.round(enemy.getHealth() * currentEnemyHealthBoost));
         currentWave = new Wave(enemy, numberOfEnemies);
     }
 

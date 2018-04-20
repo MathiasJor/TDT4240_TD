@@ -67,6 +67,7 @@ public class PlayState extends State {
         srb = new StartRoundButton(mapView.getMapHeight(), mapView.getMapWidth());
         bmf = new BitmapFont();
 
+
         //Represents the three states of the game loop: Playing, waiting for next round, and next is ready
         nextRoundReady = true;
         playing = true;
@@ -84,6 +85,7 @@ public class PlayState extends State {
             gameMenuView.draw(sb);
             if (nextRoundReady) {
                 srb.draw(sb);
+
             }
         }
         bmf.getData().setScale(6);
@@ -104,11 +106,17 @@ public class PlayState extends State {
             for (int i = 0; i < enemies.size(); i++) {
                 if (enemies.get(i).getHealth() == 0) {
                     enemyView.removeEnemy(enemies.get(i));
-                    playerStats.addMoney(enemies.get(i).getCost()/2);
+                    playerStats.addMoney(enemies.get(i).getBounty());
                     enemies.remove(i);
 
                 } else {
                     enemies.get(i).move(dt);
+                    //Remove enemies that have completed the path
+                    if (enemies.get(i).isFinished()) {
+                        playerStats.removeHealth(1);
+                        enemyView.removeEnemy(enemies.get(i));
+                        enemies.remove(i);
+                    }
                 }
             }
             //calculate tower targeting and shooting
@@ -128,16 +136,6 @@ public class PlayState extends State {
     @Override
     protected void handleInput(Vector3 pointer) {
 
-
-
-
-
-
-
-
-
-
-
         if (nextRoundReady && !playing) {
             if (srb.clicked(pointer)) {
                 //currentWave = serverConnection.result()
@@ -156,9 +154,7 @@ public class PlayState extends State {
                 playerStats.withdrawMoney(tower.getCost());
                 playerStats.getBalance();
             }
-
         }
-
     }
 
     //Set up the game

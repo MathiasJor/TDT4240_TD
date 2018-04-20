@@ -23,7 +23,7 @@ public abstract class AbstractStatusEffect {
 
     public void slowDown(AbstractEnemy enemy,int towerLevel){
         float speed = enemy.getSpeed();
-        enemy.setSpeed((float) (speed*1-reduceBasedOnTowerLevel[towerLevel]));
+        //enemy.setSpeed((float) (speed*1-reduceBasedOnTowerLevel[towerLevel]));
     }
 
     //posion, returns the array [how much health reduced per seconds, duration in sections]

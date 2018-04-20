@@ -14,7 +14,11 @@ public abstract class AbstractTower {
     private static ArrayList<AbstractEnemy> enemies;
     private float frameTime = 0;
     private boolean canShoot = true;
+
+    private float rotation=0;
+
     private Node container;
+
 
     public AbstractTower(int damage, float reloadTime, int cost, int range){
         this.damage = damage;
@@ -33,9 +37,10 @@ public abstract class AbstractTower {
         frameTime += dt;
         if (frameTime > reloadTime)
             canShoot = true;
-
         targetUpdate();
         if (target != null && canShoot) {
+            //rotation = position.angle(target.getPosition());
+            rotation = findDegree(target);
             target.takeDamage(damage);
             frameTime = 0;
             canShoot = false;
@@ -45,6 +50,13 @@ public abstract class AbstractTower {
     private void targetUpdate() {
         if (target == null || target.getHealth() == 0 || enemyOutOfRange(target)) {
             target = findNextEnemy(enemies);
+
+            if(target!=null){
+                //rotation = target.getPosition().angle(position);
+                rotation = findDegree(target);
+            }
+
+
         }
     }
 
@@ -103,6 +115,8 @@ public abstract class AbstractTower {
 
     public int getTowerLevel(){return towerLevel;}
 
+    public float getRotation(){return rotation;}
+
     //set new values for upgrade tower
     public void upgradeTower(int dmg, float reloadTime, int range){
         setDamage(dmg);
@@ -130,6 +144,50 @@ public abstract class AbstractTower {
             }
         }
         return (shortest < range) ? returnEnemy : null;
+    }
+
+    public float findDegree(AbstractEnemy target){
+        Vector2 targetCoords = target.getPosition();
+        float degree = (float) Math.atan((targetCoords.x-container.getPosition().x)/(targetCoords.y-container.getPosition().y));
+        degree= (float) Math.toDegrees(degree);
+        System.out.print(degree+"\n");
+        if(container.getPosition().x==targetCoords.x){
+            if(targetCoords.y<container.getPosition().y){
+                degree = 90;
+            }
+            else{
+                degree=270;
+            }
+        }
+        else if(container.getPosition().y==targetCoords.y){
+            if(targetCoords.x> container.getPosition().x){
+                degree = 0;
+            }
+            else{
+                degree=180;
+            }
+        }
+        else{
+            if(targetCoords.x>container.getPosition().x){
+                if(targetCoords.y<container.getPosition().y){
+                    degree=90+degree;
+                }
+                else{
+                    degree = +degree-90; //done
+                }
+            }
+            else{
+                if(targetCoords.y>container.getPosition().y){
+                    degree=270+degree; //done
+                }
+                else{
+                    degree=degree+90;
+                }
+            }
+        }
+
+
+        return degree;
     }
     
 

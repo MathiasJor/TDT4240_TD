@@ -24,7 +24,11 @@ public class EnemyView extends View {
     public void draw(SpriteBatch spriteBatch) {
         int counter = 0;
         for(AbstractEnemy e : enemies) {
-            spriteBatch.draw(enemySpr, e.getY()*getTileWidth(), e.getX()*getTileHeight());
+            //spriteBatch.draw(enemySpr, e.getY()*getTileWidth(), e.getX()*getTileHeight());
+            enemySpr.setRotation(e.getEnemyRotation());
+            //System.out.print(e.getEnemyRotation()+"\n");
+            enemySpr.setPosition(e.getY()*getTileWidth(), e.getX()*getTileHeight());
+            enemySpr.draw(spriteBatch);
         }
     }
 

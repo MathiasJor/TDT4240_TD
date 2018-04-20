@@ -5,31 +5,36 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.grp12.towerdefense.gamelogic.statuseffects.AbstractStatusEffect;
 import com.grp12.towerdefense.gamelogic.Node;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public abstract class AbstractEnemy extends Actor {
 
-    private int health;
-    private float speed;
+    private int health, slowDown=10;
+    private float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
     private int cost;
+    private int bounty;
 
     //Will be used to find direction we need to move to get to the next waypoint
     Vector2 direction = new Vector2();
 
+    private boolean isFinished;
+
     private Node currentWaypoint = null;
     private int waypointIndex;
     private ArrayList<Node> waypoints;
-
+    private float eRotation=0;
     ArrayList<AbstractStatusEffect> statusEffects;
 
-    public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health, int cost) {
+    public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health, int cost, int bounty) {
         this.waypoints = waypoints;
         this.speed = speed;
         this.health = health;
         this.cost = cost;
+        this.bounty = bounty;
+
         waypointIndex = 0;
+        isFinished = false;
         findNextWaypoint();
 
         position.x = waypoints.get(0).getX();
@@ -59,8 +64,15 @@ public abstract class AbstractEnemy extends Actor {
     public void findNextWaypoint() {
         if (waypointIndex < waypoints.size()) {
             currentWaypoint = waypoints.get(waypointIndex);
-            waypointIndex++;
+            //waypointIndex++;
+            if (waypointIndex < waypoints.size()) {
+                currentWaypoint = waypoints.get(waypointIndex);
+                waypointIndex++;
+            }
+            eRotation = findEDegree();
+
         } else {
+            isFinished = true;
             System.out.println("End reached by: " + this.toString());
         }
     }
@@ -106,12 +118,75 @@ public abstract class AbstractEnemy extends Actor {
         return cost;
     }
 
+    public int getBounty(){
+        return bounty;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
     public ArrayList<Node> getWaypoints () {
         return (ArrayList) waypoints.clone();
     }
 
+        public float getEnemyRotation(){return eRotation;}
+
+    public float findEDegree(){
+        Vector2 targetCoords = currentWaypoint.getPosition();
+        float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
+        degree= (float) Math.toDegrees(degree);
+        //System.out.print("enemy= "+ position.x +", "+ position.y +" waypoint= "+ targetCoords.x+ ", "+targetCoords.y+ "deg= "+degree+"+\n");
+        if(position.x==targetCoords.x){
+            if(targetCoords.y<position.y){
+                degree = 0;
+
+            }
+            else{
+                degree=180;
+
+            }
+        }
+        else if(position.y==targetCoords.y){
+            if(targetCoords.x> position.x){
+                degree = -90;
+
+            }
+            else{
+                degree=90;
+
+            }
+        }
+        else{
+            if(targetCoords.x>position.x){
+                if(targetCoords.y<position.y){
+                    degree=degree;
+
+                }
+                else{
+                    degree = 270;
+
+                }
+            }
+            else{
+                if(targetCoords.y>position.y){
+                    degree=degree;
+
+                }
+                else{
+                    degree=degree;
+
+
+                }
+            }
+        }
+        return degree;
+    }
+
+
     //Should return a deep copy of this object
     public abstract AbstractEnemy clone();
+
 
 }
 

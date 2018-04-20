@@ -65,9 +65,6 @@ public abstract class AbstractEnemy extends Actor {
                 System.out.println("End reached by: " + this.toString());
             }
             eRotation = findEDegree();
-            waypointIndex++;
-        } else {
-            System.out.println("End reached by: " + this.toString());
 
         }
     }
@@ -120,42 +117,42 @@ public abstract class AbstractEnemy extends Actor {
         if(position.x==targetCoords.x){
             if(targetCoords.y<position.y){
                 degree = 0;
-                System.out.print("5");
+
             }
             else{
                 degree=180;
-                System.out.print("6");
+
             }
         }
         else if(position.y==targetCoords.y){
             if(targetCoords.x> position.x){
                 degree = -90;
-                System.out.print("7");
+
             }
             else{
                 degree=90;
-                System.out.print("8");
+
             }
         }
         else{
             if(targetCoords.x>position.x){
                 if(targetCoords.y<position.y){
                     degree=degree;
-                    System.out.print("1");
+
                 }
                 else{
                     degree = 270;
-                    System.out.print("2");
+
                 }
             }
             else{
                 if(targetCoords.y>position.y){
                     degree=degree;
-                    System.out.print("3");
+
                 }
                 else{
                     degree=degree;
-                    System.out.print("4");
+
 
                 }
             }

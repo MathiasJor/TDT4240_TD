@@ -59,7 +59,7 @@ public class PlayState extends State {
 
         //models
         map = new Map();
-        playerStats = new PlayerStats(100, 100);
+        playerStats = new PlayerStats(200, 10);
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower.setEnemyList(enemies);
@@ -96,7 +96,8 @@ public class PlayState extends State {
             }
         }
         bmf.getData().setScale(6);
-        bmf.draw(sb, Integer.toString(playerStats.getBalance()), 20, mapView.getMapHeight()-20 );
+        String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance();
+        bmf.draw(sb, info, 20, mapView.getMapHeight()-20 );
 
     }
 

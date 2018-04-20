@@ -150,7 +150,7 @@ public abstract class AbstractTower {
         Vector2 targetCoords = target.getPosition();
         float degree = (float) Math.atan((targetCoords.x-container.getPosition().x)/(targetCoords.y-container.getPosition().y));
         degree= (float) Math.toDegrees(degree);
-        System.out.print(degree+"\n");
+        //System.out.print(degree+"\n");
         if(container.getPosition().x==targetCoords.x){
             if(targetCoords.y<container.getPosition().y){
                 degree = 90;

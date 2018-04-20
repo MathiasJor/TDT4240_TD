@@ -17,6 +17,7 @@ import com.grp12.towerdefense.gamelogic.PlayerStats;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.Wave;
+import com.grp12.towerdefense.gamelogic.enemies.WaveGenerator;
 import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 import com.grp12.towerdefense.gamelogic.towers.BasicTower;
 import com.grp12.towerdefense.views.EnemyView;
@@ -33,9 +34,11 @@ public class PlayState extends State {
     //models
     private Map map;
     private PlayerStats playerStats;
-    private Wave currentWave;
+    //private Wave currentWave;
     private ArrayList<AbstractEnemy> enemies;
     private ArrayList<AbstractTower> towers;
+    private WaveGenerator waveGenerator;
+    private ArrayList<AbstractEnemy> listOfEnemyTypes;
 
     //Views
     private MapView mapView;
@@ -59,6 +62,9 @@ public class PlayState extends State {
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower.setEnemyList(enemies);
+        listOfEnemyTypes = new ArrayList<AbstractEnemy>();
+        listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 100));
+        waveGenerator = new WaveGenerator(listOfEnemyTypes);
 
         //Views
         mapView = new MapView(map.getGrid());
@@ -97,7 +103,7 @@ public class PlayState extends State {
     public void update(float dt) {
         if (playing) {
             //Start: Spawn enemies in the start of the lane
-            AbstractEnemy e = currentWave.popAttempt(dt);
+            AbstractEnemy e = waveGenerator.getCurrentWave().popAttempt(dt);
             if (e != null) {
                 enemies.add(e);
                 enemyView.addEnemy(e);
@@ -124,7 +130,7 @@ public class PlayState extends State {
                 tower.fire(dt);
             }
         }
-        if (enemies.size() == 0 && currentWave.empty()) {
+        if (enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
             serverConnection.sendResult();
         }
@@ -139,7 +145,8 @@ public class PlayState extends State {
         if (nextRoundReady && !playing) {
             if (srb.clicked(pointer)) {
                 //currentWave = serverConnection.result()
-                currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 15);
+                //currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 15);
+                waveGenerator.setNextWave();
                 playing = true;
             }
         }
@@ -160,7 +167,7 @@ public class PlayState extends State {
     //Set up the game
     private void init() {
         playerStats.addMoney(500);
-        currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 15);
+        //currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 15);
     }
 
     @Override

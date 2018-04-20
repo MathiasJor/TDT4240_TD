@@ -7,7 +7,7 @@ public class Node {
 
     public enum NodeType {TOWERNODE, PATHNODE}
     private NodeType type;
-
+    private boolean occupied = false;
     private Vector2 position = new Vector2();
 
     private AbstractTower tower;
@@ -41,6 +41,7 @@ public class Node {
         this.position = position;
     }
 
+
     //TODO: Successfully setting this sets the tower.setNode as well
     public boolean setTower(AbstractTower abstractTower) {
         if (type == NodeType.TOWERNODE && tower == null) {
@@ -58,4 +59,5 @@ public class Node {
     public AbstractTower getTower() {
         return this.tower;
     }
+
 }

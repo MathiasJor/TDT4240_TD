@@ -63,8 +63,10 @@ public class PlayState extends State {
         bmf = new BitmapFont();
 
 
-        e = new BasicEnemy(map.getWaypoints(), 1, 100);
-        currentWave = new Wave(e, 15);
+        //e = new BasicEnemy(map.getWaypoints(), 1, 1000);
+        e = new BasicEnemy(map.getWaypoints(), 1, 1000);
+        currentWave = new Wave(e, 10);
+
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
 
@@ -90,6 +92,7 @@ public class PlayState extends State {
             Node node =mapView.getNode(nodeIsClicked, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             //if not nodepath build a tower there
             if(node.getType()== Node.NodeType.TOWERNODE){
+
                 AbstractTower tower = new BasicTower();
                 if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
                     tower.setNode(node);
@@ -121,6 +124,7 @@ public class PlayState extends State {
 
                 } else {
                     enemies.get(i).move(dt);
+
                 }
             }
             //calculate tower targeting and shooting

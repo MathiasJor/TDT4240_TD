@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public abstract class AbstractEnemy extends Actor {
 
-    private int health;
-    private float speed;
+    private int health, slowDown=10;
+    private float speed, distanceX, distanceY;
     private Vector2 position = new Vector2();
     private int cost;
 
@@ -21,7 +21,7 @@ public abstract class AbstractEnemy extends Actor {
     private Node currentWaypoint = null;
     private int waypointIndex;
     private ArrayList<Node> waypoints;
-
+    private float eRotation=0;
     ArrayList<AbstractStatusEffect> statusEffects;
 
     public AbstractEnemy(ArrayList<Node> waypoints, float speed, int health, int cost) {
@@ -59,9 +59,15 @@ public abstract class AbstractEnemy extends Actor {
     public void findNextWaypoint() {
         if (waypointIndex < waypoints.size()) {
             currentWaypoint = waypoints.get(waypointIndex);
-            waypointIndex++;
-        } else {
-            System.out.println("End reached by: " + this.toString());
+            //waypointIndex++;
+            if (waypointIndex < waypoints.size()) {
+                currentWaypoint = waypoints.get(waypointIndex);
+                waypointIndex++;
+            } else {
+                System.out.println("End reached by: " + this.toString());
+            }
+            eRotation = findEDegree();
+
         }
     }
 
@@ -110,8 +116,63 @@ public abstract class AbstractEnemy extends Actor {
         return (ArrayList) waypoints.clone();
     }
 
+        public float getEnemyRotation(){return eRotation;}
+
+    public float findEDegree(){
+        Vector2 targetCoords = currentWaypoint.getPosition();
+        float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
+        degree= (float) Math.toDegrees(degree);
+        //System.out.print("enemy= "+ position.x +", "+ position.y +" waypoint= "+ targetCoords.x+ ", "+targetCoords.y+ "deg= "+degree+"+\n");
+        if(position.x==targetCoords.x){
+            if(targetCoords.y<position.y){
+                degree = 0;
+
+            }
+            else{
+                degree=180;
+
+            }
+        }
+        else if(position.y==targetCoords.y){
+            if(targetCoords.x> position.x){
+                degree = -90;
+
+            }
+            else{
+                degree=90;
+
+            }
+        }
+        else{
+            if(targetCoords.x>position.x){
+                if(targetCoords.y<position.y){
+                    degree=degree;
+
+                }
+                else{
+                    degree = 270;
+
+                }
+            }
+            else{
+                if(targetCoords.y>position.y){
+                    degree=degree;
+
+                }
+                else{
+                    degree=degree;
+
+
+                }
+            }
+        }
+        return degree;
+    }
+
+
     //Should return a deep copy of this object
     public abstract AbstractEnemy clone();
+
 
 }
 

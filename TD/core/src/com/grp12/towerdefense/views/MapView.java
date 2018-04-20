@@ -22,6 +22,8 @@ public class MapView extends View {
     private Node[][] grid;
     private Texture path;
     private Texture land;
+    private Texture tower;
+    private Sprite tSprite;
 
     public MapView(Node[][] grid) {
         this.grid = grid;
@@ -29,6 +31,9 @@ public class MapView extends View {
         path = new Texture("towerDefense_tile050.png");
         View.setTileHeight(path.getHeight());
         View.setTileWidth(path.getWidth());
+        tower= new Texture("towerDefense_tile250.png");
+        tSprite = new Sprite(tower);
+
     }
 
     public void setGrid(Node[][] grid) {
@@ -43,7 +48,11 @@ public class MapView extends View {
                     sb.draw(land, i*land.getHeight(), j*land.getWidth());
                     AbstractTower t = grid[i][j].getTower();
                     if (t != null) {
-                        sb.draw(new Sprite(new Texture("towerDefense_tile250.png")), i * land.getHeight(), j * land.getWidth());
+                        //sb.draw(new Sprite(new Texture("towerDefense_tile250.png")), i * land.getHeight(), j * land.getWidth());
+                        tSprite.setRotation(t.getRotation());
+                        tSprite.setPosition(i * land.getHeight(), j * land.getWidth());
+                        tSprite.draw(sb);
+
                     }
                 }
                 if (grid[i][j].getType() == Node.NodeType.PATHNODE) {

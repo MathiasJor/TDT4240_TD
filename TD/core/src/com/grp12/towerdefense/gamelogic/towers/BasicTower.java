@@ -6,5 +6,6 @@ public class BasicTower extends AbstractTower {
 
     public BasicTower() {
         super(100, 2, 100, 3);
+
     }
 }

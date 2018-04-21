@@ -38,10 +38,6 @@ public class MainGame extends ApplicationAdapter {
 		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
-    camera = new OrthographicCamera();
-    viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
-    viewport.apply();
-    camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		gsm = new GameStateManager(this);
 		gsm.push(new MenuState(gsm));

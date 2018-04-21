@@ -2,7 +2,7 @@ package com.grp12.towerdefense.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.grp12.towerdefense.views.StartMenuView;
+import com.grp12.towerdefense.views.MenyViews.StartMenuView;
 
 public class MenuState extends State {
 
@@ -17,9 +17,14 @@ public class MenuState extends State {
 
     @Override
     protected void handleInput(Vector3 pointer) {
-        startMenuView.clicked(pointer);
-        System.out.println(pointer.x);
-        System.out.println(pointer.y);
+        if (startMenuView.clicked(pointer) != null) {
+            if (startMenuView.clicked(pointer) == StartMenuView.StartMenuOption.NEWGAME) {
+                gsm.push(new PlayState(gsm));
+            }
+            if (startMenuView.clicked(pointer) == StartMenuView.StartMenuOption.ACTIVE_GAMES) {
+                gsm.push(new PlayState(gsm));
+            }
+        }
     }
 
     @Override

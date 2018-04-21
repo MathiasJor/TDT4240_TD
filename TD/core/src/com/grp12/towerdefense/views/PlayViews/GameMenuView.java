@@ -1,22 +1,17 @@
-package com.grp12.towerdefense.views;
+package com.grp12.towerdefense.views.PlayViews;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 import com.grp12.towerdefense.gamelogic.towers.BasicTower;
 import com.grp12.towerdefense.gamelogic.towers.RocketTower;
 import com.grp12.towerdefense.gamelogic.towers.StunTower;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameMenuView extends View {
 

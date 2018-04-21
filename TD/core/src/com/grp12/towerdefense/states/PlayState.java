@@ -1,17 +1,9 @@
 package com.grp12.towerdefense.states;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.actions.CountdownEventAction;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.grp12.towerdefense.MainGame;
 import com.grp12.towerdefense.Network.ServerConnection;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
@@ -24,18 +16,14 @@ import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 import com.grp12.towerdefense.gamelogic.towers.BasicTower;
 import com.grp12.towerdefense.gamelogic.towers.RocketTower;
 import com.grp12.towerdefense.gamelogic.towers.StunTower;
-import com.grp12.towerdefense.views.EnemyView;
-import com.grp12.towerdefense.views.GameMenuView;
-import com.grp12.towerdefense.views.MapView;
-import com.grp12.towerdefense.views.StartRoundButton;
-import com.grp12.towerdefense.views.TowerView;
-import com.grp12.towerdefense.views.View;
+import com.grp12.towerdefense.views.PlayViews.EnemyView;
+import com.grp12.towerdefense.views.PlayViews.GameMenuView;
+import com.grp12.towerdefense.views.PlayViews.MapView;
+import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import sun.java2d.SurfaceDataProxy;
 
 public class PlayState extends State {
 
@@ -92,8 +80,6 @@ public class PlayState extends State {
         //Represents the three states of the game loop: Playing, waiting for next round, and next is ready
         nextRoundReady = true;
         playing = false;
-
-
         serverConnection = new ServerConnection();
     }
 
@@ -154,7 +140,6 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput(Vector3 pointer) {
-
         if (nextRoundReady && !playing) {
             if (srb.clicked(pointer)) {
                 //currentWave = serverConnection.result()
@@ -162,39 +147,43 @@ public class PlayState extends State {
                 playing = true;
             }
             else{
+                Node node = mapView.getNode(pointer);
                 //open tower selection
+
                 gameMenuView.isClickedSelectTower(pointer);
+
                 if(gameMenuView.getShowElements()){
                     buildThisTower =gameMenuView.towerSelected(pointer, mapView.getMapHeight(), mapView.getMapWidth());
                     delayThis();
                     ready[0]=false;
                 }
-
                 if(gameMenuView.getShowOneTower()){
-                    delayThis();
-                    if(gameMenuView.finishedWithSelectedTower(pointer)){
-                        ready[0]=false;
+                    if(node.getTower()==null){
+                        buildTowers(pointer,node);
                     }
-                    //get node informastion
-                    if(ready[0]){
-                        Node node = mapView.getNode(pointer);
-                        //if not nodepath build a tower there
-                        if(node.getType()== Node.NodeType.TOWERNODE){
-                            AbstractTower tower = newTower(buildThisTower);
-                            if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
-                                tower.setNode(node);
-                                towers.add(tower);
-                                playerStats.withdrawMoney(tower.getCost());
-                                playerStats.getBalance();
+                }
+                else if(!gameMenuView.getShowOneTower()&&!gameMenuView.getShowElements()){
+                        //sellTower(node)
+                    if(node.getTower()!=null){
+                        gameMenuView.sellAndUpgrade(pointer,node);
+                    }
+                    else{
+                        if(gameMenuView.getSellAndUpgrade()){
+                            Node pickedTower = gameMenuView.pickSellOrUpgrade(pointer);
+                            if(pickedTower.getTower().getChoice()=='S'){
+                                sellTower(pickedTower);
+                            }
+                            else if(pickedTower.getTower().getChoice()=='U'){
+                                upgradeTower(pickedTower);
                             }
                         }
                     }
+
+
                 }
+
+
             }
-
-
-
-
         }
     }
 
@@ -229,7 +218,7 @@ public class PlayState extends State {
     }
 
     public void delayThis(){
-        long delay = 1000;
+        long delay = 2000;
         long period = 2000;
         Timer task = new Timer();
         task.schedule(new TimerTask() {
@@ -242,5 +231,47 @@ public class PlayState extends State {
 
     }
 
+    public void buildTowers(Vector3 pointer, Node node){
+        if(gameMenuView.getShowOneTower()){
+            delayThis();
+            if(gameMenuView.finishedWithSelectedTower(pointer)){
+                ready[0]=false;
+            }
+            //get node informastion
+            if(ready[0]){
+                //if not nodepath build a tower there
+                if(node.getType()== Node.NodeType.TOWERNODE){
+                    AbstractTower tower = newTower(buildThisTower);
+                    if (playerStats.getBalance() >= tower.getCost() && node.setTower(tower)) {
+                        tower.setNode(node);
+                        towers.add(tower);
+                        playerStats.withdrawMoney(tower.getCost());
+                        playerStats.getBalance();
+                        gameMenuView.setShowOneTower(false);
 
+                    }
+                }
+            }
+        }
+    }
+
+    public void sellTower(Node node){
+        for(int i=0; i<towers.size();i++){
+            if(node.getTower().getPosition()==towers.get(i).getPosition()){
+                playerStats.addMoney(towers.get(i).getSellPrice());
+               towers.remove(i);
+               node.removeTower();
+            }
+
+        }
+    }
+
+    public void upgradeTower(Node pickedTower){
+        if(playerStats.getBalance()>pickedTower.getTower().getUpgradeCost()){
+            pickedTower.getTower().upgradeTower();
+            gameMenuView.setShowSellAndUpgrade(false);
+            playerStats.withdrawMoney(pickedTower.getTower().getUpgradeCost());
+        }
+
+    }
 }

@@ -15,12 +15,7 @@ import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.PlayerStats;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.states.GameStateManager;
-import com.grp12.towerdefense.states.PlayState;
-import com.grp12.towerdefense.views.EnemyView;
-import com.grp12.towerdefense.views.MapView;
-import com.grp12.towerdefense.views.View;
-
-import java.util.ArrayList;
+import com.grp12.towerdefense.states.MenuState;
 
 public class MainGame extends ApplicationAdapter {
 
@@ -37,30 +32,36 @@ public class MainGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		camera = new OrthographicCamera();
+		viewport = new FillViewport(2560, 2048, camera);
+		viewport.apply();
+		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
-		gsm.push(new PlayState(gsm));
-		NetworkCommunicator.fetchExternalUserId();
-		NetworkCommunicator.newGameRequest();
-        camera = new OrthographicCamera();
-        viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
-        viewport.apply();
-        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+    camera = new OrthographicCamera();
+    viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
+    viewport.apply();
+    camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
+		gsm = new GameStateManager(this);
+		gsm.push(new MenuState(gsm));
 	}
 
 	@Override
 	public void render () {
+		camera.update();
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gsm.update(Gdx.graphics.getDeltaTime());
-		if(Gdx.input.isTouched()) {
-			handleInput();
-		}
-        camera.update();
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         gsm.render(batch);
         batch.end();
+
+		if(Gdx.input.isTouched()) {
+			handleInput();
+		}
 	}
 
 	public void handleInput() {
@@ -73,5 +74,4 @@ public class MainGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
-
 }

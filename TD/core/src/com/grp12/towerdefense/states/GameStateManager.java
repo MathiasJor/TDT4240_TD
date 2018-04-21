@@ -2,12 +2,19 @@ package com.grp12.towerdefense.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.grp12.towerdefense.MainGame;
 
 import java.util.Stack;
 
 public class GameStateManager {
 
+    private MainGame mg;
     private Stack<State> states;
+
+    public GameStateManager(MainGame mg) {
+        this.mg = mg;
+        states = new Stack<State>();
+    }
 
     public GameStateManager() {
         states = new Stack<State>();

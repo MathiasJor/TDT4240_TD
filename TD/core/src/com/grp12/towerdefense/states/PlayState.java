@@ -178,8 +178,8 @@ public class PlayState extends State {
             }
             else{
 
-                if (sendEnemyMenuView.clicked(pointer) && playerStats.getBalance() >= 50) {
-                    playerStats.withdrawMoney(50);
+                if (sendEnemyMenuView.clicked(pointer) && playerStats.getBalance() >= (listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2)) {
+                    playerStats.withdrawMoney(listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2);
                     enemiesToSend += 1;
                 }
 

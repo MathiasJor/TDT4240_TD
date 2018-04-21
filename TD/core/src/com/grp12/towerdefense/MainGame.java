@@ -55,7 +55,7 @@ public class MainGame extends ApplicationAdapter {
         gsm.render(batch);
         batch.end();
 
-		if(Gdx.input.isTouched()) {
+		if(Gdx.input.justTouched()) {
 			handleInput();
 		}
 	}

@@ -9,12 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.MenuState;
-import com.grp12.towerdefense.states.PlayState;
-import com.grp12.towerdefense.views.PlayViews.MapView;
-import com.grp12.towerdefense.views.PlayViews.View;
 
 public class MainGame extends ApplicationAdapter {
 

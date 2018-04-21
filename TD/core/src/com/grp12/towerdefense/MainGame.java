@@ -45,7 +45,8 @@ public class MainGame extends ApplicationAdapter {
 
 		batch = new SpriteBatch();
 		gsm = new GameStateManager(this);
-		gsm.push(new MenuState(gsm));
+		//gsm.push(new MenuState(gsm));
+		gsm.push(new PlayState(gsm));
 
 	}
 

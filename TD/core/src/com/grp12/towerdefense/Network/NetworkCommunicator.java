@@ -18,7 +18,11 @@ import java.util.ArrayList;
 
 public class NetworkCommunicator {
     static int userId = 0;
-    static boolean  lookedForUserId = false;
+    static GsonBuilder builder = new GsonBuilder();
+
+    static public int getUserId(){
+        return userId;
+    }
 
 
     public static ArrayList<NetworkGame> userGames = new ArrayList<NetworkGame>();
@@ -41,11 +45,15 @@ public class NetworkCommunicator {
                     out.write("{\"type\":\"connect\", \"userId\": \"null\"}");
                     out.flush();
                     BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+                    Gson gs = builder.create();
                     String line;
                     while((line = in.readLine()) != null){
                         System.out.println(line);
+                        UserIdResponse res = gs.fromJson(line, UserIdResponse.class);
+                        userId = res.userId;
                     }
-
+                    System.out.println(userId);
                     out.close();
                     in.close();
                     s.close();
@@ -75,11 +83,12 @@ public class NetworkCommunicator {
 
 
                         System.out.println(line);
-                        GsonBuilder builder = new GsonBuilder();
                         builder.setLenient();
                         Gson gs = builder.create();
                         try{
-                            userGames.add(gs.fromJson(line, NetworkGame.class));
+                            NetworkGame game = gs.fromJson(line, NetworkGame.class);
+                            if(game != null)
+                                userGames.add(game);
                         }catch (Exception e){
                             System.out.println(e);
                         }
@@ -99,6 +108,11 @@ public class NetworkCommunicator {
                 }
             }
         };
+        executor.start();
+    }
+
+    public static void newGameRequest(){
+        Thread executor = new NewGameThread();
         executor.start();
     }
 
@@ -124,7 +138,7 @@ class EndTurnThread extends Thread{
             System.out.println("This worked!");
 
             //TODO: Add health to the string. (Not done due to health not being implemented on branch at the time)
-            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d, \"sentCreatures\":\"\"}", NetworkCommunicator.userId, gameId, 30, ps.getBalance()));
+            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d, \"sentCreatures\":\"\"}", NetworkCommunicator.userId, gameId, ps.getHealth(), ps.getBalance()));
             out.flush();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line;
@@ -139,4 +153,34 @@ class EndTurnThread extends Thread{
             System.out.println(e);
         }
     }
+}
+
+class NewGameThread extends Thread{
+    public void run(){
+        try{
+
+            Socket s = new Socket("localhost", 9999);
+            PrintWriter out = new PrintWriter(s.getOutputStream());
+
+            //TODO: Add health to the string. (Not done due to health not being implemented on branch at the time)
+            out.write(java.lang.String.format("{\"type\":\"newGame\", \"userId\":%d}", NetworkCommunicator.userId));
+            out.flush();
+            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            String line;
+            while((line = in.readLine()) != null){
+                System.out.println(line);
+            }
+            out.close();
+            in.close();
+            s.close();
+
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+}
+
+class UserIdResponse{
+    public int userId;
+    String type;
 }

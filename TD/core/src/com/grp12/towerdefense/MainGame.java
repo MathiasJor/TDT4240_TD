@@ -41,6 +41,7 @@ public class MainGame extends ApplicationAdapter {
 		gsm = new GameStateManager();
 		gsm.push(new PlayState(gsm));
 		NetworkCommunicator.fetchExternalUserId();
+		NetworkCommunicator.newGameRequest();
         camera = new OrthographicCamera();
         viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
         viewport.apply();

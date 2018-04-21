@@ -148,7 +148,7 @@ public class PlayState extends State {
         if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
             //TODO: FIX this, so gameId is correct:
-            NetworkCommunicator.sendEndTurnMessage(0, playerStats, enemiesToSend);
+            NetworkCommunicator.sendEndTurnMessage(0, playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber());
             if (playerStats.getHealth() < 1) {
                 gameOverView = new GameOverView();
                 gameover = true;

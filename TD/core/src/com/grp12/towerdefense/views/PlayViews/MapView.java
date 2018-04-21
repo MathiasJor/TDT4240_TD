@@ -1,6 +1,7 @@
 package com.grp12.towerdefense.views.PlayViews;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -23,6 +24,7 @@ public class MapView extends View {
     private Texture bTower, rTower, sTower;
     private Sprite tSprite;
     private Sprite[] towers = new Sprite[3];
+    private BitmapFont bitmapFont;
 
     public MapView(Node[][] grid) {
         this.grid = grid;
@@ -36,6 +38,7 @@ public class MapView extends View {
         View.setMapHeight(land.getHeight()*grid[0].length);
         View.setMapWidth(land.getWidth()*grid.length);
         tower= new Texture("towerDefense_tile250.png");
+        bitmapFont = new BitmapFont();
 
         makeSpriteArray();
 
@@ -59,6 +62,10 @@ public class MapView extends View {
                         tSprite.setRotation(t.getRotation());
                         tSprite.setPosition(i * land.getHeight(), j * land.getWidth());
                         tSprite.draw(sb);
+                        bitmapFont.getData().setScale(3);
+                        bitmapFont.draw(sb, (""+t.getTowerLevel()),
+                                tSprite.getX()+tSprite.getWidth()/2,
+                                tSprite.getY()+tSprite.getHeight()/2);
 
                     }
                 }

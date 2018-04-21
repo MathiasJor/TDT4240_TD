@@ -2,6 +2,8 @@ package com.grp12.towerdefense.Network;
 
 import com.badlogic.gdx.utils.Json;
 
+import java.util.ArrayList;
+
 import jdk.nashorn.internal.parser.JSONParser;
 
 /**
@@ -9,5 +11,15 @@ import jdk.nashorn.internal.parser.JSONParser;
  */
 
 public class NetworkGame {
-    Json json = new Json();
+    ArrayList<NetworkUser> users;
+    public NetworkUser getUser(int uid){
+        return users.get(uid);
+    }
+    String turnData;
+
+    public int getId() {
+        return id;
+    }
+
+    int id;
 }

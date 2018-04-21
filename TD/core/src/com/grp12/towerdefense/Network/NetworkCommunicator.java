@@ -2,19 +2,26 @@ package com.grp12.towerdefense.Network;
 
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.grp12.towerdefense.gamelogic.PlayerStats;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by Kristian on 4/18/2018.
  */
 
 public class NetworkCommunicator {
-    public static int userId = 0;
+    static int userId = 0;
+    static boolean  lookedForUserId = false;
+
+
+    public static ArrayList<NetworkGame> userGames = new ArrayList<NetworkGame>();
 
     String hostName = "localhost";
     int port = 9999;
@@ -22,7 +29,7 @@ public class NetworkCommunicator {
     public NetworkCommunicator(){
     }
 
-    public static void getExternalUserId(){
+    public static void fetchExternalUserId(){
         Thread executor = new Thread(){
             public void run(){
                 try{
@@ -38,10 +45,11 @@ public class NetworkCommunicator {
                     while((line = in.readLine()) != null){
                         System.out.println(line);
                     }
+
                     out.close();
                     in.close();
                     s.close();
-                    NetworkCommunicator.getGames();
+                    NetworkCommunicator.fetchGames();
                 }catch(Exception e){
                     System.out.println(e);
                 }
@@ -50,7 +58,7 @@ public class NetworkCommunicator {
         executor.start();
     }
 
-    public static void getGames(){
+    public static void fetchGames(){
         Thread executor = new Thread(){
             public void run(){
                 try{
@@ -64,8 +72,24 @@ public class NetworkCommunicator {
                     BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     String line;
                     while((line = in.readLine()) != null){
+
+
                         System.out.println(line);
+                        GsonBuilder builder = new GsonBuilder();
+                        builder.setLenient();
+                        Gson gs = builder.create();
+                        try{
+                            userGames.add(gs.fromJson(line, NetworkGame.class));
+                        }catch (Exception e){
+                            System.out.println(e);
+                        }
                     }
+
+                    System.out.println(userGames.size());
+
+                    System.out.println(userGames.get(0).getId());
+                    System.out.println(userGames.get(0).getUser(0).gold);
+
                     out.close();
                     in.close();
                     s.close();
@@ -100,7 +124,7 @@ class EndTurnThread extends Thread{
             System.out.println("This worked!");
 
             //TODO: Add health to the string. (Not done due to health not being implemented on branch at the time)
-            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d}", NetworkCommunicator.userId, gameId, 30, ps.getBalance()));
+            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d, \"sentCreatures\":\"\"}", NetworkCommunicator.userId, gameId, 30, ps.getBalance()));
             out.flush();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line;

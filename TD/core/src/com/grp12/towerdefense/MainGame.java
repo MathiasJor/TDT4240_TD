@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.grp12.towerdefense.Network.NetworkCommunicator;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
+import com.grp12.towerdefense.gamelogic.PlayerStats;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.PlayState;
@@ -39,7 +40,7 @@ public class MainGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 		gsm.push(new PlayState(gsm));
-
+		NetworkCommunicator.fetchExternalUserId();
         camera = new OrthographicCamera();
         viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
         viewport.apply();

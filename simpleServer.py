@@ -38,11 +38,18 @@ class ServerData:
 		self.userStorageDir = serverDir
 
 	def findUserGames(self, userid):
-		rs = '{ "type":"userGames", "games":['
+		rs = '{ "type":"userGames", "games":[\n'
+		first = True
 		for i in range(len(self.games)):
 			if(self.games[i].user1.id == userid or self.games[i].user2.id == userid):
-				rs = rs + self.games[i].toString() + ','
-		rs = rs + ']}'
+				if first:
+					rs = rs + self.games[i].toString()
+					first = False
+				else:
+					#IGNORE THIS, THIS IS SO DAMN UGLY! 
+					#THIS WAS DONE TO BE COMPATIBLE WITH GSON!!!!
+					rs = rs + '\n,\n' + self.games[i].toString()					
+		rs = rs + '\n]}'
 		return rs
 
 	def saveToFile(self):
@@ -69,6 +76,7 @@ class ServerData:
 			user1 = GameUser(game["users"][0]["id"], game["users"][0]["health"], game["users"][0]["gold"], game["users"][0]["isTurn"])
 			user2 = GameUser(game["users"][1]["id"], game["users"][1]["health"], game["users"][1]["gold"], game["users"][1]["isTurn"])
 			self.games.append(Game(user1, user2, game["id"]))
+		print("Load successful")
 
 
 

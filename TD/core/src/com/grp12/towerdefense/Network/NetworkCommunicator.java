@@ -139,8 +139,8 @@ public class NetworkCommunicator {
         executor.start();
     }
 
-    public static void sendEndTurnMessage(int gameId, PlayerStats ps, int sentCreatures){
-        Thread executor = new EndTurnThread(gameId, ps, sentCreatures);
+    public static void sendEndTurnMessage(int gameId, PlayerStats ps, int sentCreatures, int waveNumber){
+        Thread executor = new EndTurnThread(gameId, ps, sentCreatures, waveNumber);
         executor.start();
     }
 }
@@ -149,11 +149,13 @@ class EndTurnThread extends Thread{
     int gameId;
     int sentCreatures = 0;
     PlayerStats ps;
+    int waveNumber;
 
-    public EndTurnThread(int gameId, PlayerStats ps, int sentCreatures){
+    public EndTurnThread(int gameId, PlayerStats ps, int sentCreatures, int waveNumber){
         this.gameId = gameId;
         this.ps = ps;
         this.sentCreatures = sentCreatures;
+        this.waveNumber = waveNumber;
     }
     public void run(){
         try{
@@ -162,7 +164,7 @@ class EndTurnThread extends Thread{
             PrintWriter out = new PrintWriter(s.getOutputStream());
 
             //TODO: Add health to the string. (Not done due to health not being implemented on branch at the time)
-            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d, \"sentCreatures\":%d}", NetworkCommunicator.userId, gameId, ps.getHealth(), ps.getBalance(), sentCreatures));
+            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d, \"sentCreatures\":%d, \"waveNumber\":%d}", NetworkCommunicator.userId, gameId, ps.getHealth(), ps.getBalance(), sentCreatures, waveNumber));
             out.flush();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line;

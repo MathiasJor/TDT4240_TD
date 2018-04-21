@@ -36,4 +36,9 @@ public class NetworkGame {
     }
 
     int id;
+
+    public int getWaveNumber() {
+        return waveNumber;
+    }
+    int waveNumber;
 }

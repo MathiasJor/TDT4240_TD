@@ -102,7 +102,7 @@ public class PlayState extends State {
             } else {
                 gameMenuView.draw(sb);
                 sendEnemyMenuView.draw(sb);
-                if (true  && !gameover) {
+                if (NetworkCommunicator.getActiveGame().isMyTurn() && !gameover) {
                     srb.draw(sb);
                 }
             }
@@ -168,7 +168,7 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput(Vector3 pointer) {
-        if (!playing && true) {
+        if (!playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
                 //TODO: Add code here, that takes the input from network message received and use it!
                 int opponentHealth = 0; //TODO: Change this

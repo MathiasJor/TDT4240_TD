@@ -5,6 +5,7 @@ public class PlayerStats {
     private int money;
     private int health;
 
+
     public PlayerStats(int money, int health) {
         this.money = money;
         this.health = health;

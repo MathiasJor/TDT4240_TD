@@ -42,11 +42,11 @@ public class PlayState extends State {
     //models
     private Map map;
     private PlayerStats playerStats;
-    //private Wave currentWave;
     private ArrayList<AbstractEnemy> enemies;
     private ArrayList<AbstractTower> towers;
     private WaveGenerator waveGenerator;
     private ArrayList<AbstractEnemy> listOfEnemyTypes;
+    private ArrayList<AbstractEnemy> enemiesToSend;
 
     //Views
     private MapView mapView;
@@ -68,9 +68,10 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
+
         //models
         map = new Map();
-        playerStats = new PlayerStats(100, 100);
+        playerStats = new PlayerStats(200, 10);
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower.setEnemyList(enemies);
@@ -78,6 +79,7 @@ public class PlayState extends State {
         listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 100));
         listOfEnemyTypes.add(new FastEnemy(map.getWaypoints(), 1, 100));
         waveGenerator = new WaveGenerator(listOfEnemyTypes);
+        enemiesToSend = new ArrayList<AbstractEnemy>();
 
         //Views
         mapView = new MapView(map.getGrid());
@@ -93,7 +95,6 @@ public class PlayState extends State {
 
 
         serverConnection = new ServerConnection();
-        init();
     }
 
     @Override
@@ -108,7 +109,8 @@ public class PlayState extends State {
             }
         }
         bmf.getData().setScale(6);
-        bmf.draw(sb, Integer.toString(playerStats.getBalance()), 20, mapView.getMapHeight()-20 );
+        String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance();
+        bmf.draw(sb, info, 20, mapView.getMapHeight()-20 );
 
     }
 
@@ -121,14 +123,14 @@ public class PlayState extends State {
                 enemies.add(e);
                 enemyView.addEnemy(e);
             }
-            //calculate enemy movement
+            //remove dead enemies
             for (int i = 0; i < enemies.size(); i++) {
                 if (enemies.get(i).getHealth() == 0) {
                     enemyView.removeEnemy(enemies.get(i));
                     playerStats.addMoney(enemies.get(i).getBounty());
                     enemies.remove(i);
-
                 } else {
+                    //calculate movement
                     enemies.get(i).move(dt);
                     //Remove enemies that have completed the path
                     if (enemies.get(i).isFinished()) {
@@ -143,13 +145,11 @@ public class PlayState extends State {
                 tower.fire(dt);
             }
         }
+        //ends the round when all the enemies are gone
         if (enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
-            serverConnection.sendResult();
+            serverConnection.sendResult(playerStats.getHealth(), enemiesToSend, waveGenerator.getCurrentWaveNumber());
         }
-
-
-
     }
 
     @Override
@@ -158,8 +158,6 @@ public class PlayState extends State {
         if (nextRoundReady && !playing) {
             if (srb.clicked(pointer)) {
                 //currentWave = serverConnection.result()
-
-                //currentWave = new Wave(new BasicEnemy(map.getWaypoints(), 1, 100), 15);
                 waveGenerator.setNextWave();
                 playing = true;
             }
@@ -198,11 +196,6 @@ public class PlayState extends State {
 
 
         }
-    }
-
-    //Set up the game
-    private void init() {
-        playerStats.addMoney(500);
     }
 
     @Override

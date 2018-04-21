@@ -1,17 +1,34 @@
 package com.grp12.towerdefense.Network;
 
+import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
+
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class ServerConnection {
 
 
-    public void sendResult() {
-
+    public void sendResult(int healthpoints, ArrayList<AbstractEnemy> sendEnemies, int waveNumber) {
+        //TODO: code that sends this info to the server
     }
 
-    public void ping() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*public void ping() {
         new Thread(new ClientThread()).start();
     }
 
@@ -29,7 +46,5 @@ public class ServerConnection {
                 System.out.println(e);
             }
         }
-
-
-    }
+    }*/
 }

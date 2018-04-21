@@ -22,6 +22,7 @@ import com.grp12.towerdefense.views.PlayViews.GameMenuView;
 import com.grp12.towerdefense.views.PlayViews.GameOverView;
 import com.grp12.towerdefense.views.PlayViews.MapView;
 import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
+import com.sun.xml.internal.bind.v2.TODO;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -36,7 +37,8 @@ public class PlayState extends State {
     private ArrayList<AbstractTower> towers;
     private WaveGenerator waveGenerator;
     private ArrayList<AbstractEnemy> listOfEnemyTypes;
-    private ArrayList<AbstractEnemy> enemiesToSend;
+    //TODO: Add code that adds to enemiesToSend
+    private int enemiesToSend;
 
     //Views
     private MapView mapView;
@@ -48,7 +50,6 @@ public class PlayState extends State {
 
     //state
     private boolean playing;
-    private boolean nextRoundReady;
     private boolean gameover;
 
     //variables
@@ -57,7 +58,7 @@ public class PlayState extends State {
     int buildThisTower =0;
     final boolean[] ready = {false};
 
-    ServerConnection serverConnection;
+    NetworkCommunicator networkCommunicator;
 
 
     public PlayState(GameStateManager gsm) {
@@ -73,7 +74,7 @@ public class PlayState extends State {
         listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 100));
         listOfEnemyTypes.add(new FastEnemy(map.getWaypoints(), 1, 100));
         waveGenerator = new WaveGenerator(listOfEnemyTypes);
-        enemiesToSend = new ArrayList<AbstractEnemy>();
+        enemiesToSend = 0;
 
         //Views
         mapView = new MapView(map.getGrid());
@@ -83,13 +84,12 @@ public class PlayState extends State {
         bmf = new BitmapFont();
 
 
-        //Represents the four states of the game loop: Playing, waiting for next round, next round is ready, and game over
-        nextRoundReady = true;
+        //Represents the three states of the game loop: Playing, waiting for next round, and game over
         playing = false;
         gameover = false;
 
         //Network
-        serverConnection = new ServerConnection();
+        networkCommunicator = new NetworkCommunicator();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PlayState extends State {
                 enemyView.draw(sb);
             } else {
                 gameMenuView.draw(sb);
-                if (nextRoundReady && !gameover) {
+                if (NetworkCommunicator.getActiveGame().isMyTurn() && !gameover) {
                     srb.draw(sb);
                 }
             }
@@ -145,10 +145,10 @@ public class PlayState extends State {
             }
         }
         //ends the round when all the enemies are gone
-        if (enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
+        if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
-            //TODO: FIX this, so it isn't called every update once the round is over
-            serverConnection.sendResult(playerStats.getHealth(), enemiesToSend, waveGenerator.getCurrentWaveNumber());
+            //TODO: FIX this, so gameId is correct:
+            NetworkCommunicator.sendEndTurnMessage(0, playerStats, enemiesToSend);
             if (playerStats.getHealth() < 1) {
                 gameOverView = new GameOverView();
                 gameover = true;
@@ -165,9 +165,9 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput(Vector3 pointer) {
-        if (nextRoundReady && !playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
+        if (!playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
-                //currentWave = serverConnection.result()
+                //TODO: Add code here, that takes the input from network message received and use it!
                 waveGenerator.setNextWave();
                 playing = true;
             }

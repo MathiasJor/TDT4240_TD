@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.views;
+package com.grp12.towerdefense.views.PlayViews;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

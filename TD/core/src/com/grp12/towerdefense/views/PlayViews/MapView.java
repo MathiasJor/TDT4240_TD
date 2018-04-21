@@ -1,19 +1,12 @@
-package com.grp12.towerdefense.views;
+package com.grp12.towerdefense.views.PlayViews;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteCache;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
-
-import java.util.ArrayList;
-
-import javax.swing.text.Position;
 
 /*
 MapView is unique in that it contains stuff that doesn't change during the game, and for performance's sake.

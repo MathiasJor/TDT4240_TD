@@ -1,17 +1,9 @@
 package com.grp12.towerdefense.states;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.actions.CountdownEventAction;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.grp12.towerdefense.MainGame;
 import com.grp12.towerdefense.Network.ServerConnection;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
@@ -24,18 +16,14 @@ import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 import com.grp12.towerdefense.gamelogic.towers.BasicTower;
 import com.grp12.towerdefense.gamelogic.towers.RocketTower;
 import com.grp12.towerdefense.gamelogic.towers.StunTower;
-import com.grp12.towerdefense.views.EnemyView;
-import com.grp12.towerdefense.views.GameMenuView;
-import com.grp12.towerdefense.views.MapView;
-import com.grp12.towerdefense.views.StartRoundButton;
-import com.grp12.towerdefense.views.TowerView;
-import com.grp12.towerdefense.views.View;
+import com.grp12.towerdefense.views.PlayViews.EnemyView;
+import com.grp12.towerdefense.views.PlayViews.GameMenuView;
+import com.grp12.towerdefense.views.PlayViews.MapView;
+import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import sun.java2d.SurfaceDataProxy;
 
 public class PlayState extends State {
 
@@ -152,7 +140,6 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput(Vector3 pointer) {
-
         if (nextRoundReady && !playing) {
             if (srb.clicked(pointer)) {
                 //currentWave = serverConnection.result()

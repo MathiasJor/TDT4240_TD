@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.views;
+package com.grp12.towerdefense.views.PlayViews;
 
 /*
 Takes in an object to be drawn in the GameMenuView

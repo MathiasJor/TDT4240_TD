@@ -15,14 +15,15 @@ class GameUser:
 		self.isTurn = isTurn
 
 class Game:
-	def __init__(self, user1, user2, id):
+	def __init__(self, user1, user2, id, waveNumber):
 		self.user1 = user1
 		self.user2 = user2
 		self.id = id
 		self.sentCreatures = 0
+		self.waveNumber = waveNumber
 
 	def toString(self):
-		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"sentCreatures\":" + str(self.sentCreatures) + ", \"id\":" + str(self.id) + "}"
+		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"sentCreatures\":" + str(self.sentCreatures) + ", \"id\":" + str(self.id) + "\"waveNumber\": " + str(self.waveNumber) + "}"
 
 class ServerData:
 	connectedUsers = []
@@ -73,7 +74,7 @@ class ServerData:
 			game = data['games'][i]
 			user1 = GameUser(game["users"][0]["id"], game["users"][0]["health"], game["users"][0]["gold"], game["users"][0]["isTurn"])
 			user2 = GameUser(game["users"][1]["id"], game["users"][1]["health"], game["users"][1]["gold"], game["users"][1]["isTurn"])
-			self.games.append(Game(user1, user2, game["id"]))
+			self.games.append(Game(user1, user2, game["id"], game["waveNumber"]))
 		print("Load successful")
 
 
@@ -111,7 +112,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 				self.request.sendall(bytes(self.createNewGame(), 'utf-8'))
 		elif(response['type'] == 'endTurn'):
 			#TODO: Implement response when a user has ended their turn
-			self.request.sendall(bytes(self.startTurn(response['userId'], response['gameId'], response['userHealth'], response['userGold'], response["sentCreatures"]), 'utf-8'))
+			self.request.sendall(bytes(self.startTurn(response['userId'], response['gameId'], response['userHealth'], response['userGold'], response["sentCreatures"], response["waveNumber"]), 'utf-8'))
 		elif(response['type'] == 'getGames'):
 			self.request.sendall(bytes(self.getUserGames(response['userId']), 'utf-8'))
 		elif(response['type'] == 'serverSave'):
@@ -119,7 +120,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 		elif(response['type'] == 'serverLoad'):
 			serverData.loadFromFile()
 
-	def startTurn(self, userid, gameid, userHealth, userGold, sentCreatures):
+	def startTurn(self, userid, gameid, userHealth, userGold, sentCreatures, waveNumber):
 		global serverData
 		game = serverData.games[gameid]
 		if game.user1.id == userid or game.user2.id == userid:
@@ -159,7 +160,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			user1 = GameUser(user1id, 30, 500, True)
 			user2 = GameUser(user2id, 30, 500, False)
 
-			serverData.games.append(Game(user1, user2, serverData.nextGameId))
+			serverData.games.append(Game(user1, user2, serverData.nextGameId, 0))
 			serverData.nextGameId += 1
 			return serverData.games[serverData.nextGameId - 1].toString()
 		print("Not enough players looking for game yet...")

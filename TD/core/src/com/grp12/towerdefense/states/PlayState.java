@@ -18,6 +18,7 @@ import com.grp12.towerdefense.gamelogic.towers.RocketTower;
 import com.grp12.towerdefense.gamelogic.towers.StunTower;
 import com.grp12.towerdefense.views.PlayViews.EnemyView;
 import com.grp12.towerdefense.views.PlayViews.GameMenuView;
+import com.grp12.towerdefense.views.PlayViews.GameOverView;
 import com.grp12.towerdefense.views.PlayViews.MapView;
 import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
 
@@ -42,12 +43,16 @@ public class PlayState extends State {
     private GameMenuView gameMenuView;
     private StartRoundButton srb;
     private BitmapFont bmf;
+    private GameOverView gameOverView;
 
     //state
     private boolean playing;
     private boolean nextRoundReady;
+    private boolean gameover;
 
     //variables
+    private float gameoverTime = 3;
+    private float gameoverTimer = 0;
     int buildThisTower =0;
     final boolean[] ready = {false};
 
@@ -77,26 +82,33 @@ public class PlayState extends State {
         bmf = new BitmapFont();
 
 
-        //Represents the three states of the game loop: Playing, waiting for next round, and next is ready
+        //Represents the four states of the game loop: Playing, waiting for next round, next round is ready, and game over
         nextRoundReady = true;
         playing = false;
+        gameover = false;
+
+        //Network
         serverConnection = new ServerConnection();
     }
 
     @Override
     public void render(SpriteBatch sb) {
         mapView.draw(sb);
-        if (playing) {
-            enemyView.draw(sb);
-        } else {
-            gameMenuView.draw(sb);
-            if (nextRoundReady) {
-                srb.draw(sb);
+        if (!gameover) {
+            if (playing) {
+                enemyView.draw(sb);
+            } else {
+                gameMenuView.draw(sb);
+                if (nextRoundReady && !gameover) {
+                    srb.draw(sb);
+                }
             }
+            bmf.getData().setScale(6);
+            String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance();
+            bmf.draw(sb, info, 20, mapView.getMapHeight() - 20);
+        } else {
+            gameOverView.draw(sb);
         }
-        bmf.getData().setScale(6);
-        String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance();
-        bmf.draw(sb, info, 20, mapView.getMapHeight()-20 );
 
     }
 
@@ -134,7 +146,19 @@ public class PlayState extends State {
         //ends the round when all the enemies are gone
         if (enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
+            //TODO: FIX this, so it isn't called every update once the round is over
             serverConnection.sendResult(playerStats.getHealth(), enemiesToSend, waveGenerator.getCurrentWaveNumber());
+            if (playerStats.getHealth() < 1) {
+                gameOverView = new GameOverView();
+                gameover = true;
+
+            }
+        }
+        if (gameover) {
+            gameoverTimer += dt;
+            if (gameoverTimer > gameoverTime) {
+                gsm.pop();
+            }
         }
     }
 
@@ -178,11 +202,7 @@ public class PlayState extends State {
                             }
                         }
                     }
-
-
                 }
-
-
             }
         }
     }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public abstract class AbstractTower {
 
-    private int damage, cost, range, upgradeCost, towerLevel=0;
+    private int damage, cost, range, upgradeCost, towerLevel=0, value=0, sellPrice=0;
     private float reloadTime;
     private AbstractEnemy target;
     private static ArrayList<AbstractEnemy> enemies;
@@ -17,6 +17,8 @@ public abstract class AbstractTower {
     private String towerName;
     public enum towerType {Basic,Rocket, Stunner};
     private towerType typeTower;
+    private char choice='X';
+
 
 
     private float rotation=0;
@@ -29,8 +31,10 @@ public abstract class AbstractTower {
         this.reloadTime = reloadTime;
         this.cost = cost;
         this.range = range;
-        this.upgradeCost= (int) (cost*.6); //upgrade cost is 60% of build price
+        this.upgradeCost= (int) (cost*.4); //upgrade cost starts off as 40% of buy cost
         this.typeTower = typeTower;
+        setValue(cost);
+        setSellPrice();
         target = null;
     }
 
@@ -118,13 +122,24 @@ public abstract class AbstractTower {
     public float getRotation(){return rotation;}
 
     public towerType getType(){return typeTower;}
+    public void setValue(int increase){value+=increase;}
+
+    public void setSellPrice(){sellPrice = (int) (value*.8);}
+    public int getSellPrice(){return  sellPrice;}
+
+    public void setChoice(char choice){this.choice=choice;}
+    public char getChoice(){return choice;}
+
 
     //set new values for upgrade tower
-    public void upgradeTower(int dmg, float reloadTime, int range){
-        setDamage(dmg);
-        setRange(range);
-        setReloadTime(reloadTime);
+    public void upgradeTower(){
+        setDamage(damage*2);
+        setRange(range+2);
+        setReloadTime(reloadTime/2);
         setUpgradeCost();
+        setValue(upgradeCost);
+        setUpgradeCost();
+        setSellPrice();
         towerLevel++;
     }
 

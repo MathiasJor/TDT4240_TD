@@ -164,6 +164,7 @@ public class PlayState extends State {
             else{
                 Node node = mapView.getNode(pointer);
                 //open tower selection
+
                 gameMenuView.isClickedSelectTower(pointer);
 
                 if(gameMenuView.getShowElements()){
@@ -195,6 +196,7 @@ public class PlayState extends State {
 
 
                 }
+
             }
         }
     }

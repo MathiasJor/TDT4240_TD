@@ -15,7 +15,12 @@ public class NetworkGame {
     public NetworkUser getUser(int uid){
         return users.get(uid);
     }
-    String turnData;
+
+    public int getSentCreatures() {
+        return sentCreatures;
+    }
+
+    int sentCreatures;
 
     public int getId() {
         return id;

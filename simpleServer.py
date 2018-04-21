@@ -19,12 +19,10 @@ class Game:
 		self.user1 = user1
 		self.user2 = user2
 		self.id = id
-		self.turnData = '""'
+		self.sentCreatures = 0
 
 	def toString(self):
-		if self.turnData == '' or self.turnData == None:
-			self.turnData = '""'
-		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"turnData\":" + str(self.turnData) + ", \"id\":" + str(self.id) + "}"
+		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"sentCreatures\":" + str(self.sentCreatures) + ", \"id\":" + str(self.id) + "}"
 
 class ServerData:
 	connectedUsers = []
@@ -138,7 +136,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			else:
 				return '{"type":"endTurnError", "message":"Something is wrong here"}'
 
-			game.turnData = sentCreatures
+			game.sentCreatures = sentCreatures
 			serverData.games[gameid] = game
 			# Wish I could send info to the other user that it is his turn, but he just has to refresh his games...
 			return '{"type":"endTurnResponse"}'

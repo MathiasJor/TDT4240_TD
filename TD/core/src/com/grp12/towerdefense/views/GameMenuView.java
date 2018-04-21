@@ -200,7 +200,7 @@ public class GameMenuView extends View {
             if (pointer.x >= width-towerSprite.getWidth()-scale+closeMenu.getWidth() && pointer.x <= width) {
                 if (pointer.y >= height-towerSprite.getWidth()*3 && pointer.y <= height) {
                     showOneTower=false;
-                    showElements =true;
+                    showElements =false;
                     return true;
                 }
             }

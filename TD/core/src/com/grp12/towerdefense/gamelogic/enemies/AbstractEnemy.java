@@ -157,35 +157,35 @@ public abstract class AbstractEnemy extends Actor {
         Vector2 targetCoords = currentWaypoint.getPosition();
         float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
         degree= (float) Math.toDegrees(degree);
-        //System.out.print("enemy= "+ position.x +", "+ position.y +" waypoint= "+ targetCoords.x+ ", "+targetCoords.y+ "deg= "+degree+"+\n");
+        System.out.print("enemy= "+ position.x +", "+ position.y +" waypoint= "+ targetCoords.x+ ", "+targetCoords.y+ "deg= "+degree+"+\n");
         if(position.x==targetCoords.x){
             if(targetCoords.y<position.y){
-                degree = 0;
+                degree = 180;
 
             }
             else{
-                degree=180;
+                degree=0;
 
             }
         }
         else if(position.y==targetCoords.y){
             if(targetCoords.x> position.x){
-                degree = -90;
+                degree = 90;
 
             }
             else{
-                degree=90;
+                degree=-90;
 
             }
         }
         else{
             if(targetCoords.x>position.x){
                 if(targetCoords.y<position.y){
-                    degree=degree;
+                    degree=degree+180;
 
                 }
                 else{
-                    degree = 270;
+                    degree = degree;
 
                 }
             }
@@ -195,7 +195,7 @@ public abstract class AbstractEnemy extends Actor {
 
                 }
                 else{
-                    degree=degree;
+                    degree=degree+180;
 
 
                 }

@@ -259,6 +259,7 @@ public class PlayState extends State {
                         towers.add(tower);
                         playerStats.withdrawMoney(tower.getCost());
                         playerStats.getBalance();
+                        gameMenuView.setShowOneTower(false);
 
                     }
                 }

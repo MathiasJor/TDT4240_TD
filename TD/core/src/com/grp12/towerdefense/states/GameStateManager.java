@@ -21,7 +21,6 @@ public class GameStateManager {
     }
 
     public void push(State state) {
-        mg.resizeViewport(state.getViewportWidth(), state.getViewportHeight());
         states.push(state);
     }
 

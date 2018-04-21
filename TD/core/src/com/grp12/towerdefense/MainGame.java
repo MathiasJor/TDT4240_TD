@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.MenuState;
 import com.grp12.towerdefense.states.PlayState;
+import com.grp12.towerdefense.views.PlayViews.MapView;
+import com.grp12.towerdefense.views.PlayViews.View;
 
 public class MainGame extends ApplicationAdapter {
 
@@ -29,7 +32,7 @@ public class MainGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		viewport = new FillViewport(100, 100, camera);
+		viewport = new FillViewport(2560, 2048, camera);
 		viewport.apply();
 		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		batch = new SpriteBatch();
@@ -40,8 +43,6 @@ public class MainGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-
-
 		camera.update();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -66,11 +67,5 @@ public class MainGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-	}
-
-	public void resizeViewport(int width, int height) {
-		viewport = new FillViewport(width, height, camera);
-		viewport.apply();
-		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 	}
 }

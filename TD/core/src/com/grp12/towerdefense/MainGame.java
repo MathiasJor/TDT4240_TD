@@ -2,6 +2,7 @@ package com.grp12.towerdefense;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,6 +41,10 @@ public class MainGame extends ApplicationAdapter {
 		gsm = new GameStateManager();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		gsm = new GameStateManager(this);
+
+		// CONNECTING to server and STARTING ping loop
+		NetworkCommunicator.fetchExternalUserId();
+
 		gsm.push(new MenuState(gsm));
 	}
 

@@ -147,8 +147,7 @@ public class PlayState extends State {
         //ends the round when all the enemies are gone
         if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
-            //TODO: FIX this, so gameId is correct:
-            NetworkCommunicator.sendEndTurnMessage(0, playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber());
+            NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber());
             if (playerStats.getHealth() < 1) {
                 gameOverView = new GameOverView();
                 gameover = true;
@@ -168,6 +167,7 @@ public class PlayState extends State {
         if (!playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
                 //TODO: Add code here, that takes the input from network message received and use it!
+                //TODO: All data from network should lie in getActiveGame()
                 waveGenerator.setNextWave();
                 playing = true;
             }

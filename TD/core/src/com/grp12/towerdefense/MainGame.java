@@ -14,6 +14,7 @@ import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.states.GameStateManager;
+import com.grp12.towerdefense.states.MenuState;
 import com.grp12.towerdefense.states.PlayState;
 import com.grp12.towerdefense.views.EnemyView;
 import com.grp12.towerdefense.views.MapView;
@@ -36,25 +37,27 @@ public class MainGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		gsm = new GameStateManager();
-		gsm.push(new PlayState(gsm));
-
-        camera = new OrthographicCamera();
-        viewport = new FillViewport(gsm.getViewportWidth(), gsm.getViewportHeight(), camera);
-        viewport.apply();
-        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+		camera = new OrthographicCamera();
+		viewport = new FillViewport(100, 100, camera);
+		viewport.apply();
+		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
+
+		batch = new SpriteBatch();
+		gsm = new GameStateManager(this);
+		gsm.push(new MenuState(gsm));
+
 	}
 
 	@Override
 	public void render () {
+		camera.update();
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gsm.update(Gdx.graphics.getDeltaTime());
 		if(Gdx.input.isTouched()) {
 			handleInput();
 		}
-        camera.update();
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         gsm.render(batch);
@@ -72,4 +75,9 @@ public class MainGame extends ApplicationAdapter {
 		batch.dispose();
 	}
 
+	public void resizeViewport(int width, int height) {
+		viewport = new FillViewport(width, height, camera);
+		viewport.apply();
+		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+	}
 }

@@ -21,8 +21,8 @@ import com.grp12.towerdefense.views.PlayViews.EnemyView;
 import com.grp12.towerdefense.views.PlayViews.GameMenuView;
 import com.grp12.towerdefense.views.PlayViews.GameOverView;
 import com.grp12.towerdefense.views.PlayViews.MapView;
+import com.grp12.towerdefense.views.PlayViews.SendEnemyMenuView;
 import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
-import com.sun.xml.internal.bind.v2.TODO;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -47,6 +47,7 @@ public class PlayState extends State {
     private StartRoundButton srb;
     private BitmapFont bmf;
     private GameOverView gameOverView;
+    private SendEnemyMenuView sendEnemyMenuView;
 
     //state
     private boolean playing;
@@ -82,6 +83,7 @@ public class PlayState extends State {
         gameMenuView = new GameMenuView(new Vector2(0,0));
         srb = new StartRoundButton(mapView.getMapHeight(), mapView.getMapWidth());
         bmf = new BitmapFont();
+        sendEnemyMenuView = new SendEnemyMenuView();
 
 
         //Represents the three states of the game loop: Playing, waiting for next round, and game over
@@ -100,12 +102,13 @@ public class PlayState extends State {
                 enemyView.draw(sb);
             } else {
                 gameMenuView.draw(sb);
-                if (NetworkCommunicator.getActiveGame().isMyTurn() && !gameover) {
+                sendEnemyMenuView.draw(sb);
+                if (NetworkCommunicator.getActiveGame().isMyTurn()  && !gameover) {
                     srb.draw(sb);
                 }
             }
             bmf.getData().setScale(6);
-            String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance();
+            String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance() + "    Sending: " + enemiesToSend;
             bmf.draw(sb, info, 20, mapView.getMapHeight() - 20);
         } else {
             gameOverView.draw(sb);
@@ -148,6 +151,8 @@ public class PlayState extends State {
         if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
             NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber());
+
+            enemiesToSend = 0;
             if (playerStats.getHealth() < 1) {
                 gameOverView = new GameOverView();
                 gameover = true;
@@ -172,6 +177,12 @@ public class PlayState extends State {
                 playing = true;
             }
             else{
+
+                if (sendEnemyMenuView.clicked(pointer) && playerStats.getBalance() >= 50) {
+                    playerStats.withdrawMoney(50);
+                    enemiesToSend += 1;
+                }
+
                 Node node = mapView.getNode(pointer);
                 //open tower selection
 

@@ -16,6 +16,15 @@ public class NetworkGame {
         return users.get(uid);
     }
 
+    public boolean isMyTurn(){
+        for (NetworkUser user : users){
+            if (user.getId() == NetworkCommunicator.getUserId()){
+                return user.isTurn();
+            }
+        }
+        return false;
+    }
+
     public int getSentCreatures() {
         return sentCreatures;
     }

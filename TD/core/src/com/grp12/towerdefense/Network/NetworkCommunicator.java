@@ -24,6 +24,15 @@ public class NetworkCommunicator {
 
     static Timer networkTimer;
 
+    public static NetworkGame getActiveGame() {
+        return activeGame;
+    }
+
+    public static void setActiveGame(NetworkGame activeGame) {
+        NetworkCommunicator.activeGame = activeGame;
+    }
+
+    static NetworkGame activeGame;
 
     static public int getUserId(){
         return userId;

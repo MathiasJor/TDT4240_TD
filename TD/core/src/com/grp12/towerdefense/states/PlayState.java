@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.grp12.towerdefense.Network.NetworkCommunicator;
 import com.grp12.towerdefense.Network.ServerConnection;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
@@ -164,7 +165,7 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput(Vector3 pointer) {
-        if (nextRoundReady && !playing) {
+        if (nextRoundReady && !playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
                 //currentWave = serverConnection.result()
                 waveGenerator.setNextWave();

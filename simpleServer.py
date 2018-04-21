@@ -23,7 +23,7 @@ class Game:
 		self.waveNumber = waveNumber
 
 	def toString(self):
-		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"sentCreatures\":" + str(self.sentCreatures) + ", \"id\":" + str(self.id) + "\"waveNumber\": " + str(self.waveNumber) + "}"
+		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"sentCreatures\":" + str(self.sentCreatures) + ", \"id\":" + str(self.id) + ", \"waveNumber\": " + str(self.waveNumber) + "}"
 
 class ServerData:
 	connectedUsers = []

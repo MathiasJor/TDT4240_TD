@@ -18,7 +18,7 @@ import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.PlayerStats;
 import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
-import com.grp12.towerdefense.gamelogic.enemies.Wave;
+import com.grp12.towerdefense.gamelogic.enemies.FastEnemy;
 import com.grp12.towerdefense.gamelogic.enemies.WaveGenerator;
 import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
 import com.grp12.towerdefense.gamelogic.towers.BasicTower;
@@ -76,6 +76,7 @@ public class PlayState extends State {
         AbstractTower.setEnemyList(enemies);
         listOfEnemyTypes = new ArrayList<AbstractEnemy>();
         listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 100));
+        listOfEnemyTypes.add(new FastEnemy(map.getWaypoints(), 1, 100));
         waveGenerator = new WaveGenerator(listOfEnemyTypes);
 
         //Views

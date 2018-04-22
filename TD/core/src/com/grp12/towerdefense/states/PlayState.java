@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.grp12.towerdefense.controllers.EnemyController;
 import com.grp12.towerdefense.controllers.TowerController;
 import com.grp12.towerdefense.network.NetworkCommunicator;
 import com.grp12.towerdefense.models.Map;
@@ -50,6 +51,7 @@ public class PlayState extends State {
 
     //controllers
     private TowerController towerController;
+    private EnemyController enemyController;
 
     //state
     private boolean playing;
@@ -88,6 +90,7 @@ public class PlayState extends State {
 
         //controllers
         towerController = new TowerController(towers, enemies);
+        enemyController = new EnemyController(playerStats, enemies);
 
 
         //Represents the three states of the game loop: Playing, waiting for next round, and game over
@@ -128,21 +131,9 @@ public class PlayState extends State {
             if (e != null) {
                 enemies.add(e);
             }
-            //remove dead enemies
-            for (int i = 0; i < enemies.size(); i++) {
-                if (enemies.get(i).getHealth() == 0) {
-                    playerStats.addMoney(enemies.get(i).getBounty());
-                    enemies.remove(i);
-                } else {
-                    //calculate movement
-                    enemies.get(i).move(dt);
-                    //Remove enemies that have completed the path
-                    if (enemies.get(i).isFinished()) {
-                        playerStats.removeHealth(1);
-                        enemies.remove(i);
-                    }
-                }
-            }
+            //Update enemy controller
+            enemyController.update(dt);
+
             //calculate tower targeting and shooting
             towerController.update(dt);
         }

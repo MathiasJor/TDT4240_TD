@@ -41,7 +41,6 @@ public abstract class AbstractEnemy extends Actor {
 
         waypointIndex = 0;
         isFinished = false;
-        findNextWaypoint();
 
         position.x = waypoints.get(0).getX();
         position.y = waypoints.get(0).getY();
@@ -49,41 +48,8 @@ public abstract class AbstractEnemy extends Actor {
         healthBar = new HealthBar(70, 10);
     }
 
-    public void move(float dt) {
-        if (position.dst(currentWaypoint.getPosition()) <= 0.1f) {
-            //TODO: #13: Implement a check to see if we have reached the end of the path, also see findNextWaypoint() for this
-            findNextWaypoint();
-        }
-
-        //Calculate the direction and normalize vector
-        direction.setZero();
-        direction.x = currentWaypoint.getX() - position.x;
-        direction.y = currentWaypoint.getY() - position.y;
-        direction = direction.nor();
-
-        //Add direction * speed * dt to current position
-        position.x += (direction.x * speed * dt);
-        position.y += (direction.y * speed * dt);
-    }
-
     public void setNextWaypoint(Node waypoint) {
         currentWaypoint = waypoint;
-    }
-
-    public void findNextWaypoint() {
-        if (waypointIndex < waypoints.size()) {
-            currentWaypoint = waypoints.get(waypointIndex);
-            //waypointIndex++;
-            if (waypointIndex < waypoints.size()) {
-                currentWaypoint = waypoints.get(waypointIndex);
-                waypointIndex++;
-            }
-            eRotation = findEDegree();
-
-        } else {
-            isFinished = true;
-            System.out.println("End reached by: " + this.toString());
-        }
     }
 
     public void takeDamage ( int damage){
@@ -176,59 +142,6 @@ public abstract class AbstractEnemy extends Actor {
     public ArrayList<Node> getWaypoints () {
         return (ArrayList) waypoints.clone();
     }
-
-
-    public float findEDegree(){
-        Vector2 targetCoords = currentWaypoint.getPosition();
-        float degree = (float) Math.atan((targetCoords.x-position.x)/(targetCoords.y-position.y));
-        degree= (float) Math.toDegrees(degree);
-        //System.out.print("enemy= "+ position.x +", "+ position.y +" waypoint= "+ targetCoords.x+ ", "+targetCoords.y+ "deg= "+degree+"+\n");
-        if(position.x==targetCoords.x){
-            if(targetCoords.y<position.y){
-                degree = 180;
-
-            }
-            else{
-                degree=0;
-
-            }
-        }
-        else if(position.y==targetCoords.y){
-            if(targetCoords.x> position.x){
-                degree = 90;
-
-            }
-            else{
-                degree=-90;
-
-            }
-        }
-        else{
-            if(targetCoords.x>position.x){
-                if(targetCoords.y<position.y){
-                    degree=degree+180;
-
-                }
-                else{
-                    degree = degree;
-
-                }
-            }
-            else{
-                if(targetCoords.y>position.y){
-                    degree=degree;
-
-                }
-                else{
-                    degree=degree+180;
-
-
-                }
-            }
-        }
-        return degree;
-    }
-
 
     //Should return a deep copy of this object
     public abstract AbstractEnemy clone();

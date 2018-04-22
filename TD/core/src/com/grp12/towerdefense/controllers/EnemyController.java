@@ -1,6 +1,7 @@
 package com.grp12.towerdefense.controllers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.grp12.towerdefense.models.PlayerStats;
 import com.grp12.towerdefense.models.enemies.AbstractEnemy;
 
 import java.util.ArrayList;
@@ -8,9 +9,11 @@ import java.util.ArrayList;
 public class EnemyController extends Controller {
 
     private ArrayList<AbstractEnemy> listOfEnemies;
+    private PlayerStats playerStats;
 
-    public EnemyController() {
-        listOfEnemies = new ArrayList<AbstractEnemy>();
+    public EnemyController(PlayerStats playerStats, ArrayList<AbstractEnemy> enemies) {
+        listOfEnemies = enemies;
+        this.playerStats = playerStats;
 
     }
 
@@ -18,6 +21,21 @@ public class EnemyController extends Controller {
     public void update(float dt) {
         for(AbstractEnemy enemy : listOfEnemies) {
             move(dt, enemy);
+            checkStatus(enemy);
+        }
+    }
+
+    public void checkStatus(AbstractEnemy enemy) {
+        //remove dead enemies
+        if (enemy.getHealth() == 0) {
+            playerStats.addMoney(enemy.getBounty());
+            listOfEnemies.remove(enemy);
+        }
+
+        //Remove enemies that have completed the path
+        if (enemy.isFinished()) {
+            playerStats.removeHealth(1);
+            listOfEnemies.remove(enemy);
         }
     }
 

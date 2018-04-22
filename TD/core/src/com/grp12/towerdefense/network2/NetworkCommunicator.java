@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.network;
+package com.grp12.towerdefense.network2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,7 +41,7 @@ public class NetworkCommunicator {
 
     public static ArrayList<NetworkGame> userGames = new ArrayList<NetworkGame>();
 
-    public static String hostName = "localhost"; //"10.22.12.149";
+    public static String hostName = "10.22.12.149";
     public static int port = 9999;
 
     public NetworkCommunicator(){

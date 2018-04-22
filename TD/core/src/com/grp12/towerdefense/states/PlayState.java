@@ -27,8 +27,8 @@ import com.grp12.towerdefense.views.PlayViews.MapView;
 import com.grp12.towerdefense.views.PlayViews.SendEnemyMenuView;
 import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
 
-import com.grp12.towerdefense.network.NetworkCommunicator;
-import com.grp12.towerdefense.network.NetworkTower;
+import com.grp12.towerdefense.network2.NetworkCommunicator;
+import com.grp12.towerdefense.network2.NetworkTower;
 
 import java.util.ArrayList;
 import java.util.Timer;

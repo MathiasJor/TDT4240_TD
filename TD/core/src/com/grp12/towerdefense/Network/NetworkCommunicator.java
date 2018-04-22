@@ -56,7 +56,7 @@ public class NetworkCommunicator {
             public void run() {
                 NetworkCommunicator.fetchGames();
             }
-        }, 10*1000, 10*1000);
+        }, 4*1000, 4*1000);
     }
 
 
@@ -120,10 +120,10 @@ public class NetworkCommunicator {
                             //System.out.println(e);
                         }
                     }
-
-                    System.out.print("Game list size: ");
-                    System.out.print(userGames.size());
-                    System.out.println();
+//
+//                    System.out.print("Game list size: ");
+//                    System.out.print(userGames.size());
+//                    System.out.println();
 
                     setUpdatedGameList(true);
 

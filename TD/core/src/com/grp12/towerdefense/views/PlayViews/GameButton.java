@@ -17,6 +17,7 @@ public class GameButton extends View {
     private NetworkGame game;
     private int x, y, width, height;
     private BitmapFont bmf;
+    private SpriteBatch sbp;
     private Texture button;
 
     private ShapeRenderer renderer;
@@ -29,6 +30,7 @@ public class GameButton extends View {
         this.width = width;
         this.height = height;
         this.renderer = new ShapeRenderer();
+        this.sbp = new SpriteBatch();
         this.bmf = new BitmapFont();
     }
 
@@ -40,8 +42,6 @@ public class GameButton extends View {
         renderer.setColor(Color.GRAY);
         renderer.rect(x, y, width, height);
         renderer.end();
-        spriteBatch.end();
-        spriteBatch.begin();
 
         String turnString = "";
         if(game.isMyTurn()){
@@ -49,8 +49,11 @@ public class GameButton extends View {
         }else{
             turnString = "False";
         }
+        sbp.setProjectionMatrix(spriteBatch.getProjectionMatrix());
+        sbp.begin();
         bmf.getData().setScale(4);
-        bmf.draw(spriteBatch, String.format("Game nr: %d, Your turn: %s", game.getId(), turnString), x + 5, y + height);
+        bmf.draw(sbp, String.format("Game nr: %d, Your turn: %s", game.getId(), turnString), x + 5, y + height);
+        sbp.end();
     }
     public boolean clicked(Vector3 pointer) {
 

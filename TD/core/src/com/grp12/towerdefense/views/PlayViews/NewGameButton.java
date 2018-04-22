@@ -15,7 +15,7 @@ import com.grp12.towerdefense.Network.NetworkGame;
 public class NewGameButton extends View {
     private int x, y, width, height;
     private BitmapFont bmf;
-
+    private SpriteBatch sbp;
     private ShapeRenderer renderer;
 
     public NewGameButton(int x, int y, int width, int height) {
@@ -24,6 +24,7 @@ public class NewGameButton extends View {
         this.width = width;
         this.height = height;
         this.renderer = new ShapeRenderer();
+        sbp = new SpriteBatch();
         this.bmf = new BitmapFont();
     }
 
@@ -36,16 +37,15 @@ public class NewGameButton extends View {
         renderer.setColor(Color.GRAY);
         renderer.rect(x, y, width, height);
         renderer.end();
-        spriteBatch.end();
-        spriteBatch.begin();
 
+        sbp.setProjectionMatrix(spriteBatch.getProjectionMatrix());
+        sbp.begin();
         bmf.getData().setScale(6);
         bmf.setColor(Color.WHITE);
-        bmf.draw(spriteBatch, "New Game", x, y+ height/2);
+        bmf.draw(sbp, "New Game", x, y+ height/2);
+        sbp.end();
     }
     public boolean clicked(Vector3 pointer) {
-        System.out.println("Checking if clicked :)");
-        System.out.println(String.format("X: %d, Y: %d, Pointer X: %f, Pointer Y: %f", x, y, pointer.x, pointer.y));
         if (pointer.x >= (float)this.x && pointer.x <= (float)(this.x + this.width) ) {
             if (pointer.y >= (float)this.y && pointer.y <= (float)this.y + (float)this.height) {
                 return true;

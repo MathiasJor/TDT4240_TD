@@ -15,11 +15,11 @@ class GameUser:
 		self.isTurn = isTurn
 
 class Game:
-	def __init__(self, user1, user2, id, waveNumber):
+	def __init__(self, user1, user2, id, sentCreatures, waveNumber):
 		self.user1 = user1
 		self.user2 = user2
 		self.id = id
-		self.sentCreatures = 0
+		self.sentCreatures = sentCreatures
 		self.waveNumber = waveNumber
 
 	def toString(self):
@@ -74,7 +74,7 @@ class ServerData:
 			game = data['games'][i]
 			user1 = GameUser(game["users"][0]["id"], game["users"][0]["health"], game["users"][0]["gold"], game["users"][0]["isTurn"])
 			user2 = GameUser(game["users"][1]["id"], game["users"][1]["health"], game["users"][1]["gold"], game["users"][1]["isTurn"])
-			self.games.append(Game(user1, user2, game["id"], game["waveNumber"]))
+			self.games.append(Game(user1, user2, game["id"], game['sentCreatures'], game["waveNumber"]))
 		print("Load successful")
 
 
@@ -111,7 +111,6 @@ class TCPHandler(socketserver.BaseRequestHandler):
 				serverData.usersLookingForGame.append(response['userId'])
 				self.request.sendall(bytes(self.createNewGame(), 'utf-8'))
 		elif(response['type'] == 'endTurn'):
-			#TODO: Implement response when a user has ended their turn
 			self.request.sendall(bytes(self.startTurn(response['userId'], response['gameId'], response['userHealth'], response['userGold'], response["sentCreatures"], response["waveNumber"]), 'utf-8'))
 		elif(response['type'] == 'getGames'):
 			self.request.sendall(bytes(self.getUserGames(response['userId']), 'utf-8'))
@@ -138,6 +137,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 				return '{"type":"endTurnError", "message":"Something is wrong here"}'
 
 			game.sentCreatures = sentCreatures
+			game.waveNumber = waveNumber
 			serverData.games[gameid] = game
 			# Wish I could send info to the other user that it is his turn, but he just has to refresh his games...
 			return '{"type":"endTurnResponse"}'
@@ -160,7 +160,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			user1 = GameUser(user1id, 30, 500, True)
 			user2 = GameUser(user2id, 30, 500, False)
 
-			serverData.games.append(Game(user1, user2, serverData.nextGameId, 0))
+			serverData.games.append(Game(user1, user2, serverData.nextGameId, 0, 0))
 			serverData.nextGameId += 1
 			return serverData.games[serverData.nextGameId - 1].toString()
 		print("Not enough players looking for game yet...")

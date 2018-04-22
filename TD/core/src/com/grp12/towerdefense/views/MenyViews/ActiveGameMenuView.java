@@ -36,9 +36,9 @@ public class ActiveGameMenuView extends State{
     @Override
     protected void handleInput(Vector3 pointer) {
         for(GameButton b : gameButtons){
-            if(b.clicked(pointer)){
-                //NetworkCommunicator.setActiveGame(b.getGame());
-                //gsm.push(new PlayState(gsm));
+            if(b.clicked(pointer) && b.getGame().isMyTurn()){
+                NetworkCommunicator.setActiveGame(b.getGame());
+                gsm.push(new PlayState(gsm));
                 System.out.println(b.getGame().getId());
             }
         }

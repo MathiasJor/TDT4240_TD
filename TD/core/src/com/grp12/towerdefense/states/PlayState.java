@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.grp12.towerdefense.Network.NetworkCommunicator;
+import com.grp12.towerdefense.Network.NetworkGame;
 import com.grp12.towerdefense.Network.ServerConnection;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
@@ -66,7 +67,7 @@ public class PlayState extends State {
 
         //models
         map = new Map();
-        playerStats = new PlayerStats(200, 10);
+        playerStats = new PlayerStats(NetworkCommunicator.getActiveGame().getPhoneUser().getGold(), NetworkCommunicator.getActiveGame().getPhoneUser().getHealth());
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower.setEnemyList(enemies);
@@ -149,13 +150,22 @@ public class PlayState extends State {
         //ends the round when all the enemies are gone
         if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
-            NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber());
+            System.out.println(waveGenerator.getCurrentWaveNumber());
+            //Here comes the 'getti code
+            int increaseInWave = 0;
+            if(NetworkCommunicator.getActiveGame().isSecondPlayer())
+                increaseInWave = 1;
+
+            NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber() + increaseInWave);
 
             enemiesToSend = 0;
             if (playerStats.getHealth() < 1) {
                 gameOverView = new GameOverView(false);
                 gameover = true;
 
+            }
+            if(!gameover){
+                gsm.pop();
             }
         }
         if (gameover) {
@@ -179,9 +189,11 @@ public class PlayState extends State {
                     gameOverView = new GameOverView(true);
                     gameover = true;
                 } else {
-                  //TODO: All data from network should lie in getActiveGame()
-                    waveGenerator.setNextWave();
-                    playing = true;
+                 //TODO: All data from network should lie in getActiveGame()
+                  waveGenerator.setReceivedEnemies(NetworkCommunicator.getActiveGame().getSentCreatures());
+                  waveGenerator.setCurrentWaveNumber(NetworkCommunicator.getActiveGame().getWaveNumber());
+                  waveGenerator.setNextWave();
+                  playing = true;
                 }
             }
             else{

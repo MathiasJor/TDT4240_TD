@@ -41,4 +41,17 @@ public class NetworkGame {
         return waveNumber;
     }
     int waveNumber;
+
+    public NetworkUser getPhoneUser(){
+        for (NetworkUser u : users){
+            if (u.getId() == NetworkCommunicator.getUserId()){
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean isSecondPlayer(){
+        return getUser(1).getId() == NetworkCommunicator.getUserId();
+    }
 }

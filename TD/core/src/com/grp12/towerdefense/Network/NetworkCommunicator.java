@@ -24,6 +24,8 @@ public class NetworkCommunicator {
 
     static Timer networkTimer;
 
+    private static boolean updatedGameList = false;
+
     public static NetworkGame getActiveGame() {
         return activeGame;
     }
@@ -54,7 +56,7 @@ public class NetworkCommunicator {
             public void run() {
                 NetworkCommunicator.fetchGames();
             }
-        }, 10*1000, 10*1000);
+        }, 4*1000, 4*1000);
     }
 
 
@@ -107,7 +109,7 @@ public class NetworkCommunicator {
                     while((line = in.readLine()) != null){
 
 
-                        System.out.println(line);
+                        //System.out.println(line);
                         builder.setLenient();
                         Gson gs = builder.create();
                         try{
@@ -115,13 +117,16 @@ public class NetworkCommunicator {
                             if(game != null)
                                 userGames.add(game);
                         }catch (Exception e){
-                            System.out.println(e);
+                            //System.out.println(e);
                         }
                     }
+//
+//                    System.out.print("Game list size: ");
+//                    System.out.print(userGames.size());
+//                    System.out.println();
 
-                    System.out.print("Game list size: ");
-                    System.out.print(userGames.size());
-                    System.out.println();
+                    setUpdatedGameList(true);
+
                     out.close();
                     in.close();
                     s.close();
@@ -142,6 +147,14 @@ public class NetworkCommunicator {
     public static void sendEndTurnMessage(int gameId, PlayerStats ps, int sentCreatures, int waveNumber){
         Thread executor = new EndTurnThread(gameId, ps, sentCreatures, waveNumber);
         executor.start();
+    }
+
+    public static boolean isUpdatedGameList() {
+        return updatedGameList;
+    }
+
+    public static void setUpdatedGameList(boolean updatedGameList) {
+        NetworkCommunicator.updatedGameList = updatedGameList;
     }
 }
 

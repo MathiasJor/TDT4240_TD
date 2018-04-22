@@ -230,16 +230,11 @@ public class PlayState extends State {
     protected void handleInput(Vector3 pointer) {
         if (!playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
-                //TODO: Add code here, that takes the input from network message received and use it!
-
-                int opponentHealth = 1000; //TODO: Change this
-
-
+                int opponentHealth = NetworkCommunicator.getActiveGame().getOpponent().getHealth();
                 if (opponentHealth < 1) {
                     gameOverView = new GameOverView(true);
                     gameover = true;
                 } else {
-                 //TODO: All data from network should lie in getActiveGame()
                   waveGenerator.setReceivedEnemies(NetworkCommunicator.getActiveGame().getSentCreatures());
                   waveGenerator.setCurrentWaveNumber(NetworkCommunicator.getActiveGame().getWaveNumber());
                   waveGenerator.setNextWave();

@@ -58,4 +58,13 @@ public class NetworkGame {
     public boolean isSecondPlayer(){
         return getUser(1).getId() == NetworkCommunicator.getUserId();
     }
+
+    public NetworkUser getOpponent() {
+        for (NetworkUser u : users){
+            if (u.getId() != NetworkCommunicator.getUserId()){
+                return u;
+            }
+        }
+        return null;
+    }
 }

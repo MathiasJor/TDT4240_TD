@@ -104,7 +104,11 @@ public abstract class AbstractEnemy extends Actor {
         return position;
     }
 
-    public void setSpeed ( float speed){
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void setSpeed (float speed){
         this.speed = speed;
     }
     public float getSpeed () {
@@ -135,6 +139,10 @@ public abstract class AbstractEnemy extends Actor {
         return isFinished;
     }
 
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
     public EnemyType getType() {
         return type;
     }
@@ -147,11 +155,28 @@ public abstract class AbstractEnemy extends Actor {
         return maxHealth;
     }
 
+    public Node getCurrentWaypoint() {
+        return currentWaypoint;
+    }
+
+    public int getWaypointIndex() {
+        return waypointIndex;
+    }
+
+    public void setWaypointIndex(int waypointIndex) {
+        this.waypointIndex = waypointIndex;
+    }
+
+    public float getEnemyRotation(){return eRotation;}
+
+    public void seteRotation(float eRotation) {
+        this.eRotation = eRotation;
+    }
+
     public ArrayList<Node> getWaypoints () {
         return (ArrayList) waypoints.clone();
     }
 
-        public float getEnemyRotation(){return eRotation;}
 
     public float findEDegree(){
         Vector2 targetCoords = currentWaypoint.getPosition();

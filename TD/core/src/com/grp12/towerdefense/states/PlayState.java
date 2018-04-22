@@ -37,7 +37,6 @@ public class PlayState extends State {
     private ArrayList<AbstractTower> towers;
     private WaveGenerator waveGenerator;
     private ArrayList<AbstractEnemy> listOfEnemyTypes;
-    //TODO: Add code that adds to enemiesToSend
     private int enemiesToSend;
 
     //Views
@@ -103,7 +102,7 @@ public class PlayState extends State {
             } else {
                 gameMenuView.draw(sb);
                 sendEnemyMenuView.draw(sb);
-                if (NetworkCommunicator.getActiveGame().isMyTurn()  && !gameover) {
+                if (NetworkCommunicator.getActiveGame().isMyTurn() && !gameover) {
                     srb.draw(sb);
                 }
             }
@@ -154,7 +153,7 @@ public class PlayState extends State {
 
             enemiesToSend = 0;
             if (playerStats.getHealth() < 1) {
-                gameOverView = new GameOverView();
+                gameOverView = new GameOverView(false);
                 gameover = true;
 
             }
@@ -172,12 +171,20 @@ public class PlayState extends State {
         if (!playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
                 //TODO: Add code here, that takes the input from network message received and use it!
-                //TODO: All data from network should lie in getActiveGame()
-                waveGenerator.setNextWave();
-                playing = true;
+
+                int opponentHealth = 0; //TODO: Change this
+
+
+                if (opponentHealth < 1) {
+                    gameOverView = new GameOverView(true);
+                    gameover = true;
+                } else {
+                  //TODO: All data from network should lie in getActiveGame()
+                    waveGenerator.setNextWave();
+                    playing = true;
+                }
             }
             else{
-
                 if (sendEnemyMenuView.clicked(pointer) && playerStats.getBalance() >= (listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2)) {
                     playerStats.withdrawMoney(listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2);
                     enemiesToSend += 1;

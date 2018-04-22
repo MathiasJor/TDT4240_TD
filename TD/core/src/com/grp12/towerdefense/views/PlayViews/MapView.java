@@ -90,7 +90,7 @@ public class MapView extends View {
     }
 
     public void makeSpriteArray(){
-        sTower= new Texture("towerDefense_tile226R.png");
+        sTower= new Texture("towerDefense_tile203R.png");
         rTower= new Texture("towerDefense_tile205R.png");
         bTower= new Texture("towerDefense_tile250.png");
         towers[0] = new Sprite(sTower);

@@ -30,14 +30,18 @@ public class NewGameButton extends View {
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
+
+        this.renderer.setProjectionMatrix(spriteBatch.getProjectionMatrix());
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.GRAY);
         renderer.rect(x, y, width, height);
         renderer.end();
+        spriteBatch.end();
+        spriteBatch.begin();
 
         bmf.getData().setScale(6);
         bmf.setColor(Color.WHITE);
-        bmf.draw(spriteBatch, "New Game", x + 5, y + 5);
+        bmf.draw(spriteBatch, "New Game", x, y+ height/2);
     }
     public boolean clicked(Vector3 pointer) {
         System.out.println("Checking if clicked :)");

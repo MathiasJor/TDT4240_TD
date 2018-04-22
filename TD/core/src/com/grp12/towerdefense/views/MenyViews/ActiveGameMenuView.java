@@ -18,7 +18,7 @@ public class ActiveGameMenuView extends State{
 
     public ActiveGameMenuView(GameStateManager gsm) {
         super(gsm);
-        nb = new NewGameButton(10, 100, 100, 40);
+        nb = new NewGameButton(10, 600, 700, 200);
         updateGameList();
     }
 
@@ -27,7 +27,7 @@ public class ActiveGameMenuView extends State{
         gameButtons = new ArrayList<GameButton>();
         int i = 0;
         for (NetworkGame game : NetworkCommunicator.userGames){
-            gameButtons.add(new GameButton( 110, 10 + 50 * i, 100, 45, game));
+            gameButtons.add(new GameButton( 720, 1840 - 130 * i, 800, 120, game));
             i++;
         }
     }
@@ -35,7 +35,6 @@ public class ActiveGameMenuView extends State{
 
     @Override
     protected void handleInput(Vector3 pointer) {
-        System.out.println("Handling input");
         for(GameButton b : gameButtons){
             if(b.clicked(pointer)){
                 //NetworkCommunicator.setActiveGame(b.getGame());
@@ -51,7 +50,10 @@ public class ActiveGameMenuView extends State{
 
     @Override
     public void update(float dt) {
-
+        if(NetworkCommunicator.isUpdatedGameList()){
+            NetworkCommunicator.setUpdatedGameList(false);
+            updateGameList();
+        }
     }
 
     @Override

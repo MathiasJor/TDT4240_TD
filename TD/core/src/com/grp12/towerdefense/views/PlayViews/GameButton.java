@@ -35,10 +35,13 @@ public class GameButton extends View {
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
+        this.renderer.setProjectionMatrix(spriteBatch.getProjectionMatrix());
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.GRAY);
         renderer.rect(x, y, width, height);
         renderer.end();
+        spriteBatch.end();
+        spriteBatch.begin();
 
         String turnString = "";
         if(game.isMyTurn()){
@@ -46,8 +49,8 @@ public class GameButton extends View {
         }else{
             turnString = "False";
         }
-        bmf.getData().setScale(6);
-        bmf.draw(spriteBatch, String.format("Game nr: %d, Your turn: %s", game.getId(), turnString), x + 5, y + 5);
+        bmf.getData().setScale(4);
+        bmf.draw(spriteBatch, String.format("Game nr: %d, Your turn: %s", game.getId(), turnString), x + 5, y + height);
     }
     public boolean clicked(Vector3 pointer) {
 

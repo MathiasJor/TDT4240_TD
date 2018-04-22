@@ -19,9 +19,9 @@ public class EnemyController extends Controller {
 
     @Override
     public void update(float dt) {
-        for(AbstractEnemy enemy : listOfEnemies) {
-            move(dt, enemy);
-            checkStatus(enemy);
+        for(int i = 0; i < listOfEnemies.size(); i++) {
+            move(dt, listOfEnemies.get(i));
+            checkStatus(listOfEnemies.get(i));
         }
     }
 
@@ -56,8 +56,12 @@ public class EnemyController extends Controller {
     }
 
     public void move(float dt, AbstractEnemy enemy) {
+        if (enemy.getCurrentWaypoint() == null) {
+            findNextWaypoint(enemy);
+        }
         if (enemy.getPosition().dst(enemy.getCurrentWaypoint().getPosition()) <= 0.1f) {
             findNextWaypoint(enemy);
+            enemy.setWaypointIndex(enemy.getWaypointIndex() + 1);
         }
 
         //Calculate the direction and normalize vector

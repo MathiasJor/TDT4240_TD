@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.grp12.towerdefense.Network.NetworkCommunicator;
-import com.grp12.towerdefense.Network.NetworkGame;
 import com.grp12.towerdefense.Network.NetworkTower;
-import com.grp12.towerdefense.Network.ServerConnection;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
 import com.grp12.towerdefense.gamelogic.PlayerStats;
@@ -26,7 +24,6 @@ import com.grp12.towerdefense.views.PlayViews.MapView;
 import com.grp12.towerdefense.views.PlayViews.SendEnemyMenuView;
 import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;

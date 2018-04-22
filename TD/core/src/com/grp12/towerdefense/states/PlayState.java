@@ -105,6 +105,7 @@ public class PlayState extends State {
                         tower.upgradeTower();
                     }
                     towers.add(tower);
+                    break;
                 case 1:
                     tower = new StunTower();
                     map.getGrid()[(int)t.getY()][(int)t.getX()].setTower(tower);
@@ -113,6 +114,7 @@ public class PlayState extends State {
                         tower.upgradeTower();
                     }
                     towers.add(tower);
+                    break;
                 case 2:
                     tower = new RocketTower();
                     map.getGrid()[(int)t.getY()][(int)t.getX()].setTower(tower);
@@ -197,10 +199,14 @@ public class PlayState extends State {
                 switch(t.getType()){
                     case Basic:
                         type = 0;
+                        break;
                     case Stunner:
                         type = 1;
+                        break;
                     case Rocket:
+                        System.out.println(t.getType());
                         type = 2;
+                        break;
                 }
 
                 networkTowers.add(new NetworkTower(type, t.getTowerLevel(), t.getNode().getX(), t.getNode().getY()));

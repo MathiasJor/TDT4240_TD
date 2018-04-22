@@ -18,11 +18,7 @@ public abstract class AbstractTower {
     public enum towerType {Basic,Rocket, Stunner};
     private towerType typeTower;
     private char choice='X';
-
-
-
     private float rotation=0;
-
     private Node container;
 
 
@@ -42,41 +38,21 @@ public abstract class AbstractTower {
         AbstractTower.enemies = enemies;
     }
 
-    public void fire(float dt) {
-        frameTime += dt;
-        rotation = findDegree(target);
-        if (frameTime > reloadTime)
-            canShoot = true;
-        targetUpdate();
-        if (target != null && canShoot) {
-            target.takeDamage(damage);
-            frameTime = 0;
-            canShoot = false;
-        }
-    }
-
-    private void targetUpdate() {
-        if (target == null || target.getHealth() == 0 || enemyOutOfRange(target)) {
-            target = findNextEnemy(enemies);
-            if(target!=null){
-                rotation = findDegree(target);
-            }
-        }
-    }
-
-    private boolean enemyOutOfRange(AbstractEnemy abstractEnemy) {
-        return container.getPosition().dst2(abstractEnemy.getPosition()) > range;
+    public static ArrayList<AbstractEnemy> getEnemies() {
+        return enemies;
     }
 
     //TODO: Setting this sets the node.setTower, if it fails, fail here as well
     public void setNode (Node node) {
         container = node;
     }
-
     public Node getNode () {
         return container;
     }
 
+    public void setTarget(AbstractEnemy enemy) {
+        target = enemy;
+    }
     public AbstractEnemy getTarget() {
         return target;
     }
@@ -84,7 +60,6 @@ public abstract class AbstractTower {
     public void setDamage (int Dmg){
         this.damage = damage;
     }
-
     public int getDamage(){
         return damage;
     }
@@ -92,7 +67,6 @@ public abstract class AbstractTower {
     public void setRange (int range){
         this.range = range;
     }
-
     public int getRange(){
         return range;
     }
@@ -100,8 +74,7 @@ public abstract class AbstractTower {
     public void setReloadTime (float reloadTime){
         this.reloadTime = reloadTime;
     }
-
-    public float getreloatime(){
+    public float getReloadTime(){
         return reloadTime;
     }
 
@@ -110,16 +83,18 @@ public abstract class AbstractTower {
     }
 
     public void setCost(int cost) {this.cost = cost;}
-
     public int getCost(){return cost;}
 
     public void setUpgradeCost(){this.upgradeCost= (int) (upgradeCost*1.2);} //upgrade cost increase by 20% for each upgrade
-
     public int getUpgradeCost(){return upgradeCost;}
 
     public int getTowerLevel(){return towerLevel;}
+    public void upgradeTower() {
+        towerLevel++;
+    }
 
     public float getRotation(){return rotation;}
+    public void setRotation(float rotation) {this.rotation = rotation};
 
     public towerType getType(){return typeTower;}
     public void setValue(int increase){value+=increase;}
@@ -130,83 +105,21 @@ public abstract class AbstractTower {
     public void setChoice(char choice){this.choice=choice;}
     public char getChoice(){return choice;}
 
+    public void addFrameTime(float ft) {
+        frameTime += ft;
+    }
+    public void resetFrameTime() { frameTime = 0;}
+    public float getFrameTime() {
+        return frameTime;
+    }
+
+    public void setCanShoot(boolean b) {canShoot = b;}
+    public boolean getCanShoot() {return canShoot;}
 
     //set new values for upgrade tower
-    public void upgradeTower(){
-        setDamage(damage*2);
-        setRange(range+2);
-        setReloadTime(reloadTime/2);
-        setUpgradeCost();
-        setValue(upgradeCost);
-        setUpgradeCost();
-        setSellPrice();
-        towerLevel++;
-    }
 
 
 
-    public AbstractEnemy findNextEnemy(ArrayList<AbstractEnemy> listOfEnemies){
-        float shortest = Float.MAX_VALUE;
-        float tempDistance;
-        AbstractEnemy returnEnemy = null;
-        for (AbstractEnemy enemy : listOfEnemies){
-            if (enemy.getHealth() > 0) {
-                tempDistance = container.getPosition().dst2(enemy.getPosition());
-            } else {
-                tempDistance = shortest + 1;
-            }
-            if(tempDistance < shortest){
-                shortest = tempDistance;
-                returnEnemy = enemy;
-            }
-        }
-        return (shortest < range) ? returnEnemy : null;
-    }
-
-    public float findDegree(AbstractEnemy target){
-        if (target == null) {
-            return rotation;
-        }
-        Vector2 targetCoords = target.getPosition();
-        float degree = (float) Math.atan((targetCoords.x-container.getPosition().x)/(targetCoords.y-container.getPosition().y));
-        degree= (float) Math.toDegrees(degree);
-
-        if(container.getPosition().x==targetCoords.x){
-            if(targetCoords.y<container.getPosition().y){
-                degree = 90;
-            }
-            else{
-                degree=270;
-            }
-        }
-        else if(container.getPosition().y==targetCoords.y){
-            if(targetCoords.x> container.getPosition().x){
-                degree = 0;
-            }
-            else{
-                degree=180;
-            }
-        }
-        else{
-            if(targetCoords.x>container.getPosition().x){
-                if(targetCoords.y<container.getPosition().y){
-                    degree=90+degree;
-                }
-                else{
-                    degree = +degree-90; //done
-                }
-            }
-            else{
-                if(targetCoords.y>container.getPosition().y){
-                    degree=270+degree; //done
-                }
-                else{
-                    degree=degree+90;
-                }
-            }
-        }
-        return degree;
-    }
     
 
 }

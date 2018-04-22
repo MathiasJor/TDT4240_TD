@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.grp12.towerdefense.Network.NetworkCommunicator;
 import com.grp12.towerdefense.Network.NetworkGame;
+import com.grp12.towerdefense.Network.NetworkTower;
 import com.grp12.towerdefense.Network.ServerConnection;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
@@ -25,6 +26,7 @@ import com.grp12.towerdefense.views.PlayViews.MapView;
 import com.grp12.towerdefense.views.PlayViews.SendEnemyMenuView;
 import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -90,8 +92,39 @@ public class PlayState extends State {
         playing = false;
         gameover = false;
 
-        //Network
-        networkCommunicator = new NetworkCommunicator();
+        ArrayList<NetworkTower> networkTowers = NetworkCommunicator.getActiveGame().getPhoneUser().getTowers();
+
+        for(NetworkTower t : networkTowers){
+            AbstractTower tower;
+            switch(t.getType()){
+                case 0:
+                    tower = new BasicTower();
+                    map.getGrid()[(int)t.getY()][(int)t.getX()].setTower(tower);
+                    tower.setNode(map.getGrid()[(int)t.getY()][(int)t.getX()]);
+                    for(int i = 0; i < t.getLevel(); i++){
+                        tower.upgradeTower();
+                    }
+                    towers.add(tower);
+                case 1:
+                    tower = new StunTower();
+                    map.getGrid()[(int)t.getY()][(int)t.getX()].setTower(tower);
+                    tower.setNode(map.getGrid()[(int)t.getY()][(int)t.getX()]);
+                    for(int i = 0; i < t.getLevel(); i++){
+                        tower.upgradeTower();
+                    }
+                    towers.add(tower);
+                case 2:
+                    tower = new RocketTower();
+                    map.getGrid()[(int)t.getY()][(int)t.getX()].setTower(tower);
+                    tower.setNode(map.getGrid()[(int)t.getY()][(int)t.getX()]);
+                    for(int i = 0; i < t.getLevel(); i++){
+                        tower.upgradeTower();
+                    }
+                    towers.add(tower);
+                default:
+                    continue;
+            }
+        }
     }
 
     @Override
@@ -150,13 +183,30 @@ public class PlayState extends State {
         //ends the round when all the enemies are gone
         if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
-            System.out.println(waveGenerator.getCurrentWaveNumber());
             //Here comes the 'getti code
             int increaseInWave = 0;
             if(NetworkCommunicator.getActiveGame().isSecondPlayer())
                 increaseInWave = 1;
 
-            NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber() + increaseInWave);
+            NetworkCommunicator.getActiveGame().setTurn(false);
+
+            ArrayList<NetworkTower> networkTowers = new ArrayList<NetworkTower>();
+
+            for (AbstractTower t:towers) {
+                int type = 0;
+                switch(t.getType()){
+                    case Basic:
+                        type = 0;
+                    case Stunner:
+                        type = 1;
+                    case Rocket:
+                        type = 2;
+                }
+
+                networkTowers.add(new NetworkTower(type, t.getTowerLevel(), t.getNode().getX(), t.getNode().getY()));
+            }
+
+            NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber() + increaseInWave, networkTowers);
 
             enemiesToSend = 0;
             if (playerStats.getHealth() < 1) {

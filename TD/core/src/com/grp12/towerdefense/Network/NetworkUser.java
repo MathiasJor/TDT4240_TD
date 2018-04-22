@@ -1,5 +1,7 @@
 package com.grp12.towerdefense.Network;
 
+import java.util.ArrayList;
+
 /**
  * Created by Kristian on 4/21/2018.
  */
@@ -7,6 +9,13 @@ package com.grp12.towerdefense.Network;
 public class NetworkUser {
     int health;
     int gold;
+
+    ArrayList<NetworkTower> towers;
+
+    boolean isTurn;
+
+    int id;
+
 
     public int getHealth() {
         return health;
@@ -20,11 +29,11 @@ public class NetworkUser {
         return isTurn;
     }
 
-    boolean isTurn;
-
     public int getId() {
         return id;
     }
 
-    int id;
+    public ArrayList<NetworkTower> getTowers() {
+        return towers;
+    }
 }

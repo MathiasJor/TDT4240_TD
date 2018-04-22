@@ -3,7 +3,7 @@ import json
 
 userid = 'null'
 
-HOST, PORT = "localhost", 9999
+HOST, PORT = "10.22.12.149", 9999
 data = '{"type":"connect", "userId": "null"}'
 
 # Create a socket (SOCK_STREAM means a TCP socket)

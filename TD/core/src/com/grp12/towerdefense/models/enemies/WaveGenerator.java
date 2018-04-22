@@ -50,7 +50,7 @@ public class WaveGenerator {
         }
 
         //Used to cycle through different enemy types, depending on how many are available.
-        currentEnemyIndex = currentWaveNumber % numberOfEnemies;
+        currentEnemyIndex = currentWaveNumber % numberOfEnemyTypes;
 
         /*
         if (currentEnemyIndex < numberOfEnemyTypes) {

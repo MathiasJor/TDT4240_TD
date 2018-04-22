@@ -8,11 +8,13 @@ class ConnectedUser:
 		self.ip = ip
 
 class GameUser:
-	def __init__(self, id, health, gold, isTurn):
+	def __init__(self, id, health, gold, isTurn, towers):
 		self.id = id
 		self.health = health
 		self.gold = gold
 		self.isTurn = isTurn
+		self.towers = towers
+		print(self.towers)
 
 class Game:
 	def __init__(self, user1, user2, id, sentCreatures, waveNumber):
@@ -23,7 +25,7 @@ class Game:
 		self.waveNumber = waveNumber
 
 	def toString(self):
-		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + "}],\"sentCreatures\":" + str(self.sentCreatures) + ", \"id\":" + str(self.id) + ", \"waveNumber\": " + str(self.waveNumber) + "}"
+		return '{"users":[{"id": '+ str(self.user1.id) + ', "health":'+str(self.user1.health) + ', "gold":' + str(self.user1.gold) + ', "isTurn":' + str(self.user1.isTurn).lower() + ', "towers":' + str(self.user1.towers) + '}, {"id": ' + str(self.user2.id) + ', "health": ' + str(self.user2.health) + ', "gold":' + str(self.user2.gold) + ', "isTurn": ' + str(self.user2.isTurn).lower() + ', "towers":' + str(self.user2.towers) + "}],\"sentCreatures\":" + str(self.sentCreatures) + ", \"id\":" + str(self.id) + ", \"waveNumber\": " + str(self.waveNumber) + "}"
 
 class ServerData:
 	connectedUsers = []
@@ -72,8 +74,8 @@ class ServerData:
 		self.nextGameId = data['nextGameId']
 		for i in range(len(data['games'])):
 			game = data['games'][i]
-			user1 = GameUser(game["users"][0]["id"], game["users"][0]["health"], game["users"][0]["gold"], game["users"][0]["isTurn"])
-			user2 = GameUser(game["users"][1]["id"], game["users"][1]["health"], game["users"][1]["gold"], game["users"][1]["isTurn"])
+			user1 = GameUser(game["users"][0]["id"], game["users"][0]["health"], game["users"][0]["gold"], game["users"][0]["isTurn"], game["users"][0]["towers"])
+			user2 = GameUser(game["users"][1]["id"], game["users"][1]["health"], game["users"][1]["gold"], game["users"][1]["isTurn"], game["users"][1]["towers"])
 			self.games.append(Game(user1, user2, game["id"], game['sentCreatures'], game["waveNumber"]))
 		print("Load successful")
 
@@ -92,7 +94,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 	def handleResponse(self, res):
 		global serverData
 		response = json.loads(res)
-		print(response)
+		#print(response)
 
 		if(response['type'] == 'connect'):
 			if(response['userId'] == 'null'):
@@ -111,7 +113,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 				serverData.usersLookingForGame.append(response['userId'])
 				self.request.sendall(bytes(self.createNewGame(), 'utf-8'))
 		elif(response['type'] == 'endTurn'):
-			self.request.sendall(bytes(self.startTurn(response['userId'], response['gameId'], response['userHealth'], response['userGold'], response["sentCreatures"], response["waveNumber"]), 'utf-8'))
+			self.request.sendall(bytes(self.startTurn(response['userId'], response['gameId'], response['userHealth'], response['userGold'], response["sentCreatures"], response["waveNumber"], response['towers']), 'utf-8'))
 		elif(response['type'] == 'getGames'):
 			self.request.sendall(bytes(self.getUserGames(response['userId']), 'utf-8'))
 		elif(response['type'] == 'serverSave'):
@@ -119,19 +121,23 @@ class TCPHandler(socketserver.BaseRequestHandler):
 		elif(response['type'] == 'serverLoad'):
 			serverData.loadFromFile()
 
-	def startTurn(self, userid, gameid, userHealth, userGold, sentCreatures, waveNumber):
+	def startTurn(self, userid, gameid, userHealth, userGold, sentCreatures, waveNumber, towers):
 		global serverData
 		game = serverData.games[gameid]
+		print(towers)
 		if game.user1.id == userid or game.user2.id == userid:
 			if game.user1.id == userid and game.user1.isTurn:
 				game.user1.isTurn = False
 				game.user1.health = userHealth
 				game.user1.gold = userGold
+				game.user1.towers = towers
+				print(game.user1.towers, game.user2.towers)
 				game.user2.isTurn = True
 			elif game.user2.id == userid and game.user2.isTurn:
 				game.user1.isTurn = True
 				game.user2.isTurn = False
 				game.user2.health = userHealth
+				game.user2.towers = towers
 				game.user2.gold = userGold
 			else:
 				return '{"type":"endTurnError", "message":"Something is wrong here"}'
@@ -157,8 +163,8 @@ class TCPHandler(socketserver.BaseRequestHandler):
 			user2id = serverData.usersLookingForGame.pop(0)
 
 			# Change the start values for health and gold here
-			user1 = GameUser(user1id, 30, 500, True)
-			user2 = GameUser(user2id, 30, 500, False)
+			user1 = GameUser(user1id, 30, 500, True, [])
+			user2 = GameUser(user2id, 30, 500, False, [])
 
 			serverData.games.append(Game(user1, user2, serverData.nextGameId, 0, 0))
 			serverData.nextGameId += 1
@@ -167,7 +173,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 		return '{"type":"notEnoughPlayers", "message":"Not enough players in pool"}'
 		
 def startUp():
-	HOST, PORT = 'localhost', 9999
+	HOST, PORT = '10.22.12.149', 9999
 	print("Starting server")
 	server = socketserver.TCPServer((HOST, PORT), TCPHandler)
 	server.serve_forever()

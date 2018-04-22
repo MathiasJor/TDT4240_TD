@@ -107,7 +107,7 @@ public class NetworkCommunicator {
                     while((line = in.readLine()) != null){
 
 
-                        //System.out.println(line);
+                        System.out.println(line);
                         builder.setLenient();
                         Gson gs = builder.create();
                         try{
@@ -142,8 +142,8 @@ public class NetworkCommunicator {
         executor.start();
     }
 
-    public static void sendEndTurnMessage(int gameId, PlayerStats ps, int sentCreatures, int waveNumber){
-        Thread executor = new EndTurnThread(gameId, ps, sentCreatures, waveNumber);
+    public static void sendEndTurnMessage(int gameId, PlayerStats ps, int sentCreatures, int waveNumber, ArrayList<NetworkTower> towers){
+        Thread executor = new EndTurnThread(gameId, ps, sentCreatures, waveNumber, towers);
         executor.start();
     }
 
@@ -161,12 +161,14 @@ class EndTurnThread extends Thread{
     int sentCreatures = 0;
     PlayerStats ps;
     int waveNumber;
+    ArrayList<NetworkTower> towers;
 
-    public EndTurnThread(int gameId, PlayerStats ps, int sentCreatures, int waveNumber){
+    public EndTurnThread(int gameId, PlayerStats ps, int sentCreatures, int waveNumber, ArrayList<NetworkTower> towers){
         this.gameId = gameId;
         this.ps = ps;
         this.sentCreatures = sentCreatures;
         this.waveNumber = waveNumber;
+        this.towers = towers;
     }
     public void run(){
         try{
@@ -174,8 +176,10 @@ class EndTurnThread extends Thread{
             Socket s = new Socket(NetworkCommunicator.hostName, NetworkCommunicator.port);
             PrintWriter out = new PrintWriter(s.getOutputStream());
 
+            Gson gs = new Gson();
+            System.out.println(gs.toJson(towers));
             //TODO: Add health to the string. (Not done due to health not being implemented on branch at the time)
-            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d, \"sentCreatures\":%d, \"waveNumber\":%d}", NetworkCommunicator.userId, gameId, ps.getHealth(), ps.getBalance(), sentCreatures, waveNumber));
+            out.write(java.lang.String.format("{\"type\":\"endTurn\", \"userId\":%d,  \"gameId\":%d,  \"userHealth\":%d,  \"userGold\":%d, \"sentCreatures\":%d, \"waveNumber\":%d, \"towers\": %s}", NetworkCommunicator.userId, gameId, ps.getHealth(), ps.getBalance(), sentCreatures, waveNumber, gs.toJson(towers)));
             out.flush();
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line;

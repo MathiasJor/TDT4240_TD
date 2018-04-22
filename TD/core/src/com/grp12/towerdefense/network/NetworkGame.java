@@ -47,6 +47,10 @@ public class NetworkGame {
         return null;
     }
 
+    public void setTurn(boolean bol){
+        getPhoneUser().isTurn = bol;
+    }
+
     public boolean isSecondPlayer(){
         return getUser(1).getId() == NetworkCommunicator.getUserId();
     }

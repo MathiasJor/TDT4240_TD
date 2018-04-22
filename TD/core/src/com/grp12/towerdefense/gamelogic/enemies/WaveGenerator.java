@@ -50,12 +50,15 @@ public class WaveGenerator {
         }
 
         //Used to cycle through different enemy types, depending on how many are available.
+        currentEnemyIndex = currentWaveNumber % numberOfEnemies;
+
+        /*
         if (currentEnemyIndex < numberOfEnemyTypes) {
             currentEnemyIndex++;
             if (currentEnemyIndex == numberOfEnemyTypes) {
                 currentEnemyIndex = 0;
             }
-        }
+        } */
 
         //Increase enemy health by "currentEnemyHealthBoost"
         AbstractEnemy enemy = enemyTypes.get(currentEnemyIndex);

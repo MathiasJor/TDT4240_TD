@@ -182,7 +182,7 @@ public class PlayState extends State {
             if (srb.clicked(pointer)) {
                 //TODO: Add code here, that takes the input from network message received and use it!
 
-                int opponentHealth = 0; //TODO: Change this
+                int opponentHealth = 1000; //TODO: Change this
 
 
                 if (opponentHealth < 1) {

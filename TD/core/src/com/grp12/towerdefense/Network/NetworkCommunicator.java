@@ -1,5 +1,6 @@
 package com.grp12.towerdefense.Network;
 
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.google.gson.Gson;
@@ -43,8 +44,8 @@ public class NetworkCommunicator {
 
     public static ArrayList<NetworkGame> userGames = new ArrayList<NetworkGame>();
 
-    String hostName = "localhost";
-    int port = 9999;
+    public static String hostName = "10.22.12.149";
+    public static int port = 9999;
 
     public NetworkCommunicator(){
     }
@@ -65,7 +66,7 @@ public class NetworkCommunicator {
             public void run(){
                 try{
 
-                    Socket s = new Socket("localhost", 9999);
+                    Socket s = new Socket(hostName, port);
                     PrintWriter out = new PrintWriter(s.getOutputStream());
 
                     out.write("{\"type\":\"connect\", \"userId\": \"null\"}");
@@ -97,7 +98,7 @@ public class NetworkCommunicator {
             public void run(){
                 try{
 
-                    Socket s = new Socket("localhost", 9999);
+                    Socket s = new Socket(hostName, port);
                     PrintWriter out = new PrintWriter(s.getOutputStream());
 
                     out.write(java.lang.String.format("{\"type\":\"getGames\", \"userId\":%d}", NetworkCommunicator.userId));
@@ -173,7 +174,7 @@ class EndTurnThread extends Thread{
     public void run(){
         try{
 
-            Socket s = new Socket("localhost", 9999);
+            Socket s = new Socket(NetworkCommunicator.hostName, NetworkCommunicator.port);
             PrintWriter out = new PrintWriter(s.getOutputStream());
 
             //TODO: Add health to the string. (Not done due to health not being implemented on branch at the time)
@@ -198,7 +199,7 @@ class NewGameThread extends Thread{
     public void run(){
         try{
 
-            Socket s = new Socket("localhost", 9999);
+            Socket s = new Socket(NetworkCommunicator.hostName, NetworkCommunicator.port);
             PrintWriter out = new PrintWriter(s.getOutputStream());
 
             //TODO: Add health to the string. (Not done due to health not being implemented on branch at the time)

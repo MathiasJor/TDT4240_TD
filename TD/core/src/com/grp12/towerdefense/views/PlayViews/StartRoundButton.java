@@ -13,7 +13,7 @@ public class StartRoundButton extends View {
     public StartRoundButton(int height, int width) {
 
         button = new Texture("startButton.png");
-        this.middleHeight = height- button.getHeight();
+        this.middleHeight = 0;
         this.middleWidth = width/2 - button.getWidth()/2;
     }
 

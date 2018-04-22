@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.grp12.towerdefense.Network.NetworkCommunicator;
+import com.grp12.towerdefense.Network.NetworkGame;
 import com.grp12.towerdefense.Network.ServerConnection;
 import com.grp12.towerdefense.gamelogic.Map;
 import com.grp12.towerdefense.gamelogic.Node;
@@ -18,7 +20,9 @@ import com.grp12.towerdefense.gamelogic.towers.RocketTower;
 import com.grp12.towerdefense.gamelogic.towers.StunTower;
 import com.grp12.towerdefense.views.PlayViews.EnemyView;
 import com.grp12.towerdefense.views.PlayViews.GameMenuView;
+import com.grp12.towerdefense.views.PlayViews.GameOverView;
 import com.grp12.towerdefense.views.PlayViews.MapView;
+import com.grp12.towerdefense.views.PlayViews.SendEnemyMenuView;
 import com.grp12.towerdefense.views.PlayViews.StartRoundButton;
 
 import java.util.ArrayList;
@@ -34,7 +38,7 @@ public class PlayState extends State {
     private ArrayList<AbstractTower> towers;
     private WaveGenerator waveGenerator;
     private ArrayList<AbstractEnemy> listOfEnemyTypes;
-    private ArrayList<AbstractEnemy> enemiesToSend;
+    private int enemiesToSend;
 
     //Views
     private MapView mapView;
@@ -42,16 +46,20 @@ public class PlayState extends State {
     private GameMenuView gameMenuView;
     private StartRoundButton srb;
     private BitmapFont bmf;
+    private GameOverView gameOverView;
+    private SendEnemyMenuView sendEnemyMenuView;
 
     //state
     private boolean playing;
-    private boolean nextRoundReady;
+    private boolean gameover;
 
     //variables
+    private float gameoverTime = 3;
+    private float gameoverTimer = 0;
     int buildThisTower =0;
     final boolean[] ready = {false};
 
-    ServerConnection serverConnection;
+    NetworkCommunicator networkCommunicator;
 
 
     public PlayState(GameStateManager gsm) {
@@ -59,7 +67,7 @@ public class PlayState extends State {
 
         //models
         map = new Map();
-        playerStats = new PlayerStats(200, 10);
+        playerStats = new PlayerStats(NetworkCommunicator.getActiveGame().getPhoneUser().getGold(), NetworkCommunicator.getActiveGame().getPhoneUser().getHealth());
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
         AbstractTower.setEnemyList(enemies);
@@ -67,7 +75,7 @@ public class PlayState extends State {
         listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 100));
         listOfEnemyTypes.add(new FastEnemy(map.getWaypoints(), 1, 100));
         waveGenerator = new WaveGenerator(listOfEnemyTypes);
-        enemiesToSend = new ArrayList<AbstractEnemy>();
+        enemiesToSend = 0;
 
         //Views
         mapView = new MapView(map.getGrid());
@@ -75,28 +83,36 @@ public class PlayState extends State {
         gameMenuView = new GameMenuView(new Vector2(0,0));
         srb = new StartRoundButton(mapView.getMapHeight(), mapView.getMapWidth());
         bmf = new BitmapFont();
+        sendEnemyMenuView = new SendEnemyMenuView();
 
 
-        //Represents the three states of the game loop: Playing, waiting for next round, and next is ready
-        nextRoundReady = true;
+        //Represents the three states of the game loop: Playing, waiting for next round, and game over
         playing = false;
-        serverConnection = new ServerConnection();
+        gameover = false;
+
+        //Network
+        networkCommunicator = new NetworkCommunicator();
     }
 
     @Override
     public void render(SpriteBatch sb) {
         mapView.draw(sb);
-        if (playing) {
-            enemyView.draw(sb);
-        } else {
-            gameMenuView.draw(sb);
-            if (nextRoundReady) {
-                srb.draw(sb);
+        if (!gameover) {
+            if (playing) {
+                enemyView.draw(sb);
+            } else {
+                gameMenuView.draw(sb);
+                sendEnemyMenuView.draw(sb);
+                if (NetworkCommunicator.getActiveGame().isMyTurn() && !gameover) {
+                    srb.draw(sb);
+                }
             }
+            bmf.getData().setScale(6);
+            String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance() + "    Sending: " + enemiesToSend;
+            bmf.draw(sb, info, 20, mapView.getMapHeight() - 20);
+        } else {
+            gameOverView.draw(sb);
         }
-        bmf.getData().setScale(6);
-        String info = "HP: " + playerStats.getHealth() + "    $" + playerStats.getBalance();
-        bmf.draw(sb, info, 20, mapView.getMapHeight()-20 );
 
     }
 
@@ -132,21 +148,60 @@ public class PlayState extends State {
             }
         }
         //ends the round when all the enemies are gone
-        if (enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
+        if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
-            serverConnection.sendResult(playerStats.getHealth(), enemiesToSend, waveGenerator.getCurrentWaveNumber());
+            System.out.println(waveGenerator.getCurrentWaveNumber());
+            //Here comes the 'getti code
+            int increaseInWave = 0;
+            if(NetworkCommunicator.getActiveGame().isSecondPlayer())
+                increaseInWave = 1;
+
+            NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber() + increaseInWave);
+
+            enemiesToSend = 0;
+            if (playerStats.getHealth() < 1) {
+                gameOverView = new GameOverView(false);
+                gameover = true;
+
+            }
+            if(!gameover){
+                gsm.pop();
+            }
+        }
+        if (gameover) {
+            gameoverTimer += dt;
+            if (gameoverTimer > gameoverTime) {
+                gsm.pop();
+            }
         }
     }
 
     @Override
     protected void handleInput(Vector3 pointer) {
-        if (nextRoundReady && !playing) {
+        if (!playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
-                //currentWave = serverConnection.result()
-                waveGenerator.setNextWave();
-                playing = true;
+                //TODO: Add code here, that takes the input from network message received and use it!
+
+                int opponentHealth = 0; //TODO: Change this
+
+
+                if (opponentHealth < 1) {
+                    gameOverView = new GameOverView(true);
+                    gameover = true;
+                } else {
+                 //TODO: All data from network should lie in getActiveGame()
+                  waveGenerator.setReceivedEnemies(NetworkCommunicator.getActiveGame().getSentCreatures());
+                  waveGenerator.setCurrentWaveNumber(NetworkCommunicator.getActiveGame().getWaveNumber());
+                  waveGenerator.setNextWave();
+                  playing = true;
+                }
             }
             else{
+                if (sendEnemyMenuView.clicked(pointer) && playerStats.getBalance() >= (listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2)) {
+                    playerStats.withdrawMoney(listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2);
+                    enemiesToSend += 1;
+                }
+
                 Node node = mapView.getNode(pointer);
                 //open tower selection
 
@@ -178,11 +233,7 @@ public class PlayState extends State {
                             }
                         }
                     }
-
-
                 }
-
-
             }
         }
     }

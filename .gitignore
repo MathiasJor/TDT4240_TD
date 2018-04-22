@@ -61,3 +61,5 @@ nb-configuration.xml
 versions.json
 .gradle
 build/
+
+serverData.json

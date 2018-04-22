@@ -44,11 +44,11 @@ public abstract class AbstractTower {
 
     public void fire(float dt) {
         frameTime += dt;
+        rotation = findDegree(target);
         if (frameTime > reloadTime)
             canShoot = true;
         targetUpdate();
         if (target != null && canShoot) {
-            rotation = findDegree(target);
             target.takeDamage(damage);
             frameTime = 0;
             canShoot = false;
@@ -164,6 +164,9 @@ public abstract class AbstractTower {
     }
 
     public float findDegree(AbstractEnemy target){
+        if (target == null) {
+            return rotation;
+        }
         Vector2 targetCoords = target.getPosition();
         float degree = (float) Math.atan((targetCoords.x-container.getPosition().x)/(targetCoords.y-container.getPosition().y));
         degree= (float) Math.toDegrees(degree);

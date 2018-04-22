@@ -36,9 +36,13 @@ public class WaveGenerator {
         currentWave = new Wave(enemyTypes.get(currentEnemyIndex), numberOfEnemies);
     }
 
+    public void setCurrentWaveNumber(int waveNumber){
+        currentWaveNumber = waveNumber;
+    }
+
     public void setNextWave(){
         currentEnemyHealthBoost += healthIncrease;
-        currentWaveNumber++;
+        //currentWaveNumber++;
 
         //Increase enemies by "increaseEnemiesBy" every "intervalToIncreaseEnemies"th round
         if (currentWaveNumber % intervalToIncreaseEnemies == 0) {
@@ -76,5 +80,9 @@ public class WaveGenerator {
 
     public Wave getCurrentWave() {
         return currentWave;
+    }
+
+    public int getCurrentEnemyIndex() {
+        return currentEnemyIndex;
     }
 }

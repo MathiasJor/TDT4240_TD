@@ -77,4 +77,8 @@ public class WaveGenerator {
     public Wave getCurrentWave() {
         return currentWave;
     }
+
+    public int getCurrentEnemyIndex() {
+        return currentEnemyIndex;
+    }
 }

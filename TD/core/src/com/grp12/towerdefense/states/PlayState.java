@@ -149,8 +149,8 @@ public class PlayState extends State {
         //ends the round when all the enemies are gone
         if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
             playing = false;
-            //TODO: FIX this, so gameId is correct:
-            NetworkCommunicator.sendEndTurnMessage(0, playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber());
+            NetworkCommunicator.sendEndTurnMessage(NetworkCommunicator.getActiveGame().getId(), playerStats, enemiesToSend, waveGenerator.getCurrentWaveNumber());
+
             enemiesToSend = 0;
             if (playerStats.getHealth() < 1) {
                 gameOverView = new GameOverView(false);
@@ -171,6 +171,7 @@ public class PlayState extends State {
         if (!playing && NetworkCommunicator.getActiveGame().isMyTurn()) {
             if (srb.clicked(pointer)) {
                 //TODO: Add code here, that takes the input from network message received and use it!
+
                 int opponentHealth = 0; //TODO: Change this
 
 
@@ -178,13 +179,14 @@ public class PlayState extends State {
                     gameOverView = new GameOverView(true);
                     gameover = true;
                 } else {
+                  //TODO: All data from network should lie in getActiveGame()
                     waveGenerator.setNextWave();
                     playing = true;
                 }
             }
             else{
-                if (sendEnemyMenuView.clicked(pointer) && playerStats.getBalance() >= 50) {
-                    playerStats.withdrawMoney(50);
+                if (sendEnemyMenuView.clicked(pointer) && playerStats.getBalance() >= (listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2)) {
+                    playerStats.withdrawMoney(listOfEnemyTypes.get(waveGenerator.getCurrentEnemyIndex()).getBounty() * 2);
                     enemiesToSend += 1;
                 }
 

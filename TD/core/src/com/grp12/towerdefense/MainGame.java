@@ -17,6 +17,7 @@ import com.grp12.towerdefense.gamelogic.PlayerStats;
 import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.states.MenuState;
+import com.grp12.towerdefense.views.MenyViews.ActiveGameMenuView;
 
 public class MainGame extends ApplicationAdapter {
 
@@ -45,7 +46,7 @@ public class MainGame extends ApplicationAdapter {
 		// CONNECTING to server and STARTING ping loop
 		NetworkCommunicator.fetchExternalUserId();
 
-		gsm.push(new MenuState(gsm));
+		gsm.push(new ActiveGameMenuView(gsm));
 	}
 
 	@Override

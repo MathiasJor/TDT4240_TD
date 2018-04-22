@@ -7,18 +7,27 @@ import com.grp12.towerdefense.states.GameStateManager;
 public class GameOverView extends View{
 
     private Texture gameover;
-    private int xPos;
-    private int yPos;
+    private Texture victory;
+    private int xPosLoss, yPosLoss, xPosWin, yPosWin;
+    private boolean win;
 
-    public GameOverView() {
+    public GameOverView(boolean win) {
+        this.win = win;
         gameover = new Texture("gameover.png");
-        xPos = View.getMapWidth()/2 - gameover.getWidth()/2;
-        yPos = View.getMapHeight()/2 - gameover.getHeight()/2;
+        victory = new Texture("victory.png");
+        xPosLoss = View.getMapWidth()/2 - gameover.getWidth()/2;
+        yPosLoss = View.getMapHeight()/2 - gameover.getHeight()/2;
+        xPosWin = View.getMapWidth()/2 - victory.getWidth()/2;
+        yPosWin = View.getMapHeight()/2 - victory.getHeight()/2;
     }
 
     @Override
     public void draw(SpriteBatch spriteBatch) {
-        spriteBatch.draw(gameover, xPos, yPos);
+        if (win) {
+            spriteBatch.draw(victory, xPosWin, yPosWin);
+        } else {
+            spriteBatch.draw(gameover, xPosLoss, yPosLoss);
+        }
     }
 
     @Override

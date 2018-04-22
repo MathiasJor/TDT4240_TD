@@ -23,7 +23,18 @@ public class TowerController extends Controller {
         }
     }
 
-    public void fire(AbstractTower tower, float dt) {
+    public void upgradeTower(AbstractTower tower){
+        tower.setDamage(tower.getDamage()*2);
+        tower.setRange(tower.getRange()+2);
+        tower.setReloadTime(tower.getReloadTime()/2);
+        tower.setUpgradeCost();
+        tower.setValue(tower.getUpgradeCost());
+        tower.setUpgradeCost();
+        tower.setSellPrice();
+        tower.upgradeTower();
+    }
+
+    private void fire(AbstractTower tower, float dt) {
         tower.addFrameTime(dt);
         tower.setRotation(findDegree(tower, tower.getTarget()));
         if (tower.getFrameTime() > tower.getReloadTime())
@@ -97,17 +108,6 @@ public class TowerController extends Controller {
             }
         }
         return degree;
-    }
-
-    public void upgradeTower(AbstractTower tower){
-        tower.setDamage(tower.getDamage()*2);
-        tower.setRange(tower.getRange()+2);
-        tower.setReloadTime(tower.getReloadTime()/2);
-        tower.setUpgradeCost();
-        tower.setValue(tower.getUpgradeCost());
-        tower.setUpgradeCost();
-        tower.setSellPrice();
-        tower.upgradeTower();
     }
 
     private boolean enemyOutOfRange(AbstractTower tower, AbstractEnemy abstractEnemy) {

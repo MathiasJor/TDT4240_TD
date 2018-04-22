@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class EnemyView extends View {
 
-    //TODO: #3: Add more textures and test for enemies type to draw different enemies
     private ArrayList<AbstractEnemy> enemies;
 
     //Basic enemy
@@ -20,8 +19,8 @@ public class EnemyView extends View {
     private Texture fastEnemyImg;
     private Sprite fastEnemySpr;
 
-    public EnemyView() {
-        enemies = new ArrayList<AbstractEnemy>();
+    public EnemyView(ArrayList<AbstractEnemy> enemies) {
+        this.enemies = enemies;
         basicEnemyImg = new Texture("towerDefense_tile245.png");
         basicEnemySpr = new Sprite(basicEnemyImg);
 
@@ -49,15 +48,6 @@ public class EnemyView extends View {
             e.getHealthBar().setValue((Float.valueOf(e.getHealth()) / Float.valueOf(e.getMaxHealth())) * e.getHealthBar().getMaxValue());
             e.getHealthBar().draw(spriteBatch, 1);
         }
-    }
-
-    public void addEnemy(AbstractEnemy abstractEnemy) {
-        if (enemies.indexOf(abstractEnemy) == -1)
-            enemies.add(abstractEnemy);
-    }
-
-    public void removeEnemy(AbstractEnemy abstractEnemy) {
-        enemies.remove(abstractEnemy);
     }
 
     @Override

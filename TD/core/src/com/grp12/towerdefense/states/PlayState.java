@@ -80,7 +80,7 @@ public class PlayState extends State {
 
         //views
         mapView = new MapView(map.getGrid());
-        enemyView = new EnemyView();
+        enemyView = new EnemyView(enemies);
         gameMenuView = new GameMenuView(new Vector2(0,0));
         srb = new StartRoundButton(mapView.getMapHeight(), mapView.getMapWidth());
         bmf = new BitmapFont();
@@ -127,12 +127,10 @@ public class PlayState extends State {
             AbstractEnemy e = waveGenerator.getCurrentWave().popAttempt(dt);
             if (e != null) {
                 enemies.add(e);
-                enemyView.addEnemy(e);
             }
             //remove dead enemies
             for (int i = 0; i < enemies.size(); i++) {
                 if (enemies.get(i).getHealth() == 0) {
-                    enemyView.removeEnemy(enemies.get(i));
                     playerStats.addMoney(enemies.get(i).getBounty());
                     enemies.remove(i);
                 } else {
@@ -141,7 +139,6 @@ public class PlayState extends State {
                     //Remove enemies that have completed the path
                     if (enemies.get(i).isFinished()) {
                         playerStats.removeHealth(1);
-                        enemyView.removeEnemy(enemies.get(i));
                         enemies.remove(i);
                     }
                 }

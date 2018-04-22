@@ -11,7 +11,6 @@ public abstract class AbstractTower {
     private int damage, cost, range, upgradeCost, towerLevel=0, value=0, sellPrice=0;
     private float reloadTime;
     private AbstractEnemy target;
-    private static ArrayList<AbstractEnemy> enemies;
     private float frameTime = 0;
     private boolean canShoot = true;
     private String towerName;
@@ -32,14 +31,6 @@ public abstract class AbstractTower {
         setValue(cost);
         setSellPrice();
         target = null;
-    }
-
-    public static void setEnemyList(ArrayList<AbstractEnemy> enemies) {
-        AbstractTower.enemies = enemies;
-    }
-
-    public static ArrayList<AbstractEnemy> getEnemies() {
-        return enemies;
     }
 
     //TODO: Setting this sets the node.setTower, if it fails, fail here as well
@@ -94,7 +85,7 @@ public abstract class AbstractTower {
     }
 
     public float getRotation(){return rotation;}
-    public void setRotation(float rotation) {this.rotation = rotation};
+    public void setRotation(float rotation) {this.rotation = rotation;}
 
     public towerType getType(){return typeTower;}
     public void setValue(int increase){value+=increase;}

@@ -8,9 +8,19 @@ import java.util.ArrayList;
 
 public class TowerController extends Controller {
 
+    private ArrayList<AbstractTower> towers;
+    private ArrayList<AbstractEnemy> enemies;
+
+    public TowerController(ArrayList<AbstractTower> towers, ArrayList<AbstractEnemy> enemies) {
+        this.towers = towers;
+        this.enemies = enemies;
+    }
+
     @Override
     public void update(float dt) {
-
+        for (AbstractTower tower : towers) {
+            fire(tower, dt);
+        }
     }
 
     public void fire(AbstractTower tower, float dt) {
@@ -18,7 +28,7 @@ public class TowerController extends Controller {
         tower.setRotation(findDegree(tower, tower.getTarget()));
         if (tower.getFrameTime() > tower.getReloadTime())
             tower.setCanShoot(true);
-        targetUpdate(tower, AbstractTower.getEnemies());
+        targetUpdate(tower, enemies);
         if (tower.getTarget() != null && tower.getCanShoot()) {
             tower.getTarget().takeDamage(tower.getDamage());
             tower.resetFrameTime();
@@ -89,7 +99,7 @@ public class TowerController extends Controller {
         return degree;
     }
 
-    private void upgradeTower(AbstractTower tower){
+    public void upgradeTower(AbstractTower tower){
         tower.setDamage(tower.getDamage()*2);
         tower.setRange(tower.getRange()+2);
         tower.setReloadTime(tower.getReloadTime()/2);

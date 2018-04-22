@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.grp12.towerdefense.controllers.TowerController;
 import com.grp12.towerdefense.network.NetworkCommunicator;
 import com.grp12.towerdefense.models.Map;
 import com.grp12.towerdefense.models.Node;
@@ -38,7 +39,7 @@ public class PlayState extends State {
     private ArrayList<AbstractEnemy> listOfEnemyTypes;
     private int enemiesToSend;
 
-    //Views
+    //views
     private MapView mapView;
     private EnemyView enemyView;
     private GameMenuView gameMenuView;
@@ -46,6 +47,9 @@ public class PlayState extends State {
     private BitmapFont bmf;
     private GameOverView gameOverView;
     private SendEnemyMenuView sendEnemyMenuView;
+
+    //controllers
+    private TowerController towerController;
 
     //state
     private boolean playing;
@@ -68,20 +72,22 @@ public class PlayState extends State {
         playerStats = new PlayerStats(NetworkCommunicator.getActiveGame().getPhoneUser().getGold(), NetworkCommunicator.getActiveGame().getPhoneUser().getHealth());
         enemies = new ArrayList<AbstractEnemy>();
         towers = new ArrayList<AbstractTower>();
-        AbstractTower.setEnemyList(enemies);
         listOfEnemyTypes = new ArrayList<AbstractEnemy>();
         listOfEnemyTypes.add(new BasicEnemy(map.getWaypoints(), 1, 100));
         listOfEnemyTypes.add(new FastEnemy(map.getWaypoints(), 1, 100));
         waveGenerator = new WaveGenerator(listOfEnemyTypes);
         enemiesToSend = 0;
 
-        //Views
+        //views
         mapView = new MapView(map.getGrid());
         enemyView = new EnemyView();
         gameMenuView = new GameMenuView(new Vector2(0,0));
         srb = new StartRoundButton(mapView.getMapHeight(), mapView.getMapWidth());
         bmf = new BitmapFont();
         sendEnemyMenuView = new SendEnemyMenuView();
+
+        //controllers
+        towerController = new TowerController(towers, enemies);
 
 
         //Represents the three states of the game loop: Playing, waiting for next round, and game over
@@ -141,9 +147,7 @@ public class PlayState extends State {
                 }
             }
             //calculate tower targeting and shooting
-            for (AbstractTower tower : towers) {
-                tower.fire(dt);
-            }
+            towerController.update(dt);
         }
         //ends the round when all the enemies are gone
         if (playing && enemies.size() == 0 && waveGenerator.getCurrentWave().empty()) {
@@ -312,7 +316,7 @@ public class PlayState extends State {
 
     public void upgradeTower(Node pickedTower){
         if(playerStats.getBalance()>pickedTower.getTower().getUpgradeCost()){
-            pickedTower.getTower().upgradeTower();
+            towerController.upgradeTower(pickedTower.getTower());
             gameMenuView.setShowSellAndUpgrade(false);
             playerStats.withdrawMoney(pickedTower.getTower().getUpgradeCost());
         }

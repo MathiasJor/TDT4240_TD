@@ -1,7 +1,7 @@
-package com.grp12.towerdefense.gamelogic;
+package com.grp12.towerdefense.models;
 
 import com.badlogic.gdx.math.Vector2;
-import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
+import com.grp12.towerdefense.models.towers.AbstractTower;
 
 public class Node {
 

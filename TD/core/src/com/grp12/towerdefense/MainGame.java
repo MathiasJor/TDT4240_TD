@@ -2,7 +2,6 @@ package com.grp12.towerdefense;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,13 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.grp12.towerdefense.Network.NetworkCommunicator;
-import com.grp12.towerdefense.gamelogic.Map;
-import com.grp12.towerdefense.gamelogic.Node;
-import com.grp12.towerdefense.gamelogic.PlayerStats;
-import com.grp12.towerdefense.gamelogic.enemies.BasicEnemy;
+import com.grp12.towerdefense.network.NetworkCommunicator;
 import com.grp12.towerdefense.states.GameStateManager;
-import com.grp12.towerdefense.states.MenuState;
 import com.grp12.towerdefense.views.MenyViews.ActiveGameMenuView;
 
 public class MainGame extends ApplicationAdapter {

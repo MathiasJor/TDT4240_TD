@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.gamelogic.towers;
+package com.grp12.towerdefense.models.towers;
 
 public class StunTower extends AbstractTower {
 

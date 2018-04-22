@@ -1,10 +1,7 @@
-package com.grp12.towerdefense.Network;
+package com.grp12.towerdefense.network;
 
-import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
+import com.grp12.towerdefense.models.enemies.AbstractEnemy;
 
-import java.net.HttpURLConnection;
-import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class ServerConnection {

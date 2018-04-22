@@ -1,11 +1,8 @@
-package com.grp12.towerdefense.Network;
+package com.grp12.towerdefense.network;
 
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.utils.async.AsyncExecutor;
-import com.badlogic.gdx.utils.async.AsyncTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.grp12.towerdefense.gamelogic.PlayerStats;
+import com.grp12.towerdefense.models.PlayerStats;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

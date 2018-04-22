@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.gamelogic.enemies;
+package com.grp12.towerdefense.models.enemies;
 
 import java.util.ArrayList;
 

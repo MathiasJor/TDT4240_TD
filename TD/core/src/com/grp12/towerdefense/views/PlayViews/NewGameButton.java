@@ -1,12 +1,10 @@
 package com.grp12.towerdefense.views.PlayViews;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.grp12.towerdefense.Network.NetworkGame;
 
 /**
  * Created by Kristian on 4/22/2018.

@@ -1,10 +1,6 @@
-package com.grp12.towerdefense.Network;
-
-import com.badlogic.gdx.utils.Json;
+package com.grp12.towerdefense.network;
 
 import java.util.ArrayList;
-
-import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  * Created by Kristian on 4/19/2018.

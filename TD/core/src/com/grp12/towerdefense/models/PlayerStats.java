@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.gamelogic;
+package com.grp12.towerdefense.models;
 
 public class PlayerStats {
 

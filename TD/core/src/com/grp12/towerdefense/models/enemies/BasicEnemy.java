@@ -1,6 +1,6 @@
-package com.grp12.towerdefense.gamelogic.enemies;
+package com.grp12.towerdefense.models.enemies;
 
-import com.grp12.towerdefense.gamelogic.Node;
+import com.grp12.towerdefense.models.Node;
 
 import java.util.ArrayList;
 

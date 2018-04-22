@@ -1,8 +1,8 @@
-package com.grp12.towerdefense.gamelogic.towers;
+package com.grp12.towerdefense.models.towers;
 
 import com.badlogic.gdx.math.Vector2;
-import com.grp12.towerdefense.gamelogic.Node;
-import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
+import com.grp12.towerdefense.models.Node;
+import com.grp12.towerdefense.models.enemies.AbstractEnemy;
 
 import java.util.ArrayList;
 

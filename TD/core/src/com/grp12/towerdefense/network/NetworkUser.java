@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.Network;
+package com.grp12.towerdefense.network;
 
 /**
  * Created by Kristian on 4/21/2018.

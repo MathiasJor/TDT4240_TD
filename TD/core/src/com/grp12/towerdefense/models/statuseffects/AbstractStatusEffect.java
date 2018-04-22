@@ -1,8 +1,6 @@
-package com.grp12.towerdefense.gamelogic.statuseffects;
+package com.grp12.towerdefense.models.statuseffects;
 
-import com.grp12.towerdefense.gamelogic.enemies.AbstractEnemy;
-
-import java.util.ArrayList;
+import com.grp12.towerdefense.models.enemies.AbstractEnemy;
 
 public abstract class AbstractStatusEffect {
 

@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.grp12.towerdefense.gamelogic.Node;
-import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
-import com.grp12.towerdefense.gamelogic.towers.BasicTower;
-import com.grp12.towerdefense.gamelogic.towers.RocketTower;
-import com.grp12.towerdefense.gamelogic.towers.StunTower;
+import com.grp12.towerdefense.models.Node;
+import com.grp12.towerdefense.models.towers.AbstractTower;
+import com.grp12.towerdefense.models.towers.BasicTower;
+import com.grp12.towerdefense.models.towers.RocketTower;
+import com.grp12.towerdefense.models.towers.StunTower;
 
 import java.util.ArrayList;
 

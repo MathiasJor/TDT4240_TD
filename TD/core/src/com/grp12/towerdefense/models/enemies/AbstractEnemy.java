@@ -1,9 +1,9 @@
-package com.grp12.towerdefense.gamelogic.enemies;
+package com.grp12.towerdefense.models.enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.grp12.towerdefense.gamelogic.statuseffects.AbstractStatusEffect;
-import com.grp12.towerdefense.gamelogic.Node;
+import com.grp12.towerdefense.models.statuseffects.AbstractStatusEffect;
+import com.grp12.towerdefense.models.Node;
 
 import java.util.ArrayList;
 

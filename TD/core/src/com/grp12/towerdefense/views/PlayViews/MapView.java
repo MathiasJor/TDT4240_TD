@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.grp12.towerdefense.gamelogic.Node;
-import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
+import com.grp12.towerdefense.models.Node;
+import com.grp12.towerdefense.models.towers.AbstractTower;
 
 /*
 MapView is unique in that it contains stuff that doesn't change during the game, and for performance's sake.

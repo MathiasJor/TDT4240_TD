@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.gamelogic.enemies;
+package com.grp12.towerdefense.models.enemies;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

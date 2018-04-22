@@ -1,6 +1,4 @@
-package com.grp12.towerdefense.gamelogic.towers;
-
-import com.badlogic.gdx.math.Vector2;
+package com.grp12.towerdefense.models.towers;
 
 public class BasicTower extends AbstractTower {
 

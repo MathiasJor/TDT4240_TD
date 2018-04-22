@@ -3,7 +3,7 @@ package com.grp12.towerdefense.views.PlayViews;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.grp12.towerdefense.gamelogic.towers.AbstractTower;
+import com.grp12.towerdefense.models.towers.AbstractTower;
 
 import java.util.ArrayList;
 

@@ -6,8 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.grp12.towerdefense.Network.NetworkCommunicator;
-import com.grp12.towerdefense.Network.NetworkGame;
+import com.grp12.towerdefense.network.NetworkGame;
 
 /**
  * Created by Kristian on 4/22/2018.

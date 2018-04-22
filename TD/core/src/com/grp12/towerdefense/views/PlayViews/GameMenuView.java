@@ -44,9 +44,9 @@ public class GameMenuView extends View {
         closeMenu = new Sprite(new Texture("towerDefense_tile086.png"));
         backGroundTile = new Sprite(new Texture("towerDefense_tile084.png"));
         //TODO:Remove this
-        elements.add(new MenuElement(cost[2], new Texture("towerDefense_tile226.png")));
+        elements.add(new MenuElement(cost[0], new Texture("towerDefense_tile226.png")));
         elements.add(new MenuElement(cost[1], new Texture("towerDefense_tile205.png")));
-        elements.add(new MenuElement(cost[0], new Texture("towerDefense_tile250_orginal.png")));
+        elements.add(new MenuElement(cost[2], new Texture("towerDefense_tile250_orginal.png")));
         bitmapFont = new BitmapFont();
 
     }

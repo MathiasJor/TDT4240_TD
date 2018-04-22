@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.network2;
+package com.grp12.towerdefense.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

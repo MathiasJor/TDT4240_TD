@@ -1,4 +1,4 @@
-package com.grp12.towerdefense.network2;
+package com.grp12.towerdefense.network;
 
 public class NetworkTower {
     int type;

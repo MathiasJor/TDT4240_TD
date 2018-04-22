@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.grp12.towerdefense.network2.NetworkCommunicator;
+import com.grp12.towerdefense.network.NetworkCommunicator;
 import com.grp12.towerdefense.states.GameStateManager;
 import com.grp12.towerdefense.views.MenyViews.ActiveGameMenuView;
 
